@@ -12,16 +12,13 @@ const StyleChipSchema = z.union([
   z.literal('Modern'),
   z.literal('Luxury'),
   z.literal('Compact'),
+  z.literal('Bohemian'),
+  z.literal('Industrial'),
+  z.literal('Coastal'),
 ])
 
 const OptimizeBodySchema = z.object({
-  prompt: z.string().min(4).max(600),
-  roomType: z.union([z.literal('Bedroom'), z.literal('Living Room')]),
-  lengthM: z.number().min(2).max(12),
-  widthM: z.number().min(2).max(12),
-  budgetINR: z.number().min(20000).max(1000000),
-  styles: z.array(StyleChipSchema).max(5),
-  styleSliders: z.record(StyleChipSchema, z.number().min(0).max(1)),
+  prompt: z.string().min(4).max(600)
 })
 
 const app = express()

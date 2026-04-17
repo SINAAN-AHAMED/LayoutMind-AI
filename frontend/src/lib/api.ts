@@ -22,7 +22,7 @@ const OptimizeResponseSchema = z.object({
       }),
       prompt: z.string(),
       selectedStyles: z.array(
-        z.union([z.literal('Cozy'), z.literal('Minimal'), z.literal('Modern'), z.literal('Luxury'), z.literal('Compact')]),
+        z.union([z.literal('Cozy'), z.literal('Minimal'), z.literal('Modern'), z.literal('Luxury'), z.literal('Compact'), z.literal('Bohemian'), z.literal('Industrial'), z.literal('Coastal')]),
       ),
       items: z.array(
         z.object({
@@ -34,6 +34,11 @@ const OptimizeResponseSchema = z.object({
             z.literal('chair'),
             z.literal('wardrobe'),
             z.literal('tvUnit'),
+            z.literal('plant'),
+            z.literal('rug'),
+            z.literal('floorLamp'),
+            z.literal('sideTable'),
+            z.literal('bookshelf'),
           ]),
           x: z.number(),
           z: z.number(),
@@ -54,22 +59,26 @@ const OptimizeResponseSchema = z.object({
         fitness: z.number(),
       }),
       explanation: z.string(),
+      removedItems: z.array(
+        z.object({
+          type: z.string(),
+          reason: z.string(),
+        })
+      ).optional(),
     }),
   ),
 })
 
 export type OptimizeRequest = {
   prompt: string
-  roomType: RoomType
-  lengthM: number
-  widthM: number
-  budgetINR: number
-  styles: StyleChip[]
-  styleSliders: Record<StyleChip, number>
+  explicitStyle?: string
+  addPlants?: boolean
+  addRugs?: boolean
 }
 
 export async function optimizeLayout(req: OptimizeRequest): Promise<OptimizationResult> {
-  const res = await fetch('/api/optimize', {
+  const baseUrl = import.meta.env.VITE_API_URL || '/api'
+  const res = await fetch(`${baseUrl}/optimize`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(req),

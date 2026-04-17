@@ -1,181 +1,173 @@
-import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Brand } from '../components/Brand'
-import { Button } from '../components/ui/Button'
-import { Chip } from '../components/ui/Chip'
-import { Input } from '../components/ui/Input'
+import { motion } from 'framer-motion'
 import { Textarea } from '../components/ui/Textarea'
-import { BackgroundOrb } from '../three/BackgroundOrb'
-import { formatINR } from '../lib/inr'
 import { optimizeLayout } from '../lib/api'
+import type { OptimizeRequest } from '../lib/api'
 import { useStudioStore } from '../store/useStudioStore'
-import type { StyleChip } from '../types/layout'
-
-const styleChips: StyleChip[] = ['Cozy', 'Minimal', 'Modern', 'Luxury', 'Compact']
+import { AbstractBackground } from '../components/AbstractBackground'
+import { useState } from 'react'
 
 export function PromptStudioPage() {
   const nav = useNavigate()
   const st = useStudioStore()
 
-  const subtitle = useMemo(() => {
-    const area = st.lengthM * st.widthM
-    return `${st.roomType} • ${st.lengthM.toFixed(1)}m × ${st.widthM.toFixed(1)}m • ${area.toFixed(1)} m² • Budget ${formatINR(st.budgetINR)}`
-  }, [st.budgetINR, st.lengthM, st.roomType, st.widthM])
+  // Default professional prompt when empty
+  const defaultPrompt = 'Design a living room spanning 6x8 meters under 450,000 INR.'
 
   async function onGenerate() {
+    const promptToUse = st.prompt.trim() ? st.prompt : defaultPrompt
+    if (!st.prompt.trim()) st.setPrompt(defaultPrompt) 
+    
     st.setOptimizing(true)
     try {
-      const result = await optimizeLayout({
-        prompt: st.prompt,
-        roomType: st.roomType,
-        lengthM: st.lengthM,
-        widthM: st.widthM,
-        budgetINR: st.budgetINR,
-        styles: st.styles,
-        styleSliders: st.styleSliders,
-      })
+      const payload: OptimizeRequest = {
+        prompt: promptToUse,
+        explicitStyle: st.explicitStyle,
+        addPlants: st.addPlants,
+        addRugs: st.addRugs
+      }
+      const result = await optimizeLayout(payload)
       st.setResult(result)
       nav('/workspace')
     } catch (e: any) {
-      st.setOptimizing(false)
       alert(e?.message ?? 'Optimization failed')
+    } finally {
+      st.setOptimizing(false)
     }
   }
 
+  const STYLES = ["Modern", "Cozy", "Luxury", "Minimal", "Compact"]
+
   return (
-    <div className="relative min-h-full overflow-hidden">
-      <BackgroundOrb />
-      <div className="mx-auto max-w-5xl px-5 py-10 md:py-16">
-        <motion.div initial={{ y: 14, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
-          <Brand />
-        </motion.div>
+    <div className="min-h-screen pt-24 px-4 md:px-8 pb-32 relative bg-bg-primary overflow-hidden font-sans">
+      
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/3" />
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        
+        {/* Header */}
+        <header className="mb-12">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-text-primary dark:text-white mb-3">
+              New Layout Project
+            </h1>
+            <p className="text-text-secondary dark:text-white/60 text-lg">
+              Configure parameters and natural language constraints to generate a 3D layout.
+            </p>
+          </motion.div>
+        </header>
 
-        <motion.div
-          initial={{ y: 18, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.08, duration: 0.55 }}
-          className="mt-10 md:mt-14"
-        >
-          <div className="glass rounded-3xl p-6 md:p-8">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="text-xs text-white/55">{subtitle}</div>
-                <div className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight text-white">
-                  Describe the vibe. We’ll optimize the interior.
-                </div>
-                <div className="mt-2 text-sm text-white/60">
-                  Real GLTF furniture • PBR lighting • Fuzzy logic → Genetic algorithm evolution
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 grid gap-4">
+        {/* 2-Column SaaS Dashboard */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Left Column: Form Controls */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-5 space-y-8"
+          >
+            {/* Prompt Card */}
+            <div className="bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-6 shadow-sm">
+              <label className="block text-sm font-semibold text-text-primary dark:text-white mb-2">Architectural Prompt</label>
               <Textarea
                 value={st.prompt}
                 onChange={(e) => st.setPrompt(e.target.value)}
-                placeholder="Example: A modern living room with calm lighting, wide circulation, and a cozy lounge corner."
+                placeholder={defaultPrompt}
+                className="w-full h-32 bg-transparent text-base md:text-lg"
               />
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                <div className="md:col-span-1">
-                  <div className="text-xs text-white/55 mb-2">Room type</div>
-                  <div className="flex gap-2">
-                    <Chip label="Living Room" selected={st.roomType === 'Living Room'} onClick={() => st.setRoomType('Living Room')} />
-                    <Chip label="Bedroom" selected={st.roomType === 'Bedroom'} onClick={() => st.setRoomType('Bedroom')} />
-                  </div>
-                </div>
-                <div className="md:col-span-2">
-                  <div className="text-xs text-white/55 mb-2">Room dimensions (meters)</div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Input
-                      type="number"
-                      min={2}
-                      max={12}
-                      step={0.1}
-                      value={st.lengthM}
-                      onChange={(e) => st.setDims(Number(e.target.value), st.widthM)}
-                      placeholder="Length (m)"
-                    />
-                    <Input
-                      type="number"
-                      min={2}
-                      max={12}
-                      step={0.1}
-                      value={st.widthM}
-                      onChange={(e) => st.setDims(st.lengthM, Number(e.target.value))}
-                      placeholder="Width (m)"
-                    />
-                  </div>
-                </div>
-                <div className="md:col-span-1">
-                  <div className="text-xs text-white/55 mb-2">Budget (₹)</div>
-                  <Input
-                    type="number"
-                    min={20000}
-                    step={1000}
-                    value={st.budgetINR}
-                    onChange={(e) => st.setBudget(Number(e.target.value))}
-                    placeholder="Budget in INR"
-                  />
-                </div>
-              </div>
-
+            {/* Config Card */}
+            <div className="bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-6 shadow-sm space-y-6">
+              
               <div>
-                <div className="text-xs text-white/55 mb-2">Style</div>
+                <label className="block text-sm font-semibold text-text-primary dark:text-white mb-3">Aesthetic Style</label>
                 <div className="flex flex-wrap gap-2">
-                  {styleChips.map((s) => (
-                    <Chip key={s} label={s} selected={st.styles.includes(s)} onClick={() => st.toggleStyle(s)} />
+                  {STYLES.map(style => (
+                    <button
+                      key={style}
+                      onClick={() => st.setExplicitStyle(style)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        st.explicitStyle === style 
+                        ? 'bg-primary text-white shadow-md' 
+                        : 'bg-text-primary/5 dark:bg-white/5 text-text-secondary dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/10'
+                      }`}
+                    >
+                      {style}
+                    </button>
                   ))}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between gap-3 pt-2">
-                <div className="text-sm text-white/55">
-                  Generates <span className="text-white/80 font-medium">Top 3</span> layouts with metrics + GA evolution
+              <div className="pt-4 border-t border-black/5 dark:border-white/10">
+                <label className="block text-sm font-semibold text-text-primary dark:text-white mb-4">Additional Decor Primitives</label>
+                
+                <div className="space-y-4">
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${st.addPlants ? 'bg-primary border-primary' : 'border-black/20 dark:border-white/20 group-hover:border-primary/50'}`}>
+                      {st.addPlants && <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                    </div>
+                    <input type="checkbox" className="hidden" checked={st.addPlants} onChange={(e) => st.setAddPlants(e.target.checked)} />
+                    <span className="text-sm font-medium text-text-secondary dark:text-white/80 select-none">Include Indoor Plants</span>
+                  </label>
+
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${st.addRugs ? 'bg-primary border-primary' : 'border-black/20 dark:border-white/20 group-hover:border-primary/50'}`}>
+                      {st.addRugs && <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                    </div>
+                    <input type="checkbox" className="hidden" checked={st.addRugs} onChange={(e) => st.setAddRugs(e.target.checked)} />
+                    <span className="text-sm font-medium text-text-secondary dark:text-white/80 select-none">Include Center Rugs</span>
+                  </label>
                 </div>
-                <Button onClick={onGenerate} size="lg" disabled={st.isOptimizing}>
-                  Generate
-                </Button>
+              </div>
+
+            </div>
+
+            <button 
+              onClick={onGenerate}
+              disabled={st.isOptimizing}
+              className="w-full relative overflow-hidden rounded-xl bg-text-primary dark:bg-white text-bg-primary dark:text-black px-6 py-4 font-bold tracking-wide hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg"
+            >
+              {st.isOptimizing ? (
+                <>
+                  <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  Processing Layout...
+                </>
+              ) : (
+                <>
+                  Generate 3D Layout
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                </>
+              )}
+            </button>
+          </motion.div>
+
+          {/* Right Column: Preview/Interactive Visuals */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
+            className="lg:col-span-7"
+          >
+            <div className="w-full h-full min-h-[400px] lg:min-h-full relative rounded-3xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10 group bg-[#070812]">
+              
+              <img 
+                src="/images/house.jpg" 
+                alt="Modern Architecture" 
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8 z-10 transition-colors duration-700 pointer-events-none">
+                 <div className="text-white/70 text-xs font-bold tracking-widest uppercase mb-2">Smart Engine</div>
+                 <div className="text-white text-3xl font-black">{st.explicitStyle || 'Modern'} Generation</div>
+                 <div className="flex gap-4 mt-4">
+                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur text-xs font-semibold text-white">AI Spacing Constraints</span>
+                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur text-xs font-semibold text-white">Arch-Viz Material Textures</span>
+                 </div>
               </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
-
-      <AnimatePresence>
-        {st.isOptimizing && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 8 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.98, opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="glass w-[min(560px,92vw)] rounded-3xl p-6"
-            >
-              <div className="text-sm text-white/60">Optimizing Layout via Soft Computing Engine…</div>
-              <div className="mt-2 text-xl font-semibold tracking-tight">Evolving placements, clearance, and budget fit</div>
-              <div className="mt-5 h-2 w-full rounded-full bg-white/8 overflow-hidden border border-white/10">
-                <motion.div
-                  className="h-full w-1/2 bg-gradient-to-r from-violet-500 via-indigo-500 to-cyan-500"
-                  initial={{ x: '-80%' }}
-                  animate={{ x: '180%' }}
-                  transition={{ repeat: Infinity, duration: 1.1, ease: 'linear' }}
-                />
-              </div>
-              <div className="mt-4 text-xs text-white/45">
-                GA: 40 generations • Constraints: walls + overlaps + 0.8m circulation
-              </div>
-            </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+
+        </div>
+      </div>
     </div>
   )
 }
-

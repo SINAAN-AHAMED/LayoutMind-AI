@@ -54,5 +54,40 @@ export const furnitureCatalog: Record<FurnitureType, FurnitureSpec> = {
     targetSizeM: { x: 1.6, z: 0.45, y: 0.8 },
     costINR: 22000,
   },
+  plant: {
+    type: 'plant',
+    label: 'Plant',
+    modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Duck/glTF-Binary/Duck.glb',
+    targetSizeM: { x: 0.5, z: 0.5, y: 1.2 },
+    costINR: 4500,
+  },
+  rug: {
+    type: 'rug',
+    label: 'Rug',
+    modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Duck/glTF-Binary/Duck.glb',
+    targetSizeM: { x: 2.5, z: 1.5, y: 0.02 },
+    costINR: 8000,
+  },
+  floorLamp: {
+    type: 'floorLamp',
+    label: 'Floor Lamp',
+    modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Duck/glTF-Binary/Duck.glb',
+    targetSizeM: { x: 0.4, z: 0.4, y: 1.8 },
+    costINR: 6000,
+  },
+  sideTable: {
+    type: 'sideTable',
+    label: 'Side Table',
+    modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Duck/glTF-Binary/Duck.glb',
+    targetSizeM: { x: 0.45, z: 0.45, y: 0.6 },
+    costINR: 4000,
+  },
+  bookshelf: {
+    type: 'bookshelf',
+    label: 'Bookshelf',
+    modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Duck/glTF-Binary/Duck.glb',
+    targetSizeM: { x: 1.2, z: 0.35, y: 2.1 },
+    costINR: 15000,
+  },
 }
 

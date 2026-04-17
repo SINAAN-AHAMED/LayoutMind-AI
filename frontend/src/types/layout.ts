@@ -1,6 +1,21 @@
 export type RoomType = 'Bedroom' | 'Living Room'
-export type StyleChip = 'Cozy' | 'Minimal' | 'Modern' | 'Luxury' | 'Compact'
-export type FurnitureType = 'sofa' | 'bed' | 'table' | 'chair' | 'wardrobe' | 'tvUnit'
+export type StyleChip = 'Cozy' | 'Minimal' | 'Modern' | 'Luxury' | 'Compact' | 'Bohemian' | 'Industrial' | 'Coastal'
+export type FurnitureType = 'sofa' | 'bed' | 'table' | 'chair' | 'wardrobe' | 'tvUnit' | 'rug' | 'plant' | 'floorLamp' | 'sideTable' | 'bookshelf'
+
+export type NLPExtracted = {
+  roomType: RoomType
+  lengthM: number
+  widthM: number
+  budgetINR: number
+  styles: StyleChip[]
+  styleSliders: Record<StyleChip, number>
+  floorMaterial?: 'Wood' | 'Tile' | 'Carpet'
+  wallMaterial?: 'Plain' | 'Panel' | 'Brick'
+}
+
+export type OptimizeRequest = {
+  prompt: string
+}
 
 export type Metrics = {
   totalCostINR: number
@@ -26,6 +41,11 @@ export type FurnitureItem = {
   costINR: number
 }
 
+export type RemovedItemInfo = {
+  type: string
+  reason: string
+}
+
 export type LayoutSolution = {
   id: string
   rank: 1 | 2 | 3
@@ -35,6 +55,7 @@ export type LayoutSolution = {
   items: FurnitureItem[]
   metrics: Metrics
   explanation: string
+  removedItems?: RemovedItemInfo[]
 }
 
 export type OptimizationResult = {
@@ -43,4 +64,3 @@ export type OptimizationResult = {
   evolution: EvolutionPoint[]
   solutions: LayoutSolution[]
 }
-

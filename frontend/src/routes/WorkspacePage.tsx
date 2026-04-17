@@ -1,387 +1,222 @@
-import { useMemo, useState } from 'react'
+import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Brand } from '../components/Brand'
-import { Button } from '../components/ui/Button'
-import { Chip } from '../components/ui/Chip'
-import { Input } from '../components/ui/Input'
-import { Slider } from '../components/ui/Slider'
-import { Textarea } from '../components/ui/Textarea'
-import { formatINR } from '../lib/inr'
-import { optimizeLayout } from '../lib/api'
 import { useStudioStore } from '../store/useStudioStore'
-import type { LayoutSolution, StyleChip } from '../types/layout'
 import { InteriorCanvas } from '../three/InteriorCanvas'
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-} from 'recharts'
-
-const styleChips: StyleChip[] = ['Cozy', 'Minimal', 'Modern', 'Luxury', 'Compact']
-
-function ProgressBar({ label, valuePct }: { label: string; valuePct: number }) {
-  return (
-    <div>
-      <div className="flex items-center justify-between text-xs text-white/60">
-        <div>{label}</div>
-        <div className="tabular-nums text-white/75">{valuePct.toFixed(0)}%</div>
-      </div>
-      <div className="mt-2 h-2 rounded-full bg-white/8 border border-white/10 overflow-hidden">
-        <div
-          className="h-full bg-gradient-to-r from-violet-500/80 via-indigo-500/70 to-cyan-500/70"
-          style={{ width: `${Math.max(0, Math.min(100, valuePct))}%` }}
-        />
-      </div>
-    </div>
-  )
-}
-
-function LayoutCard({ sol, selected, onClick }: { sol: LayoutSolution; selected: boolean; onClick: () => void }) {
-  const best = sol.rank === 1
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={[
-        'text-left glass rounded-2xl p-4 border transition w-full',
-        selected ? 'border-violet-400/55 shadow-glow' : 'border-white/10 hover:border-white/20 hover:bg-white/6',
-      ].join(' ')}
-    >
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-semibold text-white/90">
-          Layout #{sol.rank} {best ? <span className="text-xs text-violet-300">(Best)</span> : null}
-        </div>
-        <div className="text-xs text-white/55 tabular-nums">Fitness {sol.metrics.fitness.toFixed(3)}</div>
-      </div>
-      <div className="mt-2 grid grid-cols-3 gap-2 text-xs text-white/55">
-        <div>
-          <div className="text-white/40">Cost</div>
-          <div className="text-white/80">{formatINR(sol.metrics.totalCostINR)}</div>
-        </div>
-        <div>
-          <div className="text-white/40">Style</div>
-          <div className="text-white/80">{sol.metrics.styleAlignmentPct.toFixed(0)}%</div>
-        </div>
-        <div>
-          <div className="text-white/40">Clearance</div>
-          <div className="text-white/80">{sol.metrics.clearanceScorePct.toFixed(0)}%</div>
-        </div>
-      </div>
-    </button>
-  )
-}
 
 export function WorkspacePage() {
   const nav = useNavigate()
-  const st = useStudioStore()
-  const [showInsights, setShowInsights] = useState(true)
+  const result = useStudioStore((state) => state.lastResult)
+  const isOptimizing = useStudioStore((state) => state.isOptimizing)
+  const [showRemovedNotice, setShowRemovedNotice] = React.useState(true)
+  const [showPanel, setShowPanel] = React.useState(true)
 
-  const result = st.lastResult
-  const selected = useMemo(() => {
-    const id = st.selectedLayoutId
-    return result?.solutions.find((s) => s.id === id) ?? result?.solutions[0]
-  }, [result, st.selectedLayoutId])
-
-  if (!result || !selected) {
+  if (isOptimizing) {
     return (
-      <div className="mx-auto max-w-3xl px-5 py-12">
-        <div className="glass rounded-3xl p-6">
-          <Brand />
-          <div className="mt-6 text-white/70">No optimization result loaded yet.</div>
-          <div className="mt-5">
-            <Button onClick={() => nav('/')} variant="secondary">
-              Go to Prompt Studio
-            </Button>
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#05050A]">
+        <div className="flex flex-col items-center">
+          <div className="relative w-24 h-24 mb-8">
+            <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 3, ease: 'linear' }} className="absolute inset-0 border-t-2 border-r-2 border-white/20 rounded-full" />
+            <motion.div animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 2, ease: 'linear' }} className="absolute inset-2 border-b-2 border-l-2 border-primary/50 rounded-full" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="w-1.5 h-1.5 bg-primary rounded-full animate-ping" />
+            </div>
+          </div>
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} 
+            className="text-2xl font-serif text-white tracking-widest uppercase mb-2"
+          >
+            Compiling Geometry
+          </motion.div>
+          <div className="text-white/40 text-sm tracking-[0.3em] font-semibold">
+            ENGAGING SPATIAL ENGINE
           </div>
         </div>
       </div>
     )
   }
 
-  async function onRegenerate() {
-    st.setOptimizing(true)
-    try {
-      const next = await optimizeLayout({
-        prompt: st.prompt,
-        roomType: st.roomType,
-        lengthM: st.lengthM,
-        widthM: st.widthM,
-        budgetINR: st.budgetINR,
-        styles: st.styles,
-        styleSliders: st.styleSliders,
-      })
-      st.setResult(next)
-    } catch (e: any) {
-      st.setOptimizing(false)
-      alert(e?.message ?? 'Optimization failed')
-    }
+  if (!result) {
+    return (
+      <div className="min-h-screen pt-32 px-8 bg-[#05050A] flex flex-col items-center justify-center">
+         <h1 className="text-4xl text-white mb-4 font-serif">No Layout Data</h1>
+         <button onClick={() => nav('/')} className="bg-white text-black px-6 py-3 rounded-full font-medium hover:scale-105 active:scale-95 transition-transform">Back to Studio</button>
+      </div>
+    )
   }
 
-  const radar = useMemo(
-    () => [
-      { metric: 'Style Alignment', value: selected.metrics.styleAlignmentPct },
-      { metric: 'Budget Fit', value: selected.metrics.budgetCompliancePct },
-      { metric: 'Space Utilization', value: selected.metrics.spaceUtilizationPct },
-      { metric: 'Comfort', value: selected.metrics.comfortIndexPct },
-      { metric: 'Clearance', value: selected.metrics.clearanceScorePct },
-    ],
-    [selected.metrics],
-  )
+  const sol = result.solutions[0]
+  const removedItems = sol.removedItems || []
 
   return (
-    <div className="min-h-full">
-      <div className="px-4 py-4 md:px-6 md:py-6">
-        <div className="flex items-center justify-between gap-4">
-          <Brand compact />
-          <div className="flex items-center gap-2">
-            <Button variant="secondary" onClick={() => nav('/')}>
-              Prompt Studio
-            </Button>
-            <Button onClick={onRegenerate} disabled={st.isOptimizing}>
-              Regenerate
-            </Button>
-          </div>
-        </div>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.2 }}
+      className="fixed inset-0 w-full h-full bg-[#05050A] font-sans overflow-hidden"
+    >
 
-        <div className="mt-4 grid grid-cols-1 lg:grid-cols-[360px_1fr_360px] gap-4 items-stretch">
-          {/* Left panel */}
-          <div className="glass rounded-3xl p-4 md:p-5">
-            <div className="text-sm font-semibold text-white/90">Prompt + Controls</div>
-            <div className="mt-3">
-              <Textarea value={st.prompt} onChange={(e) => st.setPrompt(e.target.value)} />
-            </div>
+      {/* ── Full-bleed 3D Canvas ── */}
+      <div className="absolute inset-0 z-0">
+         <InteriorCanvas solution={sol} />
+      </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <div>
-                <div className="text-xs text-white/55 mb-1">Length (m)</div>
-                <Input
-                  type="number"
-                  min={2}
-                  max={12}
-                  step={0.1}
-                  value={st.lengthM}
-                  onChange={(e) => st.setDims(Number(e.target.value), st.widthM)}
-                />
-              </div>
-              <div>
-                <div className="text-xs text-white/55 mb-1">Width (m)</div>
-                <Input
-                  type="number"
-                  min={2}
-                  max={12}
-                  step={0.1}
-                  value={st.widthM}
-                  onChange={(e) => st.setDims(st.lengthM, Number(e.target.value))}
-                />
-              </div>
-            </div>
+      {/* ── Minimal top-left info (Unseen Studio style) ── */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
 
-            <div className="mt-4">
-              <div className="flex items-center justify-between text-xs text-white/55 mb-2">
-                <div>Budget</div>
-                <div className="text-white/80 tabular-nums">{formatINR(st.budgetINR)}</div>
-              </div>
-              <Slider value={st.budgetINR} onChange={(v) => st.setBudget(v)} min={20000} max={300000} step={1000} />
-            </div>
-
-            <div className="mt-4">
-              <div className="text-xs text-white/55 mb-2">Style chips</div>
-              <div className="flex flex-wrap gap-2">
-                {styleChips.map((s) => (
-                  <Chip key={s} label={s} selected={st.styles.includes(s)} onClick={() => st.toggleStyle(s)} />
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <div className="text-xs text-white/55 mb-2">Style fine-tuning</div>
-              <div className="grid gap-3">
-                {styleChips.map((s) => (
-                  <div key={s}>
-                    <div className="flex items-center justify-between text-xs text-white/60">
-                      <div>{s}</div>
-                      <div className="tabular-nums text-white/75">{Math.round(st.styleSliders[s] * 100)}%</div>
-                    </div>
-                    <Slider value={st.styleSliders[s]} onChange={(v) => st.setStyleSlider(s, v)} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Center canvas */}
+        {/* Top strip */}
+        <div className="flex justify-between items-start p-6 md:p-10 pointer-events-auto">
           <motion.div
-            key={selected.id}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="glass rounded-3xl overflow-hidden min-h-[520px]"
+            transition={{ duration: 1, delay: 0.3 }}
           >
-            <InteriorCanvas solution={selected} />
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-white tracking-tight font-light leading-none">
+              {sol.room.type}
+            </h1>
+            <div className="flex items-center gap-3 mt-3">
+              <span className="text-[11px] uppercase tracking-[0.25em] text-white/50 font-medium">
+                {sol.room.lengthM}m × {sol.room.widthM}m
+              </span>
+              <span className="w-1 h-1 rounded-full bg-white/30" />
+              <span className="text-[11px] uppercase tracking-[0.25em] text-white/40 font-medium">
+                {sol.selectedStyles.join(' · ')}
+              </span>
+            </div>
           </motion.div>
 
-          {/* Right panel */}
-          <div className="glass rounded-3xl p-4 md:p-5">
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-sm font-semibold text-white/90">Metrics</div>
-              <div className="text-xs text-white/55 tabular-nums">Overall fitness {selected.metrics.fitness.toFixed(3)}</div>
-            </div>
-
-            <div className="mt-4 grid gap-3">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                <div className="text-xs text-white/50">Budget usage</div>
-                <div className="mt-1 flex items-baseline justify-between">
-                  <div className="text-lg font-semibold text-white/90">{formatINR(selected.metrics.totalCostINR)}</div>
-                  <div className="text-xs text-white/55">of {formatINR(selected.metrics.budgetINR)}</div>
-                </div>
-                <div className="mt-3">
-                  <ProgressBar label="Budget compliance" valuePct={selected.metrics.budgetCompliancePct} />
-                </div>
-              </div>
-
-              <div className="grid gap-3">
-                <ProgressBar label="Style match" valuePct={selected.metrics.styleAlignmentPct} />
-                <ProgressBar label="Space utilization" valuePct={selected.metrics.spaceUtilizationPct} />
-                <ProgressBar label="Clearance score" valuePct={selected.metrics.clearanceScorePct} />
-                <ProgressBar label="Comfort index" valuePct={selected.metrics.comfortIndexPct} />
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                <div className="text-xs text-white/50">AI Explanation</div>
-                <div className="mt-2 text-sm leading-relaxed text-white/75">{selected.explanation}</div>
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <Button variant="secondary" className="w-full" onClick={() => setShowInsights((v) => !v)}>
-                {showInsights ? 'Hide' : 'Show'} GA insights
-              </Button>
-            </div>
-
-            <AnimatePresence initial={false}>
-              {showInsights && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.28 }}
-                  className="overflow-hidden"
-                >
-                  <div className="mt-4 grid gap-4">
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                      <div className="text-xs text-white/50 mb-2">GA Evolution (fitness vs generations)</div>
-                      <div className="h-40 min-w-0 min-h-0">
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-                          <LineChart data={result.evolution}>
-                            <XAxis dataKey="generation" tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 11 }} />
-                            <YAxis tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 11 }} />
-                            <Tooltip
-                              contentStyle={{ background: 'rgba(10,10,20,0.92)', border: '1px solid rgba(255,255,255,0.12)' }}
-                              labelStyle={{ color: 'rgba(255,255,255,0.65)' }}
-                            />
-                            <Line
-                              type="monotone"
-                              dataKey="bestFitness"
-                              stroke="#a78bfa"
-                              strokeWidth={2}
-                              dot={false}
-                              isAnimationActive={false}
-                            />
-                            <Line
-                              type="monotone"
-                              dataKey="avgFitness"
-                              stroke="#22d3ee"
-                              strokeWidth={2}
-                              dot={false}
-                              opacity={0.7}
-                              isAnimationActive={false}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                      <div className="text-xs text-white/50 mb-2">Radar: Layout profile</div>
-                      <div className="h-40 min-w-0 min-h-0">
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-                          <RadarChart data={radar}>
-                            <PolarGrid stroke="rgba(255,255,255,0.10)" />
-                            <PolarAngleAxis dataKey="metric" tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 10 }} />
-                            <PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} axisLine={false} />
-                            <Radar
-                              dataKey="value"
-                              stroke="#a78bfa"
-                              fill="rgba(167,139,250,0.28)"
-                              fillOpacity={1}
-                              isAnimationActive={false}
-                            />
-                          </RadarChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          <motion.button
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            onClick={() => nav('/')}
+            className="group flex items-center gap-2 px-5 py-2.5 bg-white text-black rounded-full text-sm font-semibold hover:bg-white/90 active:scale-95 transition-all"
+          >
+            <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            New Project
+          </motion.button>
         </div>
 
-        {/* Bottom comparison cards */}
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-          {result.solutions.map((sol) => (
-            <LayoutCard
-              key={sol.id}
-              sol={sol}
-              selected={sol.id === selected.id}
-              onClick={() => st.selectLayout(sol.id)}
-            />
-          ))}
+        {/* Bottom data strip */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-auto">
+          <AnimatePresence>
+            {showPanel && (
+              <motion.div
+                initial={{ y: 100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 100, opacity: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="mx-6 md:mx-10 mb-6 md:mb-10"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/[0.06] rounded-2xl overflow-hidden border border-white/[0.08]">
+
+                  {/* Card 1 — Architectural Logic */}
+                  <div className="bg-[#0a0a0f]/80 backdrop-blur-sm p-6 group hover:bg-[#0f0f18]/80 transition-colors duration-500">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                      </div>
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-semibold">Logic</span>
+                    </div>
+                    <p className="text-white/80 text-sm leading-relaxed font-light">
+                      {sol.items.length} items placed with deterministic spatial engine. Zero overlap, wall-flush anchoring.
+                    </p>
+                  </div>
+
+                  {/* Card 2 — Space Utilization */}
+                  <div className="bg-[#0a0a0f]/80 backdrop-blur-sm p-6 group hover:bg-[#0f0f18]/80 transition-colors duration-500">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-primary/70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                      </div>
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-semibold">Utilization</span>
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-light tracking-tight text-white">
+                        {sol.metrics.spaceUtilizationPct.toFixed(1)}
+                      </span>
+                      <span className="text-lg text-white/30 font-light">%</span>
+                    </div>
+                    <div className="mt-3 w-full h-[2px] bg-white/[0.06] rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${sol.metrics.spaceUtilizationPct}%` }}
+                        transition={{ duration: 2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="h-full bg-gradient-to-r from-primary/60 to-primary"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Card 3 — Cost */}
+                  <div className="bg-[#0a0a0f]/80 backdrop-blur-sm p-6 group hover:bg-[#0f0f18]/80 transition-colors duration-500">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-6 h-6 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-[#D4AF37]/70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      </div>
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]/50 font-semibold">Cost</span>
+                    </div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-light tracking-tight text-white">
+                        ₹{sol.metrics.totalCostINR.toLocaleString()}
+                      </span>
+                      <span className="text-xs text-white/20 line-through">₹{sol.metrics.budgetINR.toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Toggle panel button */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
+            onClick={() => setShowPanel(!showPanel)}
+            className="absolute bottom-3 right-3 md:bottom-4 md:right-4 w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/10 transition-all pointer-events-auto"
+          >
+            <svg className={`w-4 h-4 transition-transform ${showPanel ? '' : 'rotate-180'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </motion.button>
         </div>
       </div>
 
+      {/* ── Removed Items Toast ── */}
       <AnimatePresence>
-        {st.isOptimizing && (
+        {removedItems.length > 0 && showRemovedNotice && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-md"
+            initial={{ opacity: 0, x: 60, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 60, scale: 0.9 }}
+            transition={{ duration: 0.5, delay: 2, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-24 right-6 z-50 max-w-xs pointer-events-auto"
           >
-            <motion.div
-              initial={{ scale: 0.96, opacity: 0, y: 8 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.98, opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="glass w-[min(560px,92vw)] rounded-3xl p-6"
-            >
-              <div className="text-sm text-white/60">Optimizing Layout via Soft Computing Engine…</div>
-              <div className="mt-2 text-xl font-semibold tracking-tight">Evolving placements, clearance, and budget fit</div>
-              <div className="mt-5 h-2 w-full rounded-full bg-white/8 overflow-hidden border border-white/10">
-                <motion.div
-                  className="h-full w-1/2 bg-gradient-to-r from-violet-500 via-indigo-500 to-cyan-500"
-                  initial={{ x: '-80%' }}
-                  animate={{ x: '180%' }}
-                  transition={{ repeat: Infinity, duration: 1.1, ease: 'linear' }}
-                />
+            <div className="bg-[#0a0a0f]/90 backdrop-blur-md border border-amber-500/20 rounded-xl p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-amber-400/80">Space Optimized</span>
+                </div>
+                <button onClick={() => setShowRemovedNotice(false)} className="text-white/30 hover:text-white transition-colors text-sm">✕</button>
               </div>
-              <div className="mt-4 text-xs text-white/45">
-                GA: 40 generations • Constraints: walls + overlaps + 0.8m circulation
+              <p className="text-white/50 text-[11px] mb-2">
+                Removed to fit {sol.room.lengthM}×{sol.room.widthM}m:
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {removedItems.map((ri: any, i: number) => (
+                  <span key={i} className="px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded text-[10px] text-amber-300/80 font-medium capitalize">
+                    {ri.type.replace(/([A-Z])/g, ' $1').trim()}
+                  </span>
+                ))}
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   )
 }
-
