@@ -19,6 +19,15 @@ type StudioState = {
   wallMaterial: WallMaterial
   wallColor: string
 
+  // ── Room height ──
+  roomHeightM: number
+
+  // ── Drag mode (transform controls) ──
+  dragMode: boolean
+
+  // ── Per-item position overrides from drag ──
+  itemOverrides: Record<string, { x: number; z: number }>
+
   // ── Generation History ──
   activeSnapshotIndex: number
   ghostMode: boolean
@@ -32,6 +41,10 @@ type StudioState = {
   setFloorMaterial: (v: FloorMaterial) => void
   setWallMaterial: (v: WallMaterial) => void
   setWallColor: (v: string) => void
+  setRoomHeight: (v: number) => void
+  toggleDragMode: () => void
+  setItemOverride: (id: string, x: number, z: number) => void
+  clearItemOverrides: () => void
   setOptimizing: (v: boolean) => void
   setResult: (r: OptimizationResult) => void
   selectLayout: (id: string) => void
@@ -58,6 +71,13 @@ export const useStudioStore = create<StudioState>()(
       wallMaterial: 'Plain',
       wallColor: '#f5f5f4',
 
+      // ── Room height (2.0m – 5.0m) ──
+      roomHeightM: 3.2,
+
+      // ── Drag mode ──
+      dragMode: false,
+      itemOverrides: {},
+
       // ── Generation History State ──
       activeSnapshotIndex: -1, // -1 = show final result (default)
       ghostMode: false,
@@ -71,6 +91,10 @@ export const useStudioStore = create<StudioState>()(
       setFloorMaterial: (v) => set({ floorMaterial: v }),
       setWallMaterial: (v) => set({ wallMaterial: v }),
       setWallColor: (v) => set({ wallColor: v }),
+      setRoomHeight: (v) => set({ roomHeightM: Math.max(2.0, Math.min(5.0, v)) }),
+      toggleDragMode: () => set((s) => ({ dragMode: !s.dragMode })),
+      setItemOverride: (id, x, z) => set((s) => ({ itemOverrides: { ...s.itemOverrides, [id]: { x, z } } })),
+      clearItemOverrides: () => set({ itemOverrides: {} }),
 
       setOptimizing: (v) => set({ isOptimizing: v }),
 
@@ -99,7 +123,7 @@ export const useStudioStore = create<StudioState>()(
       toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
     }),
     {
-      name: 'layoutmindx-studio-v4',
+      name: 'layoutmindx-studio-v5',
       partialize: (s) => ({
         theme: s.theme,
         prompt: s.prompt,
@@ -108,8 +132,9 @@ export const useStudioStore = create<StudioState>()(
         floorMaterial: s.floorMaterial,
         wallMaterial: s.wallMaterial,
         wallColor: s.wallColor,
+        roomHeightM: s.roomHeightM,
       }),
-      version: 4,
+      version: 5,
     },
   ),
 )

@@ -19,6 +19,11 @@ export function WorkspacePage() {
   const isOptimizing = useStudioStore((state) => state.isOptimizing)
   const activeSnapshotIndex = useStudioStore((state) => state.activeSnapshotIndex)
   const ghostMode = useStudioStore((state) => state.ghostMode)
+  const roomHeightM = useStudioStore((state) => state.roomHeightM)
+  const setRoomHeight = useStudioStore((state) => state.setRoomHeight)
+  const dragMode = useStudioStore((state) => state.dragMode)
+  const toggleDragMode = useStudioStore((state) => state.toggleDragMode)
+  const clearItemOverrides = useStudioStore((state) => state.clearItemOverrides)
   const [showRemovedNotice, setShowRemovedNotice] = React.useState(true)
   const [showPanel, setShowPanel] = React.useState(true)
   const [showSaveLoad, setShowSaveLoad] = React.useState(false)
@@ -27,6 +32,7 @@ export function WorkspacePage() {
   const [showMaterialsPanel, setShowMaterialsPanel] = React.useState(false)
   const [showSuggestions, setShowSuggestions] = React.useState(false)
   const [isExporting, setIsExporting] = React.useState(false)
+  const [showHeightSlider, setShowHeightSlider] = React.useState(false)
   const [swappedItems, setSwappedItems] = React.useState<Record<string, { costINR: number; label: string; style: string }>>({})
   const [extraItems, setExtraItems] = React.useState<FurnitureItem[]>([])
 
@@ -237,6 +243,127 @@ export function WorkspacePage() {
               <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '7px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{btn.label}</span>
             </button>
           ))}
+
+          {/* ── DRAG MODE TOGGLE ── */}
+          <button
+            id="btn-drag-mode"
+            title={dragMode ? 'Exit Drag Mode (orbit camera)' : 'Drag Furniture Mode'}
+            onClick={() => toggleDragMode()}
+            style={{
+              width: '52px', padding: '14px 0', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer',
+              transition: 'all 0.2s', borderLeft: '2px solid transparent',
+              background: dragMode ? '#2D3B2D' : 'white',
+              color: dragMode ? '#FAF8F5' : '#6B6560',
+              borderLeftColor: dragMode ? '#C9A96E' : 'transparent',
+            }}
+            onMouseEnter={e => {
+              if (!dragMode) { e.currentTarget.style.background = '#F2EDE8'; e.currentTarget.style.borderLeftColor = '#C9A96E'; e.currentTarget.style.color = '#1A1A1A' }
+            }}
+            onMouseLeave={e => {
+              if (!dragMode) { e.currentTarget.style.background = 'white'; e.currentTarget.style.borderLeftColor = 'transparent'; e.currentTarget.style.color = '#6B6560' }
+            }}
+          >
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+            </svg>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '7px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Drag</span>
+          </button>
+
+          {/* ── ROOM HEIGHT SLIDER ── */}
+          <button
+            id="btn-room-height"
+            title="Adjust Room Height"
+            onClick={() => setShowHeightSlider(p => !p)}
+            style={{
+              width: '52px', padding: '14px 0', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer',
+              transition: 'all 0.2s', borderLeft: '2px solid transparent',
+              background: showHeightSlider ? '#FAF8F5' : 'white',
+              color: showHeightSlider ? '#2D3B2D' : '#6B6560',
+              borderLeftColor: showHeightSlider ? '#C9A96E' : 'transparent',
+            }}
+            onMouseEnter={e => {
+              if (!showHeightSlider) { e.currentTarget.style.background = '#F2EDE8'; e.currentTarget.style.borderLeftColor = '#C9A96E' }
+            }}
+            onMouseLeave={e => {
+              if (!showHeightSlider) { e.currentTarget.style.background = 'white'; e.currentTarget.style.borderLeftColor = 'transparent' }
+            }}
+          >
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25m-18 0V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M12 3v4.5" />
+            </svg>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '7px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Height</span>
+          </button>
+
+          {/* ── Height slider flyout ── */}
+          <AnimatePresence>
+            {showHeightSlider && (
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  position: 'absolute', left: '60px', top: '50%', transform: 'translateY(-50%)',
+                  background: 'white', border: '1px solid #E8E2DA', boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
+                  padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '10px',
+                  minWidth: '180px', zIndex: 100,
+                }}
+              >
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#C9A96E' }}>Room Height</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', fontWeight: 300, color: '#1A1A1A', minWidth: '48px' }}>{roomHeightM.toFixed(1)}m</span>
+                  <input
+                    id="room-height-slider"
+                    type="range"
+                    min={2.0}
+                    max={5.0}
+                    step={0.1}
+                    value={roomHeightM}
+                    onChange={e => setRoomHeight(parseFloat(e.target.value))}
+                    style={{ flex: 1, accentColor: '#C9A96E', cursor: 'pointer' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'DM Sans', sans-serif", fontSize: '8px', color: '#9B9690' }}>
+                  <span>2.0m — Low</span>
+                  <span>5.0m — High</span>
+                </div>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '4px' }}>
+                  {[2.4, 2.8, 3.2, 3.6, 4.0, 4.5].map(h => (
+                    <button
+                      key={h}
+                      onClick={() => setRoomHeight(h)}
+                      style={{
+                        fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 600,
+                        padding: '4px 8px', border: `1px solid ${Math.abs(roomHeightM - h) < 0.05 ? '#C9A96E' : '#E8E2DA'}`,
+                        background: Math.abs(roomHeightM - h) < 0.05 ? '#C9A96E' : 'transparent',
+                        color: Math.abs(roomHeightM - h) < 0.05 ? 'white' : '#6B6560',
+                        cursor: 'pointer', transition: 'all 0.15s',
+                      }}
+                    >{h.toFixed(1)}</button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* drag mode: reset overrides button */}
+          {dragMode && (
+            <button
+              id="btn-reset-positions"
+              title="Reset all furniture positions to AI layout"
+              onClick={() => clearItemOverrides()}
+              style={{ width: '52px', padding: '14px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', background: '#FFF5F5', border: 'none', cursor: 'pointer', color: '#C05050', transition: 'all 0.2s', borderLeft: '2px solid #E09090' }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#FFE8E8' }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#FFF5F5' }}
+            >
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '7px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Reset</span>
+            </button>
+          )}
 
           {/* PDF Export */}
           <button
