@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 
 export function GlowCard({ children, className = "" }: { children: React.ReactNode, className?: string }) {
   const divRef = useRef<HTMLDivElement>(null)

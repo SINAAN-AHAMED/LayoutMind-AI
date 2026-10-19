@@ -1,173 +1,408 @@
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { Textarea } from '../components/ui/Textarea'
-import { optimizeLayout } from '../lib/api'
+import { optimizeLayout, checkHealth } from '../lib/api'
 import type { OptimizeRequest } from '../lib/api'
 import { useStudioStore } from '../store/useStudioStore'
-import { AbstractBackground } from '../components/AbstractBackground'
-import { useState } from 'react'
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+const STYLES = ['Modern', 'Cozy', 'Luxury', 'Minimal', 'Compact', 'Bohemian'] as const
+const PLACEHOLDER = 'Design a modern living room 7 by 6 meters under ₹4,50,000...'
+const PRESETS = [
+  'Design a modern living room 7×6m under ₹4,50,000',
+  'Design a cozy bedroom 4×5m with wardrobe and study table',
+  'Design a compact studio apartment 5×5m under ₹2,00,000',
+]
+const FLOOR_MATERIALS = ['Wood', 'Tile', 'Carpet', 'Marble', 'Granite', 'Epoxy']
+const WALL_MATERIALS = ['Plain', 'Panel', 'Brick', 'Wallpaper', 'Textured', 'Stone']
+
+// ─── Styles ───────────────────────────────────────────────────────────────────
+const S = {
+  label: {
+    display: 'block',
+    fontFamily: "'DM Sans', sans-serif",
+    fontSize: '10px',
+    fontWeight: 600,
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.25em',
+    color: '#6B6560',
+    marginBottom: '20px',
+  } as React.CSSProperties,
+  chip: (active: boolean): React.CSSProperties => ({
+    padding: '8px 16px',
+    border: `1px solid ${active ? '#2D3B2D' : '#E8E2DA'}`,
+    background: active ? '#2D3B2D' : 'transparent',
+    color: active ? '#FAF8F5' : '#6B6560',
+    fontFamily: "'DM Sans', sans-serif",
+    fontSize: '10px',
+    fontWeight: 600,
+    textTransform: 'uppercase',
+    letterSpacing: '0.2em',
+    cursor: 'pointer',
+    transition: 'all 0.25s',
+  }),
+  materialChip: (active: boolean): React.CSSProperties => ({
+    padding: '6px 12px',
+    border: `1px solid ${active ? '#1A1A1A' : '#E8E2DA'}`,
+    background: 'transparent',
+    color: active ? '#1A1A1A' : '#6B6560',
+    fontFamily: "'DM Sans', sans-serif",
+    fontSize: '10px',
+    fontWeight: 600,
+    textTransform: 'uppercase',
+    letterSpacing: '0.15em',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  }),
+}
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 export function PromptStudioPage() {
   const nav = useNavigate()
   const st = useStudioStore()
+  const [serviceStatus, setServiceStatus] = useState<'checking' | 'ok' | 'error'>('checking')
+  const [activeFloor, setActiveFloor] = useState('Wood')
+  const [activeWall, setActiveWall] = useState('Panel')
 
-  // Default professional prompt when empty
-  const defaultPrompt = 'Design a living room spanning 6x8 meters under 450,000 INR.'
+  // Poll Python engine health every 5 seconds
+  useEffect(() => {
+    const check = async () => {
+      try {
+        const ctrl = new AbortController()
+        const timeout = setTimeout(() => ctrl.abort(), 3000)
+        const isOk = await checkHealth(ctrl.signal)
+        clearTimeout(timeout)
+        setServiceStatus(isOk ? 'ok' : 'error')
+      } catch {
+        setServiceStatus('error')
+      }
+    }
+    check()
+    const interval = setInterval(check, 5000)
+    return () => clearInterval(interval)
+  }, [])
 
   async function onGenerate() {
-    const promptToUse = st.prompt.trim() ? st.prompt : defaultPrompt
-    if (!st.prompt.trim()) st.setPrompt(defaultPrompt) 
-    
+    const promptToUse = st.prompt.trim() || PLACEHOLDER
+    if (!st.prompt.trim()) st.setPrompt(promptToUse)
     st.setOptimizing(true)
     try {
       const payload: OptimizeRequest = {
         prompt: promptToUse,
         explicitStyle: st.explicitStyle,
         addPlants: st.addPlants,
-        addRugs: st.addRugs
+        addRugs: st.addRugs,
       }
       const result = await optimizeLayout(payload)
       st.setResult(result)
       nav('/workspace')
-    } catch (e: any) {
-      alert(e?.message ?? 'Optimization failed')
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Unknown error'
+      alert(`Generation failed: ${msg}\n\nMake sure Python is installed and the AI engine started.`)
     } finally {
       st.setOptimizing(false)
     }
   }
 
-  const STYLES = ["Modern", "Cozy", "Luxury", "Minimal", "Compact"]
-
   return (
-    <div className="min-h-screen pt-24 px-4 md:px-8 pb-32 relative bg-bg-primary overflow-hidden font-sans">
-      
-      {/* Background Decor */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/3" />
-      
-      <div className="max-w-7xl mx-auto relative z-10">
-        
+    <div
+      style={{
+        position: 'fixed', inset: 0,
+        display: 'flex', overflow: 'hidden',
+        fontFamily: "'DM Sans', sans-serif",
+        background: '#FAF8F5', color: '#1A1A1A',
+      }}
+    >
+
+      {/* ══ LEFT PANEL ══════════════════════════════════════════════════════════ */}
+      <aside style={{
+        width: '420px', flexShrink: 0, height: '100%',
+        background: '#FAF8F5',
+        borderRight: '1px solid #E8E2DA',
+        display: 'flex', flexDirection: 'column',
+        position: 'relative', zIndex: 10,
+      }}>
+
         {/* Header */}
-        <header className="mb-12">
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-text-primary dark:text-white mb-3">
-              New Layout Project
-            </h1>
-            <p className="text-text-secondary dark:text-white/60 text-lg">
-              Configure parameters and natural language constraints to generate a 3D layout.
-            </p>
-          </motion.div>
+        <header style={{ padding: '32px 40px 24px', borderBottom: '1px solid #E8E2DA', flexShrink: 0 }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', fontWeight: 400, color: '#1A1A1A', marginBottom: '4px', letterSpacing: '-0.02em' }}>
+            LayoutMind
+          </h1>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3em', color: '#C9A96E' }}>
+            AI INTERIOR STUDIO
+          </p>
         </header>
 
-        {/* 2-Column SaaS Dashboard */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Left Column: Form Controls */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-            className="lg:col-span-5 space-y-8"
-          >
-            {/* Prompt Card */}
-            <div className="bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-6 shadow-sm">
-              <label className="block text-sm font-semibold text-text-primary dark:text-white mb-2">Architectural Prompt</label>
-              <Textarea
+        {/* Scrollable Content */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '32px 40px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+
+          {/* Section 1 — Prompt */}
+          <section>
+            <label style={S.label}>YOUR VISION</label>
+            <div>
+              <textarea
                 value={st.prompt}
-                onChange={(e) => st.setPrompt(e.target.value)}
-                placeholder={defaultPrompt}
-                className="w-full h-32 bg-transparent text-base md:text-lg"
+                onChange={e => st.setPrompt(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) onGenerate() }}
+                placeholder="Describe your ideal interior space..."
+                rows={5}
+                style={{
+                  width: '100%', boxSizing: 'border-box',
+                  background: 'transparent',
+                  border: 'none', borderBottom: '1px solid #1A1A1A',
+                  padding: '0 0 12px 0', outline: 'none',
+                  fontFamily: "'Playfair Display', serif",
+                  fontStyle: 'italic', fontSize: '16px',
+                  color: '#1A1A1A', resize: 'none',
+                  lineHeight: 1.6,
+                }}
+                onFocus={e => { e.currentTarget.style.borderBottomColor = '#C9A96E' }}
+                onBlur={e => { e.currentTarget.style.borderBottomColor = '#1A1A1A' }}
               />
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#C9A96E' }}>
+                  Ctrl+Enter to generate
+                </span>
+              </div>
             </div>
+          </section>
 
-            {/* Config Card */}
-            <div className="bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl p-6 shadow-sm space-y-6">
-              
-              <div>
-                <label className="block text-sm font-semibold text-text-primary dark:text-white mb-3">Aesthetic Style</label>
-                <div className="flex flex-wrap gap-2">
-                  {STYLES.map(style => (
-                    <button
-                      key={style}
-                      onClick={() => st.setExplicitStyle(style)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                        st.explicitStyle === style 
-                        ? 'bg-primary text-white shadow-md' 
-                        : 'bg-text-primary/5 dark:bg-white/5 text-text-secondary dark:text-white/70 hover:bg-black/5 dark:hover:bg-white/10'
-                      }`}
-                    >
-                      {style}
-                    </button>
-                  ))}
+          {/* Section 2 — Style */}
+          <section>
+            <label style={S.label}>AESTHETIC DIRECTION</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+              {STYLES.map(style => (
+                <button
+                  key={style}
+                  onClick={() => st.setExplicitStyle(st.explicitStyle === style ? '' : style)}
+                  style={S.chip(st.explicitStyle === style)}
+                  onMouseEnter={e => { if (st.explicitStyle !== style) { e.currentTarget.style.borderColor = '#1A1A1A'; e.currentTarget.style.color = '#1A1A1A' } }}
+                  onMouseLeave={e => { if (st.explicitStyle !== style) { e.currentTarget.style.borderColor = '#E8E2DA'; e.currentTarget.style.color = '#6B6560' } }}
+                >
+                  {style}
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* Section 3 — Materials */}
+          <section style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+            <div>
+              <label style={S.label}>FLOOR MATERIAL</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {FLOOR_MATERIALS.map(m => (
+                  <span
+                    key={m}
+                    onClick={() => setActiveFloor(m)}
+                    style={S.materialChip(activeFloor === m)}
+                  >
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label style={S.label}>WALL MATERIAL</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {WALL_MATERIALS.map(m => (
+                  <span
+                    key={m}
+                    onClick={() => setActiveWall(m)}
+                    style={S.materialChip(activeWall === m)}
+                  >
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Section 4 — Space Elements */}
+          <section>
+            <label style={S.label}>SPACE ELEMENTS</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {[
+                { label: 'Indoor Plants', value: st.addPlants, set: st.setAddPlants },
+                { label: 'Center Rugs', value: st.addRugs, set: st.setAddRugs },
+              ].map(opt => (
+                <label
+                  key={opt.label}
+                  onClick={() => opt.set(!opt.value)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+                >
+                  <div style={{
+                    width: '16px', height: '16px',
+                    border: '1px solid #1A1A1A',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: opt.value ? '#2D3B2D' : 'transparent',
+                    transition: 'all 0.2s', flexShrink: 0,
+                  }}>
+                    {opt.value && (
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FAF8F5" strokeWidth="3">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    )}
+                  </div>
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '15px', color: opt.value ? '#1A1A1A' : '#6B6560', transition: 'color 0.2s' }}>
+                    {opt.label}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </section>
+
+          {/* Section 5 — Presets */}
+          <section>
+            <label style={S.label}>QUICK COMPOSITIONS</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {PRESETS.map((preset, i) => (
+                <div
+                  key={preset}
+                  onClick={() => st.setPrompt(preset)}
+                  style={{
+                    paddingLeft: '16px',
+                    borderLeft: `2px solid ${i === 0 ? '#C9A96E' : 'transparent'}`,
+                    cursor: 'pointer', paddingTop: '4px', paddingBottom: '4px',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderLeftColor = '#C9A96E'; e.currentTarget.style.background = 'rgba(242,237,232,0.5)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderLeftColor = i === 0 ? '#C9A96E' : 'transparent'; e.currentTarget.style.background = 'transparent' }}
+                >
+                  <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontSize: '14px', color: i === 0 ? '#1A1A1A' : '#6B6560', lineHeight: 1.5, margin: 0 }}>
+                    "{preset}"
+                  </p>
                 </div>
-              </div>
-
-              <div className="pt-4 border-t border-black/5 dark:border-white/10">
-                <label className="block text-sm font-semibold text-text-primary dark:text-white mb-4">Additional Decor Primitives</label>
-                
-                <div className="space-y-4">
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${st.addPlants ? 'bg-primary border-primary' : 'border-black/20 dark:border-white/20 group-hover:border-primary/50'}`}>
-                      {st.addPlants && <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                    </div>
-                    <input type="checkbox" className="hidden" checked={st.addPlants} onChange={(e) => st.setAddPlants(e.target.checked)} />
-                    <span className="text-sm font-medium text-text-secondary dark:text-white/80 select-none">Include Indoor Plants</span>
-                  </label>
-
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${st.addRugs ? 'bg-primary border-primary' : 'border-black/20 dark:border-white/20 group-hover:border-primary/50'}`}>
-                      {st.addRugs && <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                    </div>
-                    <input type="checkbox" className="hidden" checked={st.addRugs} onChange={(e) => st.setAddRugs(e.target.checked)} />
-                    <span className="text-sm font-medium text-text-secondary dark:text-white/80 select-none">Include Center Rugs</span>
-                  </label>
-                </div>
-              </div>
-
+              ))}
             </div>
-
-            <button 
-              onClick={onGenerate}
-              disabled={st.isOptimizing}
-              className="w-full relative overflow-hidden rounded-xl bg-text-primary dark:bg-white text-bg-primary dark:text-black px-6 py-4 font-bold tracking-wide hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg"
-            >
-              {st.isOptimizing ? (
-                <>
-                  <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                  Processing Layout...
-                </>
-              ) : (
-                <>
-                  Generate 3D Layout
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                </>
-              )}
-            </button>
-          </motion.div>
-
-          {/* Right Column: Preview/Interactive Visuals */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:col-span-7"
-          >
-            <div className="w-full h-full min-h-[400px] lg:min-h-full relative rounded-3xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10 group bg-[#070812]">
-              
-              <img 
-                src="/images/house.jpg" 
-                alt="Modern Architecture" 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-              />
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-8 z-10 transition-colors duration-700 pointer-events-none">
-                 <div className="text-white/70 text-xs font-bold tracking-widest uppercase mb-2">Smart Engine</div>
-                 <div className="text-white text-3xl font-black">{st.explicitStyle || 'Modern'} Generation</div>
-                 <div className="flex gap-4 mt-4">
-                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur text-xs font-semibold text-white">AI Spacing Constraints</span>
-                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur text-xs font-semibold text-white">Arch-Viz Material Textures</span>
-                 </div>
-              </div>
-            </div>
-          </motion.div>
-
+          </section>
         </div>
-      </div>
+
+        {/* Footer */}
+        <footer style={{ padding: '24px 40px', borderTop: '1px solid #E8E2DA', background: '#FAF8F5', flexShrink: 0 }}>
+          <button
+            onClick={onGenerate}
+            disabled={st.isOptimizing}
+            style={{
+              width: '100%',
+              padding: '16px',
+              background: st.isOptimizing ? '#6B6560' : '#2D3B2D',
+              color: '#FAF8F5',
+              border: 'none',
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '11px', fontWeight: 600,
+              textTransform: 'uppercase', letterSpacing: '0.2em',
+              cursor: st.isOptimizing ? 'not-allowed' : 'pointer',
+              transition: 'all 0.3s',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              marginBottom: '12px',
+            }}
+            onMouseEnter={e => { if (!st.isOptimizing) e.currentTarget.style.background = '#1a2a1a' }}
+            onMouseLeave={e => { if (!st.isOptimizing) e.currentTarget.style.background = '#2D3B2D' }}
+          >
+            {st.isOptimizing ? (
+              <>
+                <span style={{ width: '14px', height: '14px', borderRadius: '50%', border: '2px solid rgba(250,248,245,0.3)', borderTopColor: '#FAF8F5', display: 'inline-block', animation: 'elyse-spin 0.8s linear infinite' }} />
+                Processing Layout...
+              </>
+            ) : (
+              <>
+                GENERATE LAYOUT
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </>
+            )}
+          </button>
+
+          {/* Status */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <span style={{
+              width: '6px', height: '6px', borderRadius: '50%',
+              background: serviceStatus === 'ok' ? '#C9A96E' : serviceStatus === 'error' ? '#8B5E52' : '#E8E2DA',
+              animation: 'elyse-pulse 2s ease infinite',
+            }} />
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#6B6560' }}>
+              {serviceStatus === 'ok' ? 'AI Engine ready' : serviceStatus === 'error' ? 'Engine offline' : 'Connecting...'}
+            </span>
+          </div>
+        </footer>
+      </aside>
+
+      {/* ══ RIGHT PANEL ═════════════════════════════════════════════════════════ */}
+      <main style={{
+        flex: 1, height: '100%',
+        background: '#F2EDE8',
+        display: 'flex', flexDirection: 'column',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        {/* Version watermark */}
+        <div style={{ position: 'absolute', top: '32px', right: '40px', zIndex: 20 }}>
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.25em', color: '#6B6560' }}>
+            LAYOUTMIND v1.0
+          </span>
+        </div>
+
+        {/* Center wireframe illustration */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px' }}>
+          <div style={{ width: '100%', maxWidth: '700px' }}>
+            <img
+              alt="Architectural wireframe"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhosh8L-GD7OwcyKM48HyfCzsgiDcb7EKWNBkqWdjLwZsQYt0f0c30LOH8e5L8GHHFgVwLdThFL94tuCr58B8Ou4t6BKkj7ultiI-ksjkTDZ2ueudx5JkUfarmmzYlSiH2KQgwaPC_jiHnyyuy9ccGlalyL-dDviCljc0lr41HcK52CxXyNPD2jJxoj19i2HomLEZnfMgUOxNtHu5UUIT5kg_3mdYM3mF_zqBtO6clqBEZCZLEvV_grnY9buk2SKNZgtlhqLzmyRY"
+              style={{ width: '100%', height: 'auto', objectFit: 'contain', mixBlendMode: 'multiply', opacity: 0.75 }}
+            />
+          </div>
+        </div>
+
+        {/* Bottom row */}
+        <div style={{
+          padding: '32px 40px',
+          borderTop: '1px solid #E8E2DA',
+          background: 'rgba(242,237,232,0.85)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          position: 'relative', zIndex: 20,
+        }}>
+          {/* Stats */}
+          <div style={{ display: 'flex', gap: '64px' }}>
+            {[
+              { value: '40+', label: 'Generations' },
+              { value: '8', label: 'Styles' },
+              { value: '∞', label: 'Layouts' },
+            ].map(s => (
+              <div key={s.label} style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', fontWeight: 400, color: '#1A1A1A' }}>
+                  {s.value}
+                </span>
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#6B6560', marginTop: '4px' }}>
+                  {s.label}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Tech tags */}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            {['NLP', 'Scikit-Fuzzy', 'DEAP', 'R3F'].map(tag => (
+              <span key={tag} style={{
+                padding: '4px 10px',
+                border: '1px solid #C9A96E',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '9px', fontWeight: 600,
+                textTransform: 'uppercase', letterSpacing: '0.2em',
+                color: '#C9A96E',
+              }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </main>
+
+      {/* Keyframes */}
+      <style>{`
+        @keyframes elyse-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes elyse-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:ital,wght@0,300;0,400;1,400&display=swap');
+      `}</style>
     </div>
   )
 }

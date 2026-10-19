@@ -13,7 +13,7 @@ export function Act2HowItWorks() {
       const ctx = gsap.context(() => {
         const panels = gsap.utils.toArray('.panel') as HTMLElement[]
         
-        panels.forEach((panel, i) => {
+        panels.forEach((panel, _i) => {
           // Fade in and lift the panel as it enters
           gsap.fromTo(panel, 
             { opacity: 0, y: 100 },

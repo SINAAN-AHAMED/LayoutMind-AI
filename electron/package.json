@@ -1,0 +1,77 @@
+{
+  "name": "layoutmind-desktop",
+  "version": "1.0.0",
+  "author": "AHMED SINAAN",
+  "description": "LayoutMind AI Interior Layout Studio — Desktop Edition",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win",
+    "dist:dir": "electron-builder --win --dir"
+  },
+  "build": {
+    "appId": "com.ahmedsinaan.layoutmind",
+    "productName": "LayoutMind",
+    "copyright": "Copyright © 2026 AHMED SINAAN. All Rights Reserved.",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "forceCodeSigning": false,
+    "files": [
+      "main.js",
+      "preload.js",
+      "splash.html",
+      "fonts/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../frontend/dist",
+        "to": "frontend/dist",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../backend",
+        "to": "backend",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../softcomputing-service",
+        "to": "softcomputing-service",
+        "filter": ["**/*", "!__pycache__/**", "!*.pyc"]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "requestedExecutionLevel": "asInvoker",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "LayoutMind",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "tree-kill": "^1.2.2"
+  }
+}

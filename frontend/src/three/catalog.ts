@@ -89,5 +89,19 @@ export const furnitureCatalog: Record<FurnitureType, FurnitureSpec> = {
     targetSizeM: { x: 1.2, z: 0.35, y: 2.1 },
     costINR: 15000,
   },
+  ottoman: {
+    type: 'ottoman',
+    label: 'Ottoman',
+    modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Duck/glTF-Binary/Duck.glb',
+    targetSizeM: { x: 0.8, z: 0.8, y: 0.45 },
+    costINR: 8500,
+  },
+  dresser: {
+    type: 'dresser',
+    label: 'Dresser',
+    modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Duck/glTF-Binary/Duck.glb',
+    targetSizeM: { x: 1.1, z: 0.5, y: 1.0 },
+    costINR: 24000,
+  },
 }
 

@@ -258,24 +258,171 @@ function TvUnitComposite({ styleKey }: { styleKey: DominantStyle }) {
   const isLuxury = styleKey === 'Luxury'
   const isModern = styleKey === 'Modern'
   const isIndustrial = styleKey === 'Industrial'
+  const isMinimal = styleKey === 'Minimal'
+  const isCompact = styleKey === 'Compact'
+  const isCozy = styleKey === 'Cozy'
+  const isCoastal = styleKey === 'Coastal'
 
   const WoodBody = <meshStandardMaterial color={p.wood} roughness={0.6} metalness={0.05} />
   const Screen = <meshStandardMaterial color="#050505" roughness={0.05} metalness={0.9} />
   const Glow = <meshStandardMaterial color="#0a0a0a" emissive="#1d4ed8" emissiveIntensity={0.3} />
   const Metal = <meshStandardMaterial color={p.metal} roughness={isLuxury ? 0.2 : 0.4} metalness={0.8} />
 
+  // Minimal: floating wall-mount shelf only — no console
+  if (isMinimal) {
+    return (
+      <group>
+        {/* Thin floating wall shelf - in front of unit */}
+        <mesh position={[0, 0.12, 0.0]} castShadow receiveShadow>
+          <boxGeometry args={[1.6, 0.06, 0.22]} />
+          <meshStandardMaterial color={p.secondary} roughness={0.3} metalness={0.1} />
+        </mesh>
+        {/* TV screen facing into room (positive Z = toward room center) */}
+        <mesh position={[0, 0.88, 0.06]} castShadow>
+          <boxGeometry args={[1.5, 0.85, 0.04]} />
+          {Screen}
+        </mesh>
+        <mesh position={[0, 0.88, 0.09]}>
+          <boxGeometry args={[1.45, 0.8, 0.01]} />
+          {Glow}
+        </mesh>
+        {/* Wall bracket */}
+        <mesh position={[0, 0.55, -0.04]}>
+          <boxGeometry args={[0.4, 0.04, 0.12]} />
+          <meshStandardMaterial color={p.metal} roughness={0.3} metalness={0.8} />
+        </mesh>
+      </group>
+    )
+  }
+
+  // Compact: small lowboard with open cubbies
+  if (isCompact) {
+    return (
+      <group>
+        <mesh position={[0, 0.18, 0]} castShadow receiveShadow>
+          <boxGeometry args={[1.4, 0.34, 0.38]} />
+          <meshStandardMaterial color="#e0e0e0" roughness={0.8} />
+        </mesh>
+        {/* Open cubbies */}
+        {[-0.45, 0, 0.45].map((x, i) => (
+          <mesh key={i} position={[x, 0.18, 0.2]}>
+            <boxGeometry args={[0.42, 0.28, 0.01]} />
+            <meshStandardMaterial color={p.secondary} roughness={0.6} />
+          </mesh>
+        ))}
+        {/* Slim legs */}
+        {[-0.62, 0.62].map(x => [-0.14, 0.14].map(z => (
+          <mesh key={`${x}-${z}`} position={[x, 0.05, z]} castShadow>
+            <boxGeometry args={[0.04, 0.1, 0.04]} />
+            {Metal}
+          </mesh>
+        )))}
+        {/* TV screen */}
+        <mesh position={[0, 0.85, -0.08]} castShadow>
+          <boxGeometry args={[1.3, 0.75, 0.04]} />
+          {Screen}
+        </mesh>
+        <mesh position={[0, 0.85, -0.05]}>
+          <boxGeometry args={[1.25, 0.7, 0.01]} />
+          {Glow}
+        </mesh>
+      </group>
+    )
+  }
+
+  // Cozy: vintage solid wood credenza with legs
+  if (isCozy) {
+    return (
+      <group>
+        {/* Main credenza body */}
+        <mesh position={[0, 0.28, 0]} castShadow receiveShadow>
+          <boxGeometry args={[1.7, 0.5, 0.48]} />
+          <meshStandardMaterial color={p.wood} roughness={0.7} />
+        </mesh>
+        {/* Panelled doors */}
+        {[-0.55, 0, 0.55].map((x, i) => (
+          <mesh key={i} position={[x, 0.28, 0.25]} castShadow>
+            <boxGeometry args={[0.54, 0.44, 0.02]} />
+            <meshStandardMaterial color={p.secondary} roughness={0.75} />
+          </mesh>
+        ))}
+        {/* Brass knobs */}
+        {[-0.55, 0, 0.55].map((x, i) => (
+          <mesh key={`k${i}`} position={[x, 0.28, 0.27]}>
+            <sphereGeometry args={[0.02, 8, 8]} />
+            <meshStandardMaterial color="#c9a227" metalness={0.8} roughness={0.2} />
+          </mesh>
+        ))}
+        {/* Tapered legs */}
+        {[-0.75, 0.75].map(x => [-0.18, 0.18].map(z => (
+          <mesh key={`${x}-${z}`} position={[x, 0.07, z]} castShadow>
+            <cylinderGeometry args={[0.025, 0.015, 0.14, 8]} />
+            <meshStandardMaterial color={p.wood} roughness={0.6} />
+          </mesh>
+        )))}
+        {/* TV screen */}
+        <mesh position={[0, 1.0, -0.08]} castShadow>
+          <boxGeometry args={[1.4, 0.8, 0.04]} />
+          {Screen}
+        </mesh>
+        <mesh position={[0, 1.0, -0.05]}>
+          <boxGeometry args={[1.35, 0.75, 0.01]} />
+          {Glow}
+        </mesh>
+      </group>
+    )
+  }
+
+  // Coastal: rattan-style low console with woven panel
+  if (isCoastal) {
+    return (
+      <group>
+        <mesh position={[0, 0.22, 0]} castShadow receiveShadow>
+          <boxGeometry args={[1.65, 0.38, 0.42]} />
+          <meshStandardMaterial color="#c8a882" roughness={0.9} />
+        </mesh>
+        {/* Woven panel front */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <mesh key={i} position={[-0.77 + i * 0.22, 0.22, 0.22]} castShadow>
+            <boxGeometry args={[0.04, 0.34, 0.02]} />
+            <meshStandardMaterial color="#b89870" roughness={0.95} />
+          </mesh>
+        ))}
+        {/* Simple legs */}
+        {[-0.74, 0.74].map(x => [-0.16, 0.16].map(z => (
+          <mesh key={`${x}-${z}`} position={[x, 0.05, z]} castShadow>
+            <cylinderGeometry args={[0.02, 0.02, 0.1, 8]} />
+            <meshStandardMaterial color={p.wood} roughness={0.9} />
+          </mesh>
+        )))}
+        {/* TV screen */}
+        <mesh position={[0, 0.92, -0.08]} castShadow>
+          <boxGeometry args={[1.45, 0.82, 0.04]} />
+          {Screen}
+        </mesh>
+        <mesh position={[0, 0.92, -0.05]}>
+          <boxGeometry args={[1.40, 0.77, 0.01]} />
+          {Glow}
+        </mesh>
+      </group>
+    )
+  }
+
+  // Default: Luxury / Modern / Industrial console
   return (
     <group>
       {/* Console Base */}
-      <RoundedBox args={[1.8, 0.4, 0.45]} radius={0.015} smoothness={4} position={[0, 0.2, 0]} castShadow receiveShadow>
+      <mesh position={[0, 0.2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[1.8, 0.4, 0.45]} />
         {WoodBody}
-      </RoundedBox>
+      </mesh>
 
       {/* Floating Shelf for Modern/Luxury */}
       {(isModern || isLuxury) && (
-        <RoundedBox args={[1.8, 0.06, 0.3]} radius={0.01} smoothness={3} position={[0, 0.48, 0.05]} castShadow receiveShadow>
+        <mesh position={[0, 0.48, 0.05]} castShadow receiveShadow>
+          <boxGeometry args={[1.8, 0.06, 0.3]} />
           {WoodBody}
-        </RoundedBox>
+        </mesh>
       )}
 
       {/* Cabinet Doors */}
@@ -292,7 +439,6 @@ function TvUnitComposite({ styleKey }: { styleKey: DominantStyle }) {
          <meshStandardMaterial color={p.secondary} roughness={0.6} />}
       </mesh>
 
-      {/* Gold/Metal handles for Luxury */}
       {(isLuxury || isModern || isIndustrial) && (
         <>
           <mesh position={[-0.45, 0.2, 0.245]} castShadow>
@@ -307,15 +453,14 @@ function TvUnitComposite({ styleKey }: { styleKey: DominantStyle }) {
       )}
 
       {/* TV Screen */}
-      <RoundedBox args={[1.5, 0.85, 0.04]} radius={0.015} smoothness={3} position={[0, 0.9, -0.08]} castShadow receiveShadow>
+      <mesh position={[0, 0.9, -0.08]} castShadow receiveShadow>
+        <boxGeometry args={[1.5, 0.85, 0.04]} />
         {Screen}
-      </RoundedBox>
-      {/* Screen glow panel */}
+      </mesh>
       <mesh position={[0, 0.9, -0.05]}>
         <boxGeometry args={[1.45, 0.8, 0.01]} />
         {Glow}
       </mesh>
-      {/* LED backlight for Luxury/Modern */}
       {(isLuxury || isModern) && (
         <rectAreaLight width={1.4} height={0.8} intensity={8} color={isLuxury ? "#66aaff" : "#38bdf8"} position={[0, 0.9, -0.09]} rotation={[0, Math.PI, 0]} />
       )}
@@ -330,7 +475,6 @@ function TvUnitComposite({ styleKey }: { styleKey: DominantStyle }) {
         {Metal}
       </mesh>
 
-      {/* Industrial metal legs */}
       {isIndustrial && (
         <>
           {[-0.8, 0.8].map(x => (
@@ -932,6 +1076,8 @@ function ChairComposite({ styleKey }: { styleKey: DominantStyle }) {
   const isLuxury = styleKey === 'Luxury'
   const isCozy = styleKey === 'Cozy'
   const isModern = styleKey === 'Modern'
+  const isCompact = styleKey === 'Compact'
+  const isBohemian = styleKey === 'Bohemian'
 
   const Fabric = <meshStandardMaterial color={p.primary} roughness={0.8} />
   const LegMat = <meshStandardMaterial color={p.metal} metalness={0.6} roughness={0.4} />
@@ -1009,6 +1155,46 @@ function ChairComposite({ styleKey }: { styleKey: DominantStyle }) {
     )
   }
 
+  // Bean Bag for Compact
+  if (isCompact) {
+    return (
+      <group>
+        <mesh position={[0, 0.28, 0]} scale={[1, 0.8, 1]} castShadow receiveShadow>
+          <dodecahedronGeometry args={[0.42, 2]} />
+          <meshStandardMaterial color={p.primary} roughness={0.9} />
+        </mesh>
+        {/* Top tuft / slouch */}
+        <mesh position={[0, 0.55, -0.05]} scale={[0.8, 0.6, 0.8]} rotation={[-0.1, 0, 0]} castShadow receiveShadow>
+          <sphereGeometry args={[0.3, 16, 16]} />
+          <meshStandardMaterial color={p.primary} roughness={0.9} />
+        </mesh>
+      </group>
+    )
+  }
+
+  // Rattan Peacock chair for Bohemian
+  if (isBohemian) {
+    return (
+      <group>
+        {/* Seat cushion */}
+        <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.3, 0.3, 0.1, 16]} />
+          <meshStandardMaterial color={p.secondary} roughness={0.9} />
+        </mesh>
+        {/* Rattan base */}
+        <mesh position={[0, 0.22, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.25, 0.35, 0.44, 16]} />
+          <meshStandardMaterial color={p.wood} roughness={0.8} />
+        </mesh>
+        {/* Large peacock backrest */}
+        <mesh position={[0, 0.9, -0.25]} rotation={[0.1, 0, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.6, 0.6, 0.05, 16]} />
+          <meshStandardMaterial color={p.wood} roughness={0.8} />
+        </mesh>
+      </group>
+    )
+  }
+
   // Default chair
   return (
     <group>
@@ -1037,23 +1223,27 @@ function BookshelfComposite({ styleKey }: { styleKey: DominantStyle }) {
   // Generate books for shelves
   const bookColors = [p.primary, p.secondary, p.accent, p.wood, '#c0392b', '#27ae60', '#2980b9', '#8e44ad']
   const books = []
-  const shelfRows = isMinimal ? 3 : 5
+  // Shelf plank centers: 0.42, 0.84, 1.26, 1.68 — top surface = center + 0.035/2 = +0.0175
+  const shelfTops = [0.44, 0.86, 1.28, 1.70] // shelf top surface Y for each row
+  const shelfRows = isMinimal ? 3 : 4
   for (let row = 0; row < shelfRows; row++) {
-    const y = 0.28 + row * 0.42
-    const count = isMinimal ? 4 : 7 + Math.floor(Math.random() * 3)
-    let x = -0.52
+    const shelfTopY = shelfTops[row]
+    const count = isMinimal ? 4 : 6 + (row % 3)
+    let x = -0.50
     for (let b = 0; b < count; b++) {
-      const w = 0.04 + Math.random() * 0.04
-      const h = 0.22 + Math.random() * 0.12
-      const color = bookColors[Math.floor(Math.random() * bookColors.length)]
-      const lean = Math.random() > 0.85 ? (Math.random() * 0.3 - 0.15) : 0
+      const w = 0.04 + (((row * 7 + b * 3) % 5) * 0.01)
+      const h = 0.20 + (((row * 3 + b * 7) % 5) * 0.025)
+      const colorIdx = (row * 5 + b * 3) % bookColors.length
+      const color = bookColors[colorIdx]
+      const lean = b % 7 === 0 ? ((b % 2 === 0 ? 1 : -1) * 0.18) : 0
+      if (x + w > 0.52) break
       books.push(
-        <mesh key={`b-${row}-${b}`} position={[x + w / 2, y + h / 2, 0]} rotation={[0, 0, lean]} castShadow>
-          <boxGeometry args={[w, h, 0.22]} />
+        <mesh key={`b-${row}-${b}`} position={[x + w / 2, shelfTopY + h / 2, 0]} rotation={[0, 0, lean]} castShadow>
+          <boxGeometry args={[w, h, 0.24]} />
           <meshStandardMaterial color={color} roughness={0.9} />
         </mesh>
       )
-      x += w + 0.005
+      x += w + 0.004
     }
   }
 
@@ -1173,7 +1363,7 @@ function PlantComposite({ styleKey }: { styleKey: DominantStyle }) {
     )
   }
 
-  // Cactus for Industrial/Minimal
+      {/* Cactus for Industrial */}
   if (isIndustrial) {
     return (
       <group>
@@ -1197,7 +1387,58 @@ function PlantComposite({ styleKey }: { styleKey: DominantStyle }) {
     )
   }
 
-  // Default plant
+  // Compact: succulent in pot
+  if (styleKey === 'Compact') {
+    return (
+      <group>
+        <mesh position={[0, 0.1, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.12, 0.09, 0.18, 10]} />
+          <meshStandardMaterial color="#c0784a" roughness={0.8} />
+        </mesh>
+        {[0,1,2,3,4,5].map(i => {
+          const ang = (i / 6) * Math.PI * 2
+          return (
+            <mesh key={i} position={[Math.cos(ang) * 0.08, 0.22, Math.sin(ang) * 0.08]} rotation={[0.6, ang, 0]} castShadow>
+              <boxGeometry args={[0.04, 0.12, 0.025]} />
+              <meshStandardMaterial color="#4a9a4a" roughness={0.7} />
+            </mesh>
+          )
+        })}
+        <mesh position={[0, 0.19, 0]} castShadow>
+          <sphereGeometry args={[0.06, 8, 8]} />
+          <meshStandardMaterial color="#3a8040" roughness={0.8} />
+        </mesh>
+      </group>
+    )
+  }
+
+  // Coastal: palm tree
+  if (styleKey === 'Coastal') {
+    return (
+      <group>
+        <mesh position={[0, 0.18, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.14, 0.11, 0.35, 10]} />
+          <meshStandardMaterial color="#a8c8d8" roughness={0.8} />
+        </mesh>
+        <mesh position={[0, 0.65, 0]} castShadow>
+          <cylinderGeometry args={[0.04, 0.06, 0.7, 8]} />
+          <meshStandardMaterial color="#8b7355" roughness={0.9} />
+        </mesh>
+        {[0,1,2,3,4].map(i => {
+          const ang = (i / 5) * Math.PI * 2
+          return (
+            <mesh key={i} position={[Math.cos(ang) * 0.22, 1.0 - Math.abs(Math.sin(ang)) * 0.1, Math.sin(ang) * 0.22]}
+              rotation={[Math.PI/2.2, ang, 0]} castShadow>
+              <boxGeometry args={[0.06, 0.4, 0.01]} />
+              <meshStandardMaterial color="#2d8a2e" roughness={0.7} />
+            </mesh>
+          )
+        })}
+      </group>
+    )
+  }
+
+  // Cozy/default: monstera / lush plant with large leaves
   return (
     <group>
       <mesh position={[0, 0.15, 0]} castShadow receiveShadow>
@@ -1212,10 +1453,12 @@ function PlantComposite({ styleKey }: { styleKey: DominantStyle }) {
         <cylinderGeometry args={[0.03, 0.04, 0.5, 8]} />
         <meshStandardMaterial color="#5c3c1e" roughness={0.8} />
       </mesh>
-      {[[0, 0.9, 0, 0.22], [-0.1, 0.8, 0.08, 0.16], [0.12, 0.85, -0.05, 0.15], [0.05, 0.95, 0.1, 0.13], [-0.08, 0.95, -0.08, 0.14]].map(([x, y, z, r], i) => (
-        <mesh key={i} position={[x, y, z]} castShadow>
-          <sphereGeometry args={[r, 12, 12]} />
-          <meshStandardMaterial color={i % 2 === 0 ? '#2d6a2e' : '#3a8a3a'} roughness={0.85} />
+      {/* Large monstera-style leaves */}
+      {[[0,0.9,0,0.22],[-0.12,0.82,0.08,0.18],[0.14,0.86,-0.06,0.16],[0.06,0.96,0.12,0.14],[-0.1,0.98,-0.1,0.15],
+        [0.18,0.78,0.05,0.13],[-0.16,0.92,-0.04,0.17]].map(([x,y,z,r],i) => (
+        <mesh key={i} position={[x,y,z]} castShadow>
+          <sphereGeometry args={[r, 10, 10]} />
+          <meshStandardMaterial color={i%2===0?'#2d6a2e':'#3a8a3a'} roughness={0.85} />
         </mesh>
       ))}
     </group>
@@ -1223,14 +1466,136 @@ function PlantComposite({ styleKey }: { styleKey: DominantStyle }) {
 }
 
 // -------------------------------------------------------------
-// FLOOR LAMP VARIANT
-// -------------------------------------------------------------
 function FloorLampComposite({ styleKey }: { styleKey: DominantStyle }) {
   const p = STYLE_PALETTES[styleKey]
   const isLuxury = styleKey === 'Luxury'
   const isIndustrial = styleKey === 'Industrial'
-  const isModern = styleKey === 'Modern'
+  const isBohemian = styleKey === 'Bohemian'
+  const isCoastal = styleKey === 'Coastal'
+  const isCozy = styleKey === 'Cozy'
 
+  if (isLuxury) {
+    return (
+      <group>
+        <mesh position={[0, 0.02, 0]} castShadow>
+          <cylinderGeometry args={[0.18, 0.22, 0.04, 20]} />
+          <meshStandardMaterial color={p.metal} roughness={0.2} metalness={0.9} />
+        </mesh>
+        <mesh position={[0, 0.85, 0]} castShadow>
+          <cylinderGeometry args={[0.018, 0.018, 1.66, 8]} />
+          <meshStandardMaterial color={p.metal} roughness={0.2} metalness={0.9} />
+        </mesh>
+        <mesh position={[0, 1.72, 0]} castShadow>
+          <cylinderGeometry args={[0.22, 0.04, 0.28, 20, 1, true]} />
+          <meshStandardMaterial color={p.secondary} roughness={0.5} side={2} />
+        </mesh>
+        <mesh position={[0, 1.72, 0]}>
+          <sphereGeometry args={[0.04, 8, 8]} />
+          <meshStandardMaterial color="#fff8e0" emissive="#ffdd88" emissiveIntensity={3} />
+        </mesh>
+        <pointLight position={[0, 1.75, 0]} intensity={1.2} color="#ffeedd" distance={5} />
+      </group>
+    )
+  }
+
+  if (isBohemian) {
+    return (
+      <group>
+        {[-0.18, 0.18, 0].map((x, i) => (
+          <mesh key={i} position={[x, 0.7, i === 2 ? 0.22 : 0]}
+            rotation={[i === 2 ? 0.35 : -0.22, (i * Math.PI * 2) / 3, 0]} castShadow>
+            <cylinderGeometry args={[0.018, 0.018, 1.44, 6]} />
+            <meshStandardMaterial color="#8b6540" roughness={0.9} />
+          </mesh>
+        ))}
+        <mesh position={[0, 1.4, 0]} castShadow>
+          <sphereGeometry args={[0.22, 10, 10]} />
+          <meshStandardMaterial color="#c49a5a" roughness={0.9} transparent opacity={0.45} />
+        </mesh>
+        <mesh position={[0, 1.4, 0]}>
+          <sphereGeometry args={[0.06, 8, 8]} />
+          <meshStandardMaterial color="#fff4e0" emissive="#ffcc66" emissiveIntensity={2.2} />
+        </mesh>
+        <pointLight position={[0, 1.4, 0]} intensity={1.0} color="#ffeecc" distance={5} castShadow />
+      </group>
+    )
+  }
+
+  if (isCoastal) {
+    return (
+      <group>
+        {[0, 1, 2].map(i => {
+          const ang = (i / 3) * Math.PI * 2
+          return (
+            <mesh key={i} position={[Math.cos(ang) * 0.15, 0.72, Math.sin(ang) * 0.15]}
+              rotation={[Math.cos(ang) * 0.32, ang, 0]} castShadow>
+              <cylinderGeometry args={[0.02, 0.03, 1.44, 6]} />
+              <meshStandardMaterial color="#c8a882" roughness={0.95} />
+            </mesh>
+          )
+        })}
+        <mesh position={[0, 1.42, 0]} castShadow>
+          <cylinderGeometry args={[0.04, 0.18, 0.24, 16, 1, true]} />
+          <meshStandardMaterial color="#e8f0f4" roughness={0.7} side={2} />
+        </mesh>
+        <mesh position={[0, 1.38, 0]}>
+          <sphereGeometry args={[0.038, 8, 8]} />
+          <meshStandardMaterial color="#fff8f0" emissive="#ffeecc" emissiveIntensity={2.5} />
+        </mesh>
+        <pointLight position={[0, 1.4, 0]} intensity={0.9} color="#f0f8ff" distance={4} />
+      </group>
+    )
+  }
+
+  if (isCozy) {
+    return (
+      <group>
+        <mesh position={[0, 0.08, 0]} castShadow>
+          <cylinderGeometry args={[0.16, 0.2, 0.16, 12]} />
+          <meshStandardMaterial color="#c9a227" roughness={0.4} metalness={0.7} />
+        </mesh>
+        <mesh position={[0, 0.82, 0]} castShadow>
+          <cylinderGeometry args={[0.022, 0.022, 1.32, 8]} />
+          <meshStandardMaterial color="#c9a227" roughness={0.4} metalness={0.7} />
+        </mesh>
+        <mesh position={[0, 1.55, 0]} castShadow>
+          <cylinderGeometry args={[0.06, 0.22, 0.3, 16, 1, true]} />
+          <meshStandardMaterial color={p.secondary} roughness={0.85} side={2} />
+        </mesh>
+        <mesh position={[0, 1.5, 0]}>
+          <sphereGeometry args={[0.042, 8, 8]} />
+          <meshStandardMaterial color="#fff4e0" emissive="#ffcc66" emissiveIntensity={2.2} />
+        </mesh>
+        <pointLight position={[0, 1.5, 0]} intensity={0.9} color="#ffedcc" distance={4.5} />
+      </group>
+    )
+  }
+
+  if (isIndustrial) {
+    return (
+      <group>
+        <mesh position={[0, 0.02, 0]} castShadow>
+          <cylinderGeometry args={[0.14, 0.16, 0.04, 8]} />
+          <meshStandardMaterial color="#555" roughness={0.4} metalness={0.8} />
+        </mesh>
+        <mesh position={[0, 0.8, 0]} castShadow>
+          <cylinderGeometry args={[0.02, 0.02, 1.55, 8]} />
+          <meshStandardMaterial color="#8a8a8a" roughness={0.4} metalness={0.8} />
+        </mesh>
+        <mesh position={[0, 1.55, 0]} castShadow>
+          <sphereGeometry args={[0.16, 6, 6]} />
+          <meshStandardMaterial color={p.metal} roughness={0.4} metalness={0.8} transparent opacity={0.35} />
+        </mesh>
+        <mesh position={[0, 1.55, 0]}>
+          <sphereGeometry args={[0.06, 8, 8]} />
+          <meshStandardMaterial color="#fff4e0" emissive="#ffcc44" emissiveIntensity={3} />
+        </mesh>
+        <pointLight position={[0, 1.55, 0]} intensity={0.8} color="#ffeecc" distance={4} />
+      </group>
+    )
+  }
+
+  // Modern: arc floor lamp (default)
   return (
     <group>
       <mesh position={[0, 0.02, 0]} castShadow receiveShadow>
@@ -1239,30 +1604,102 @@ function FloorLampComposite({ styleKey }: { styleKey: DominantStyle }) {
       </mesh>
       <mesh position={[0, 0.8, 0]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 1.55, 8]} />
-        <meshStandardMaterial color={isLuxury ? p.metal : isIndustrial ? '#8a8a8a' : '#333333'} roughness={0.4} metalness={0.7} />
+        <meshStandardMaterial color="#333333" roughness={0.4} metalness={0.7} />
       </mesh>
-      {/* Arc arm for Modern */}
-      {isModern && (
-        <mesh position={[0.3, 1.4, 0]} rotation={[0, 0, -0.6]} castShadow>
-          <cylinderGeometry args={[0.015, 0.015, 0.5, 8]} />
-          <meshStandardMaterial color={p.metal} roughness={0.3} metalness={0.8} />
-        </mesh>
-      )}
-      <mesh position={isModern ? [0.52, 1.2, 0] : [0, 1.55, 0]} castShadow>
-        <cylinderGeometry args={[0.05, 0.18, 0.25, isIndustrial ? 6 : 16, 1, true]} />
-        <meshStandardMaterial color={isLuxury ? p.secondary : isIndustrial ? '#3c3c3c' : '#f5f0e8'} roughness={0.8} side={2} />
+      <mesh position={[0.3, 1.4, 0]} rotation={[0, 0, -0.6]} castShadow>
+        <cylinderGeometry args={[0.015, 0.015, 0.5, 8]} />
+        <meshStandardMaterial color={p.metal} roughness={0.3} metalness={0.8} />
       </mesh>
-      <mesh position={isModern ? [0.52, 1.18, 0] : [0, 1.5, 0]}>
+      <mesh position={[0.52, 1.2, 0]} castShadow>
+        <cylinderGeometry args={[0.05, 0.18, 0.25, 16, 1, true]} />
+        <meshStandardMaterial color="#f5f0e8" roughness={0.8} side={2} />
+      </mesh>
+      <mesh position={[0.52, 1.18, 0]}>
         <sphereGeometry args={[0.04, 8, 8]} />
         <meshStandardMaterial color="#fff4e0" emissive="#ffcc66" emissiveIntensity={2.5} />
       </mesh>
-      <pointLight position={isModern ? [0.52, 1.2, 0] : [0, 1.5, 0]} intensity={0.8} color="#ffedcc" distance={4} />
-      {/* Industrial cage */}
-      {isIndustrial && (
-        <mesh position={[0, 1.55, 0]}>
-          <sphereGeometry args={[0.18, 6, 6]} />
-          <meshStandardMaterial color={p.metal} roughness={0.4} metalness={0.8} transparent opacity={0.3} />
-        </mesh>
+      <pointLight position={[0.52, 1.2, 0]} intensity={0.8} color="#ffedcc" distance={4} />
+    </group>
+  )
+}
+
+// -------------------------------------------------------------
+// OTTOMAN COMPOSITE
+// -------------------------------------------------------------
+function OttomanComposite({ styleKey }: { styleKey: DominantStyle }) {
+  const p = STYLE_PALETTES[styleKey]
+  const isLuxury = styleKey === 'Luxury'
+  const isModern = styleKey === 'Modern'
+  const segs = isModern ? 32 : 12
+  return (
+    <group>
+      <mesh position={[0, 0.2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[isModern ? 0.38 : 0.42, isModern ? 0.36 : 0.4, 0.28, segs]} />
+        <meshStandardMaterial color={p.primary} roughness={isLuxury ? 0.3 : 0.85} />
+      </mesh>
+      <mesh position={[0, 0.35, 0]} castShadow>
+        <cylinderGeometry args={[isModern ? 0.36 : 0.40, isModern ? 0.34 : 0.38, 0.06, segs]} />
+        <meshStandardMaterial color={p.secondary} roughness={0.8} />
+      </mesh>
+      {[0, 1, 2, 3].map(i => {
+        const ang = (i / 4) * Math.PI * 2
+        return (
+          <mesh key={i} position={[Math.cos(ang) * 0.32, 0.06, Math.sin(ang) * 0.32]} castShadow>
+            <cylinderGeometry args={[0.02, 0.015, 0.12, 8]} />
+            <meshStandardMaterial color={isLuxury ? p.metal : p.wood}
+              roughness={isLuxury ? 0.2 : 0.6} metalness={isLuxury ? 0.8 : 0} />
+          </mesh>
+        )
+      })}
+    </group>
+  )
+}
+
+// -------------------------------------------------------------
+// DRESSER COMPOSITE
+// -------------------------------------------------------------
+function DresserComposite({ styleKey }: { styleKey: DominantStyle }) {
+  const p = STYLE_PALETTES[styleKey]
+  const isLuxury = styleKey === 'Luxury'
+  const isCozy = styleKey === 'Cozy'
+  return (
+    <group>
+      <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
+        <boxGeometry args={[1.1, 1.0, 0.48]} />
+        <meshStandardMaterial color={p.wood} roughness={0.7} />
+      </mesh>
+      {[0.12, 0.5, 0.88].map((y, row) =>
+        [-0.27, 0.27].map((x, col) => (
+          <mesh key={`d-${row}-${col}`} position={[x, y, 0.25]} castShadow>
+            <boxGeometry args={[0.5, 0.28, 0.02]} />
+            <meshStandardMaterial color={p.secondary} roughness={0.75} />
+          </mesh>
+        ))
+      )}
+      {[0.12, 0.5, 0.88].map((y, row) =>
+        [-0.27, 0.27].map((x, col) => (
+          <mesh key={`h-${row}-${col}`} position={[x, y, 0.27]}>
+            <boxGeometry args={[0.12, 0.02, 0.025]} />
+            <meshStandardMaterial color={isLuxury ? '#c9a227' : '#888'}
+              roughness={0.3} metalness={0.7} />
+          </mesh>
+        ))
+      )}
+      <mesh position={[0, 1.02, 0]} castShadow>
+        <boxGeometry args={[1.12, 0.04, 0.5]} />
+        <meshStandardMaterial color={p.wood} roughness={0.6} />
+      </mesh>
+      {(isLuxury || isCozy) && (
+        <>
+          <mesh position={[0, 1.55, -0.06]} castShadow>
+            <boxGeometry args={[0.7, 1.0, 0.03]} />
+            <meshStandardMaterial color={p.wood} roughness={0.65} />
+          </mesh>
+          <mesh position={[0, 1.55, -0.045]}>
+            <boxGeometry args={[0.62, 0.9, 0.01]} />
+            <meshStandardMaterial color="#c8d0d8" roughness={0.02} metalness={0.9} />
+          </mesh>
+        </>
       )}
     </group>
   )
@@ -1300,10 +1737,70 @@ function SideTableComposite({ styleKey }: { styleKey: DominantStyle }) {
 }
 
 // -------------------------------------------------------------
-// MAIN EXPORT
+// RUG / AREA RUG VARIANT
 // -------------------------------------------------------------
+function RugComposite({ styleKey }: { styleKey: DominantStyle }) {
+  const p = STYLE_PALETTES[styleKey]
+  const isLuxury = styleKey === 'Luxury'
+  const isBohemian = styleKey === 'Bohemian'
+  const isCoastal = styleKey === 'Coastal'
+  const isMinimal = styleKey === 'Minimal'
+  const isModern = styleKey === 'Modern'
+
+  // Pick rug colors based on style
+  const rugColor = isLuxury ? '#8b0000' : isBohemian ? '#c17a4a' : isCoastal ? '#5f9ea0' :
+    isMinimal ? '#d4d4d4' : isModern ? '#2d333b' : p.primary
+  const patternColor = isLuxury ? '#d4af37' : isBohemian ? '#f0e6d8' : isCoastal ? '#f0f8ff' :
+    isMinimal ? '#f8f8f8' : isModern ? '#8fa0b5' : p.secondary
+
+  return (
+    <group>
+      {/* Main rug base */}
+      <mesh position={[0, 0.005, 0]} receiveShadow>
+        <boxGeometry args={[2.5, 0.02, 1.5]} />
+        <meshStandardMaterial color={rugColor} roughness={1.0} />
+      </mesh>
+      {/* Border strip */}
+      <mesh position={[0, 0.016, 0]} receiveShadow>
+        <boxGeometry args={[2.5, 0.005, 1.5]} />
+        <meshStandardMaterial color={patternColor} roughness={1.0} transparent opacity={0.35} />
+      </mesh>
+      {/* Inner border rectangle */}
+      {[[-1.1, 0, 0, 2.3, 0.01, 0.06], [1.1, 0, 0, 2.3, 0.01, 0.06],
+        [0, 0, -0.67, 0.06, 0.01, 1.38], [0, 0, 0.67, 0.06, 0.01, 1.38]].map(([x, y, z, w, h, d], i) => (
+        <mesh key={i} position={[x as number, 0.018 + (y as number), z as number]} receiveShadow>
+          <boxGeometry args={[w as number, h as number, d as number]} />
+          <meshStandardMaterial color={patternColor} roughness={0.9} />
+        </mesh>
+      ))}
+      {/* Center medallion for luxury/bohemian */}
+      {(isLuxury || isBohemian) && (
+        <mesh position={[0, 0.018, 0]} receiveShadow>
+          <cylinderGeometry args={[0.3, 0.3, 0.005, 16]} />
+          <meshStandardMaterial color={patternColor} roughness={0.9} />
+        </mesh>
+      )}
+      {/* Coastal: stripe pattern */}
+      {isCoastal && [- 0.6, -0.2, 0.2, 0.6].map((z, i) => (
+        <mesh key={i} position={[0, 0.018, z]} receiveShadow>
+          <boxGeometry args={[2.4, 0.005, 0.1]} />
+          <meshStandardMaterial color={i % 2 === 0 ? '#ffffff' : patternColor} roughness={0.9} opacity={0.5} transparent />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+
+const VALID_STYLES: DominantStyle[] = ['Cozy','Minimal','Modern','Luxury','Compact','Bohemian','Industrial','Coastal']
+
 export function FurnitureInstance({ item, styleSliders }: { item: FurnitureItem; styleSliders?: Record<string, number> }) {
-  const dominantStyle = useMemo(() => parseDominantStyle(styleSliders), [styleSliders])
+  // If item has a _swapStyle override from the swap panel, use that instead of global style
+  const swapStyle = item._swapStyle as DominantStyle | undefined
+  const dominantStyle = useMemo(() => {
+    if (swapStyle && VALID_STYLES.includes(swapStyle)) return swapStyle
+    return parseDominantStyle(styleSliders)
+  }, [styleSliders, swapStyle])
 
   const renderGeometry = () => {
     switch (item.type) {
@@ -1317,13 +1814,16 @@ export function FurnitureInstance({ item, styleSliders }: { item: FurnitureItem;
       case 'plant':      return <PlantComposite styleKey={dominantStyle} />
       case 'floorLamp':  return <FloorLampComposite styleKey={dominantStyle} />
       case 'sideTable':  return <SideTableComposite styleKey={dominantStyle} />
+      case 'rug':        return <RugComposite styleKey={dominantStyle} />
+      case 'ottoman':    return <OttomanComposite styleKey={dominantStyle} />
+      case 'dresser':    return <DresserComposite styleKey={dominantStyle} />
       default:           return null
     }
   }
 
   return (
     <group
-      position={[item.x, 0, item.z]}
+      position={[item.x, item.y ?? 0, item.z]}
       rotation={[0, item.rotationY, 0]}
       scale={[item.scale, item.scale, item.scale]}
     >

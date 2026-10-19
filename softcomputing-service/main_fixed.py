@@ -23,15 +23,18 @@ except OSError:
 
 RoomType = Literal["Bedroom", "Living Room"]
 StyleChip = Literal["Cozy", "Minimal", "Modern", "Luxury", "Compact", "Bohemian", "Industrial", "Coastal"]
-FurnitureType = Literal["sofa", "bed", "table", "chair", "wardrobe", "tvUnit", "plant", "floorLamp", "sideTable", "bookshelf"]
+FurnitureType = Literal["sofa", "bed", "table", "chair", "wardrobe", "tvUnit", "plant", "floorLamp", "sideTable", "bookshelf", "rug"]
 
 class OptimizeRequest(BaseModel):
     prompt: str = Field(min_length=4, max_length=600)
+    explicitStyle: str = Field(default="", max_length=30)
+    addPlants: bool = False
+    addRugs: bool = False
 
 class NLPExtracted(BaseModel):
     roomType: RoomType
-    lengthM: float = Field(ge=2.0, le=12.0)
-    widthM: float = Field(ge=2.0, le=12.0)
+    lengthM: float = Field(ge=2.0, le=15.0)
+    widthM: float = Field(ge=2.0, le=15.0)
     budgetINR: float = Field(ge=20000.0, le=1_000_000.0)
     styles: List[StyleChip] = Field(default_factory=list, max_length=5)
     styleSliders: Dict[StyleChip, float] = Field(default_factory=lambda: {"Cozy": 0.5, "Minimal": 0.5, "Modern": 0.5, "Luxury": 0.5, "Compact": 0.5})
@@ -40,6 +43,32 @@ class EvolutionPoint(BaseModel):
     generation: int
     bestFitness: float
     avgFitness: float
+
+class HistoryStepItem(BaseModel):
+    id: str
+    type: FurnitureType
+    x: float
+    z: float
+    y: float
+    rotationY: float
+    scale: float
+    costINR: float
+
+class HistoryStepMetrics(BaseModel):
+    totalCostINR: float
+    budgetINR: float
+    budgetCompliancePct: float
+    spaceUtilizationPct: float
+    styleAlignmentPct: float
+    clearanceScorePct: float
+    comfortIndexPct: float
+    fitness: float
+
+class HistoryStep(BaseModel):
+    generation: int
+    items: List[HistoryStepItem]
+    metrics: HistoryStepMetrics
+    totalCostINR: float
 
 class FurnitureItem(BaseModel):
     id: str
@@ -50,7 +79,6 @@ class FurnitureItem(BaseModel):
     rotationY: float
     scale: float
     costINR: float
-
 class Metrics(BaseModel):
     totalCostINR: float
     budgetINR: float
@@ -81,6 +109,7 @@ class OptimizeResponse(BaseModel):
     generatedAtISO: str
     evolution: List[EvolutionPoint]
     solutions: List[LayoutSolution]
+    history_steps: List[HistoryStep] = Field(default_factory=list)
 
 @dataclass(frozen=True)
 class Spec:
@@ -101,6 +130,7 @@ CATALOG: Dict[FurnitureType, Spec] = {
     "floorLamp": Spec("floorLamp", 6000.0, 0.40, 0.40, 0.60),
     "sideTable": Spec("sideTable", 4000.0, 0.45, 0.45, 0.40),
     "bookshelf": Spec("bookshelf", 15000.0, 1.20, 0.35, 0.95),
+    "rug": Spec("rug", 8000.0, 2.50, 1.50, 0.05),
 }
 
 def clamp(x: float, lo: float, hi: float) -> float:
@@ -421,8 +451,8 @@ def parse_prompt(prompt: str) -> tuple[NLPExtracted, List[FurnitureType]]:
     """
     extracted = {
         "roomType": "Living Room",
-        "lengthM": 5.0,
-        "widthM": 4.0,
+        "lengthM": 7.0,
+        "widthM": 6.0,
         "budgetINR": 145000.0,
         "styles": [],
         "styleSliders": {"Cozy": 0.5, "Minimal": 0.5, "Modern": 0.5, "Luxury": 0.5, "Compact": 0.5}
@@ -437,24 +467,38 @@ def parse_prompt(prompt: str) -> tuple[NLPExtracted, List[FurnitureType]]:
     elif re.search(r'(living|lounge|hall)', prompt_lower):
         extracted["roomType"] = "Living Room"
 
-    # Matches '4x5', '4 x 5 m', '4m x 5m', '4 by 5', '4.5 by 3.5', '5m x 6m'
-    dim_match = re.search(r'(\d+(?:\.\d+)?)\s*(?:m|meters?)?\s*(?:[xX×]|by)\s*(\d+(?:\.\d+)?)\s*(?:m|meters?)?', prompt_lower)
+    # Matches '4x5', '4 x 5 m', '4m x 5m', '4 by 5', '4.5 by 3.5', '5m x 6m', '7 meter by 6 meter'
+    dim_match = re.search(r'(\d+(?:\.\d+)?)\s*(?:m(?:eters?|etres?)?)?\s*(?:[xX×]|by)\s*(\d+(?:\.\d+)?)\s*(?:m(?:eters?|etres?)?)?', prompt_lower)
     if dim_match:
         try:
-            extracted["lengthM"] = float(dim_match.group(1))
-            extracted["widthM"] = float(dim_match.group(2))
+            v1 = float(dim_match.group(1))
+            v2 = float(dim_match.group(2))
+            # Clamp to allowed range
+            extracted["lengthM"] = max(2.0, min(15.0, v1))
+            extracted["widthM"] = max(2.0, min(15.0, v2))
         except (ValueError, TypeError):
             pass  # Keep defaults
 
-    # Budget — use word boundary \b before 'rs' to avoid matching inside 'meters'
-    budget_match = re.search(r'(?:under|budget|\brs\b|₹)\s*([\d,]+(?:\.\d+)?)', prompt_lower)
-    if budget_match:
-        budget_str = budget_match.group(1).replace(',', '')
-        if budget_str:
-            try:
-                extracted["budgetINR"] = float(budget_str)
-            except (ValueError, TypeError):
-                pass  # Keep default budget
+    # Budget — parse in priority order:
+    # 1. Lakh notation: "2 lakh", "1.5 lakhs", "under 2 lakh" (Indian system)
+    # 2. Symbol/keyword + number: "₹4,50,000", "rs 150000", "budget 200000"
+    lakh_match = re.search(r'(?:under|budget|rs|₹|inr|of|=|:)?\s*([0-9]+(?:\.[0-9]+)?)\s*lakh', prompt_lower)
+    if lakh_match:
+        try:
+            val = float(lakh_match.group(1)) * 100_000
+            extracted["budgetINR"] = max(20_000.0, min(1_000_000.0, val))
+        except (ValueError, TypeError):
+            pass
+    else:
+        budget_match = re.search(r'(?:under|budget|\brs\b|₹|inr)\s*([\d,\.]+)', prompt_lower)
+        if budget_match:
+            budget_str = budget_match.group(1).replace(',', '').strip('.')
+            if budget_str:
+                try:
+                    val = float(budget_str)
+                    extracted["budgetINR"] = max(20_000.0, min(1_000_000.0, val))
+                except (ValueError, TypeError):
+                    pass  # Keep default budget
 
     # Furniture (keywords)
     furn_keywords = {
@@ -467,11 +511,12 @@ def parse_prompt(prompt: str) -> tuple[NLPExtracted, List[FurnitureType]]:
         'plant': ['plant', 'indoor plant', 'greenery'],
         'floorLamp': ['floor lamp', 'standing lamp', 'lamp stand'],
         'sideTable': ['side table', 'nightstand', 'bedside', 'bedside table', 'end table'],
-        'bookshelf': ['bookshelf', 'bookcase', 'shelving unit', 'book shelf']
+        'bookshelf': ['bookshelf', 'bookcase', 'shelving unit', 'book shelf'],
+        'rug': ['rug', 'carpet', 'area rug', 'floor rug'],
     }
     furn_req: List[FurnitureType] = []
     for furn, keys in furn_keywords.items():
-        if any(re.search(r'\b' + k + r'\b', prompt_lower) for k in keys):
+        if any(re.search(r'\b' + k.replace(' ', r'\s+') + r'\b', prompt_lower) for k in keys):
             furn_req.append(furn)
 
     # Styles
@@ -501,6 +546,17 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
     # Parse prompt to extracted params
     extracted, furn_req_local = parse_prompt(req.prompt)
 
+    # ── Apply explicit style override from frontend ──
+    valid_styles: List[StyleChip] = ["Cozy", "Minimal", "Modern", "Luxury", "Compact", "Bohemian", "Industrial", "Coastal"]
+    if req.explicitStyle and req.explicitStyle in valid_styles:
+        # Frontend style chip overrides NLP-detected style
+        explicit = req.explicitStyle
+        if explicit not in extracted.styles:
+            extracted.styles.insert(0, explicit)  # Prepend so it takes priority
+        # Boost slider for the explicit style
+        if explicit in ["Cozy", "Minimal", "Modern", "Luxury", "Compact"]:
+            extracted.styleSliders[explicit] = 0.95
+
     # Seed for repeatability per request
     request_id = str(uuid.uuid4())
     seed = int(uuid.UUID(request_id)) % (2**32 - 1)
@@ -512,10 +568,18 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
     # If user explicitly requested furniture, use ONLY what they asked for.
     # Only fall back to generic items if user didn't mention any furniture.
     if furn_req_local:
-        items = list(set(furn_req_local))
+        items = list(dict.fromkeys(furn_req_local))  # preserve order, deduplicate
     else:
         generic_items = choose_furniture(extracted.roomType, profile["furniture_density"], extracted.styles)
-        items = list(set(generic_items))
+        items = list(dict.fromkeys(generic_items))
+
+    # ── Apply addPlants / addRugs overrides from frontend ──
+    if req.addPlants and "plant" not in items:
+        items.append("plant")
+    if req.addRugs and "rug" not in items:
+        # Only add rug if room is large enough (min 9m²)
+        if extracted.widthM * extracted.lengthM >= 9.0:
+            items.append("rug")
 
     room_w = float(extracted.widthM)
     room_l = float(extracted.lengthM)
@@ -529,13 +593,13 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
         "bed": 1.9 * 2.1, "sofa": 2.0 * 0.85, "table": 1.2 * 0.8,
         "chair": 0.5 * 0.5, "wardrobe": 1.5 * 0.65, "tvUnit": 1.8 * 0.45,
         "plant": 0.5 * 0.5, "floorLamp": 0.4 * 0.4, "sideTable": 0.45 * 0.45,
-        "bookshelf": 1.2 * 0.35,
+        "bookshelf": 1.2 * 0.35, "rug": 2.5 * 1.5,
     }
     # Priority: lower number = more essential (never remove)
     PRIORITY = {
         "bed": 0, "sofa": 0, "tvUnit": 1, "wardrobe": 1,
         "table": 2, "chair": 3, "sideTable": 4,
-        "floorLamp": 5, "plant": 6, "bookshelf": 7,
+        "floorLamp": 5, "plant": 6, "bookshelf": 7, "rug": 8,
     }
     MAX_FILL_RATIO = 0.40  # furniture should not cover more than 40% of the floor
 
@@ -649,8 +713,8 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
             if rnd.random() < 0.25:
                 individual[base + 3] += rnd.gauss(0, 0.05)
 
-            individual[base + 0] = clamp(individual[base + 0], -half_w + 0.4, half_w - 0.4)
-            individual[base + 1] = clamp(individual[base + 1], -half_l + 0.4, half_l - 0.4)
+            individual[base + 0] = clamp(individual[base + 0], -half_w + 0.55, half_w - 0.55)
+            individual[base + 1] = clamp(individual[base + 1], -half_l + 0.55, half_l - 0.55)
             individual[base + 2] = float(individual[base + 2] % (2 * math.pi))
             individual[base + 3] = clamp(individual[base + 3], 0.85, 1.20)
 
@@ -672,6 +736,11 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
     stats.register("max", np.max)
 
     evolution: List[EvolutionPoint] = []
+    history_steps: List[HistoryStep] = []
+    SNAPSHOT_INTERVAL = 5  # capture every Nth generation
+
+    # Store raw snapshots (genome + gen number) to decode after relational_furniture_snap is defined
+    _raw_snapshots: List[Tuple[int, list]] = []
 
     # Evaluate initial pop
     invalid = [i for i in pop if not i.fitness.valid]
@@ -695,6 +764,11 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
         evolution.append(
             EvolutionPoint(generation=gen, bestFitness=float(record["max"]), avgFitness=float(record["avg"]))
         )
+
+        # ── Save best genome for later snapshot decoding ──
+        if gen % SNAPSHOT_INTERVAL == 0 or gen == ngen - 1:
+            best_ind = tools.selBest(pop, k=1)[0]
+            _raw_snapshots.append((gen, list(best_ind)))
 
         pop = toolbox.select(pop, k=len(pop))
 
@@ -734,7 +808,7 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
             return [it for it in items_dict.values() if it["type"] == target_type]
 
         is_bedroom = extracted.roomType == "Bedroom"
-        WALL_GAP = 0.20  # Generous gap from wall to prevent mesh clipping outside room
+        WALL_GAP = 0.35  # Generous gap from wall to prevent mesh clipping outside room
 
         if is_bedroom:
             # ========== BEDROOM LAYOUT ==========
@@ -934,10 +1008,39 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
                 it["z"] = halfL * 0.5  # Front half of left wall
                 it["rot"] = math.pi / 2
 
+        # ========== UNIVERSAL: Rug placement ==========
+        for it in items_dict.values():
+            if it["type"] == "rug":
+                # Place rug in the center/focal zone of the room
+                if is_bedroom:
+                    # In bedroom: rug in front of the bed (between bed and foot-of-bed)
+                    bed_item = find_first("bed")
+                    if bed_item:
+                        it["x"] = bed_item["x"]
+                        it["z"] = bed_item["z"] + 1.8  # In front of bed
+                    else:
+                        it["x"] = 0.0
+                        it["z"] = 0.0
+                else:
+                    # In living room: rug under the coffee table (center of seating area)
+                    sofa_item = find_first("sofa")
+                    table_item = find_first("table")
+                    if sofa_item and table_item:
+                        it["x"] = (sofa_item["x"] + table_item["x"]) / 2.0
+                        it["z"] = (sofa_item["z"] + table_item["z"]) / 2.0
+                    elif sofa_item:
+                        it["x"] = sofa_item["x"]
+                        it["z"] = sofa_item["z"] + 1.0
+                    else:
+                        it["x"] = 0.0
+                        it["z"] = 0.0
+                it["rot"] = 0
+                it["y"] = -0.01  # Slightly below floor level to avoid z-fighting
+
         # ========== FINAL SAFETY CLAMP & COLLISION RESOLUTION ==========
         DIMS = {
             "bed":       (1.9, 2.1),
-            "sofa":      (3.5, 1.6),   # L-sectional actual footprint
+            "sofa":      (2.2, 0.95),   # 3-seater sofa actual footprint
             "table":     (1.2, 0.8),
             "chair":     (0.55, 0.55),
             "wardrobe":  (1.6, 0.7),    # Slightly oversized for safety
@@ -946,13 +1049,14 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
             "plant":     (0.5, 0.5),
             "floorLamp": (0.4, 0.4),
             "sideTable": (0.45, 0.45),
+            "rug":       (2.5, 1.5),    # Area rug sits on floor
         }
 
         # Priority: higher = anchored in place, lower = gets nudged
         PRIORITY = {
             "bed": 10, "sofa": 9, "tvUnit": 8, "wardrobe": 7,
             "table": 6, "bookshelf": 5, "chair": 4,
-            "sideTable": 3, "floorLamp": 2, "plant": 1,
+            "sideTable": 3, "floorLamp": 2, "plant": 1, "rug": 0,
         }
 
         def get_dims_rotated(item):
@@ -971,7 +1075,10 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
         def clamp_item(item):
             fw, fd = get_dims_rotated(item)
             hw, hd = fw / 2.0, fd / 2.0
-            margin = WALL_GAP + 0.08  # Extra 8cm safety margin
+            # Extra per-type safety margin so 3D meshes don't clip through walls
+            item_type = item.get("type", "").lower() if isinstance(item, dict) else ""
+            extra = {"sofa": 0.25, "bed": 0.15, "wardrobe": 0.15, "tvunit": 0.12}.get(item_type, 0.08)
+            margin = WALL_GAP + extra
             item["x"] = max(-halfW + hw + margin, min(halfW - hw - margin, item["x"]))
             item["z"] = max(-halfL + hd + margin, min(halfL - hd - margin, item["z"]))
 
@@ -1036,12 +1143,71 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
 
         return list(items_dict.values())
 
+    # ── Decode raw snapshots into HistoryStep objects ──
+    for snap_gen, snap_genome in _raw_snapshots:
+        snap_metrics, snap_decoded = compute_metrics(
+            snap_genome, items, room_w, room_l,
+            float(extracted.budgetINR), profile, clearance_m, furn_req_local,
+        )
+        snap_decoded = relational_furniture_snap(snap_decoded)
+
+        # Budget-aware cost scaling for history steps too
+        snap_raw_total = sum(float(CATALOG[sd["type"]].cost) for sd in snap_decoded)
+        snap_budget = float(extracted.budgetINR)
+        snap_cost_scale = (snap_budget / snap_raw_total) if snap_raw_total > snap_budget and snap_raw_total > 0 else 1.0
+
+        snap_items: List[HistoryStepItem] = []
+        snap_scaled_total = 0.0
+        for si, sd in enumerate(snap_decoded):
+            st = sd["type"]
+            snap_item_cost = float(CATALOG[st].cost) * snap_cost_scale
+            snap_item_cost = round(snap_item_cost / 500) * 500
+            snap_item_cost = max(snap_item_cost, 500)
+            snap_scaled_total += snap_item_cost
+            snap_items.append(HistoryStepItem(
+                id=f"{st}-{si}",
+                type=st,
+                x=float(sd["x"]),
+                z=float(sd["z"]),
+                y=0.0,
+                rotationY=float(sd["rot"]),
+                scale=float(sd["scale"]),
+                costINR=snap_item_cost,
+            ))
+        if snap_cost_scale < 1.0:
+            snap_metrics["totalCostINR"] = snap_scaled_total
+            snap_metrics["budgetCompliancePct"] = clamp((snap_budget / snap_scaled_total) * 100.0, 0.0, 100.0) if snap_scaled_total > 0 else 100.0
+        history_steps.append(HistoryStep(
+            generation=snap_gen,
+            items=snap_items,
+            metrics=HistoryStepMetrics(**snap_metrics),
+            totalCostINR=float(snap_metrics["totalCostINR"]),
+        ))
+
     for idx, ind in enumerate(top_inds):
         metrics, decoded = compute_metrics(ind, items, room_w, room_l, float(extracted.budgetINR), profile, clearance_m, furn_req_local)
         decoded = relational_furniture_snap(decoded)
+
+        # ── Budget-aware cost scaling ──
+        # Sum base catalog costs for all items in this solution
+        raw_total = sum(float(CATALOG[d["type"]].cost) for d in decoded)
+        budget_val = float(extracted.budgetINR)
+        # Scale factor: if total exceeds budget, proportionally reduce each item's cost
+        # This simulates selecting budget-tier variants for each furniture piece
+        if raw_total > budget_val and raw_total > 0:
+            cost_scale = budget_val / raw_total
+        else:
+            cost_scale = 1.0
+
         sol_items: List[FurnitureItem] = []
+        scaled_total = 0.0
         for j, d in enumerate(decoded):
             t = d["type"]
+            item_cost = float(CATALOG[t].cost) * cost_scale
+            # Round to nearest 500 for realistic pricing
+            item_cost = round(item_cost / 500) * 500
+            item_cost = max(item_cost, 500)  # minimum ₹500
+            scaled_total += item_cost
             sol_items.append(
                 FurnitureItem(
                     id=f"{t}-{j}",
@@ -1051,9 +1217,15 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
                     y=0.0,
                     rotationY=float(d["rot"]),
                     scale=float(d["scale"]),
-                    costINR=float(CATALOG[t].cost),
+                    costINR=item_cost,
                 )
             )
+
+        # Update metrics with the scaled costs
+        if cost_scale < 1.0:
+            budget_compliance = clamp((budget_val / scaled_total) * 100.0, 0.0, 100.0) if scaled_total > 0 else 100.0
+            metrics["totalCostINR"] = scaled_total
+            metrics["budgetCompliancePct"] = budget_compliance
 
         solutions.append(
             LayoutSolution(
@@ -1079,6 +1251,7 @@ def optimize(req: OptimizeRequest) -> OptimizeResponse:
         generatedAtISO=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         evolution=evolution,
         solutions=solutions,
+        history_steps=history_steps,
     )
 
 app = FastAPI(title="LayoutMind X Soft Computing Engine", version="1.0.0")

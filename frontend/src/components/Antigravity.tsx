@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
@@ -40,7 +40,7 @@ function CursorOrbitalField({
   fieldStrength = 10,
 }: AntigravityProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null)
-  const { mouse, camera, size } = useThree()
+  const { mouse, camera } = useThree()
   const timeRef = useRef(0)
 
   // Parse base color and create gradient palette
@@ -117,7 +117,7 @@ function CursorOrbitalField({
     }
   }, [colorArray])
 
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
     timeRef.current += delta
     const t = timeRef.current
     if (!meshRef.current) return

@@ -121,10 +121,10 @@ function FloorTexture({ width, length, floorMaterial, colors }: {
     const count = Math.floor(width / plankW)
     for (let i = 0; i < count; i++) {
       const x = -width / 2 + plankW * (i + 0.5)
-      if (Math.abs(x) > width / 2) continue  // Safety: skip if outside
+      if (Math.abs(x) > width / 2) continue
       planks.push(
         <mesh key={i} position={[x, 0.003, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <planeGeometry args={[plankW - 0.01, length - 0.02]} />
+          <planeGeometry args={[plankW - 0.01, length - 0.04]} />
           <meshStandardMaterial color={i % 2 === 0 ? colors.floor : shadeHex(colors.floor, 0.06)} roughness={colors.floorRoughness} />
         </mesh>
       )
@@ -136,7 +136,7 @@ function FloorTexture({ width, length, floorMaterial, colors }: {
     const tileSize = 0.6
     const cols = Math.floor(width / tileSize)
     const rows = Math.floor(length / tileSize)
-    const offsetX = (width - cols * tileSize) / 2  // Center the grid
+    const offsetX = (width - cols * tileSize) / 2
     const offsetZ = (length - rows * tileSize) / 2
     for (let c = 0; c < cols; c++) {
       for (let r = 0; r < rows; r++) {
@@ -154,6 +154,145 @@ function FloorTexture({ width, length, floorMaterial, colors }: {
     }
     return <group>{tiles}</group>
   }
+  if (floorMaterial === 'Marble') {
+    const slabs = []
+    const slabW = 0.8, slabL = 0.8
+    const cols = Math.floor(width / slabW)
+    const rows = Math.floor(length / slabL)
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        const x = -width / 2 + slabW * (c + 0.5) + (width - cols * slabW) / 2
+        const z = -length / 2 + slabL * (r + 0.5) + (length - rows * slabL) / 2
+        if (Math.abs(x) > width / 2 - 0.05 || Math.abs(z) > length / 2 - 0.05) continue
+        const shade = (c + r) % 3 === 0 ? '#f0ece8' : (c + r) % 3 === 1 ? '#e8e2dc' : '#f5f0eb'
+        slabs.push(
+          <mesh key={`m${c}-${r}`} position={[x, 0.003, z]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+            <planeGeometry args={[slabW - 0.008, slabL - 0.008]} />
+            <meshStandardMaterial color={shade} roughness={0.08} metalness={0.15} />
+          </mesh>
+        )
+        // Subtle marble vein accent
+        if ((c + r) % 4 === 0) {
+          slabs.push(
+            <mesh key={`mv${c}-${r}`} position={[x + 0.1, 0.004, z - 0.05]} rotation={[-Math.PI / 2, 0, 0.3]}>
+              <planeGeometry args={[0.4, 0.015]} />
+              <meshStandardMaterial color="#d0c8c0" roughness={0.05} transparent opacity={0.4} />
+            </mesh>
+          )
+        }
+      }
+    }
+    return <group>{slabs}</group>
+  }
+  if (floorMaterial === 'Granite') {
+    const tiles = []
+    const tileSize = 0.5
+    const cols = Math.floor(width / tileSize)
+    const rows = Math.floor(length / tileSize)
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        const x = -width / 2 + tileSize * (c + 0.5) + (width - cols * tileSize) / 2
+        const z = -length / 2 + tileSize * (r + 0.5) + (length - rows * tileSize) / 2
+        if (Math.abs(x) > width / 2 - 0.05 || Math.abs(z) > length / 2 - 0.05) continue
+        const shade = (c * 7 + r * 3) % 5 === 0 ? '#3a3a3a' : (c * 3 + r * 7) % 3 === 0 ? '#4a4540' : '#353030'
+        tiles.push(
+          <mesh key={`g${c}-${r}`} position={[x, 0.003, z]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+            <planeGeometry args={[tileSize - 0.01, tileSize - 0.01]} />
+            <meshStandardMaterial color={shade} roughness={0.25} metalness={0.1} />
+          </mesh>
+        )
+      }
+    }
+    return <group>{tiles}</group>
+  }
+  if (floorMaterial === 'Epoxy') {
+    // Glossy seamless epoxy floor with subtle color zones
+    return (
+      <group>
+        <mesh position={[0, 0.003, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <planeGeometry args={[width - 0.04, length - 0.04]} />
+          <meshStandardMaterial color="#e0ddd8" roughness={0.02} metalness={0.2} />
+        </mesh>
+        {/* Subtle metallic flake effect */}
+        <mesh position={[0, 0.004, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[width - 0.08, length - 0.08]} />
+          <meshStandardMaterial color="#d8d4ce" roughness={0.01} metalness={0.35} transparent opacity={0.3} />
+        </mesh>
+      </group>
+    )
+  }
+  if (floorMaterial === 'Carpet') {
+    return (
+      <group>
+        <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <planeGeometry args={[width - 0.04, length - 0.04]} />
+          <meshStandardMaterial color={colors.floor} roughness={0.98} metalness={0} />
+        </mesh>
+      </group>
+    )
+  }
+  if (floorMaterial === 'Parquet') {
+    const tiles = []
+    const tileS = 0.25
+    const cols = Math.floor(width / tileS)
+    const rows = Math.floor(length / tileS)
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        const x = -width / 2 + tileS * (c + 0.5) + (width - cols * tileS) / 2
+        const z = -length / 2 + tileS * (r + 0.5) + (length - rows * tileS) / 2
+        if (Math.abs(x) > width / 2 - 0.05 || Math.abs(z) > length / 2 - 0.05) continue
+        const isH = (Math.floor(c / 3) + Math.floor(r / 3)) % 2 === 0
+        const shade = (c + r) % 2 === 0 ? '#9c7a56' : '#8a6a48'
+        tiles.push(
+          <mesh key={`pq${c}-${r}`} position={[x, 0.003, z]} rotation={[-Math.PI / 2, 0, isH ? 0 : Math.PI / 2]} receiveShadow>
+            <planeGeometry args={[tileS - 0.008, tileS - 0.008]} />
+            <meshStandardMaterial color={shade} roughness={0.6} />
+          </mesh>
+        )
+      }
+    }
+    return <group>{tiles}</group>
+  }
+  if (floorMaterial === 'Concrete') {
+    return (
+      <group>
+        <mesh position={[0, 0.003, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <planeGeometry args={[width - 0.04, length - 0.04]} />
+          <meshStandardMaterial color="#909090" roughness={0.85} />
+        </mesh>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <mesh key={`cj-${i}`} position={[0, 0.004, -length / 2 + (i + 1) * (length / 6)]} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[width - 0.08, 0.012]} />
+            <meshStandardMaterial color="#707070" roughness={1} transparent opacity={0.3} />
+          </mesh>
+        ))}
+      </group>
+    )
+  }
+  if (floorMaterial === 'Terrazzo') {
+    const chips = []
+    for (let i = 0; i < 80; i++) {
+      const x = (Math.sin(i * 13.7) * 0.48) * width
+      const z = (Math.cos(i * 7.3) * 0.48) * length
+      if (Math.abs(x) > width / 2 - 0.1 || Math.abs(z) > length / 2 - 0.1) continue
+      const chipColors = ['#c8b8a8', '#a89888', '#d8c8b8', '#e0d0c0']
+      chips.push(
+        <mesh key={`tz-${i}`} position={[x, 0.004, z]} rotation={[-Math.PI / 2, 0, i * 0.7]}>
+          <planeGeometry args={[0.04 + Math.abs(Math.sin(i * 3.1)) * 0.04, 0.03 + Math.abs(Math.cos(i * 2.7)) * 0.03]} />
+          <meshStandardMaterial color={chipColors[i % chipColors.length]} roughness={0.3} />
+        </mesh>
+      )
+    }
+    return (
+      <group>
+        <mesh position={[0, 0.003, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <planeGeometry args={[width - 0.04, length - 0.04]} />
+          <meshStandardMaterial color="#e8e2d8" roughness={0.3} />
+        </mesh>
+        {chips}
+      </group>
+    )
+  }
   return null
 }
 
@@ -167,24 +306,315 @@ function shadeHex(hex: string, amount: number): string {
 // ====================================================
 // WALL DECORATIONS — style-specific feature walls
 // ====================================================
+// ============================================================
+// WALL CANVAS TEXTURE — draws rich material patterns on canvas
+// Applied directly to wall planes, no z-fighting possible.
+// ============================================================
+function useWallCanvasTexture(wallMaterial: string, wallColor: string, wallW: number, wallH: number) {
+  return useMemo(() => {
+    const W = 512, H = Math.round(512 * (wallH / wallW))
+    const canvas = document.createElement('canvas')
+    canvas.width = W; canvas.height = H
+    const ctx = canvas.getContext('2d')!
+
+    const bg = (wallColor && wallColor !== '#f5f5f4') ? wallColor : null
+
+    if (wallMaterial === 'Brick') {
+      const mortar = bg || '#2a1208'
+      ctx.fillStyle = mortar
+      ctx.fillRect(0, 0, W, H)
+      const brickW = 68, brickH = 28, gap = 5
+      const rows = Math.ceil(H / (brickH + gap)) + 1
+      const cols = Math.ceil(W / (brickW + gap)) + 2
+      for (let r = 0; r < rows; r++) {
+        const offset = r % 2 === 0 ? 0 : (brickW + gap) / 2
+        for (let c = 0; c < cols; c++) {
+          const x = c * (brickW + gap) - offset
+          const y = r * (brickH + gap)
+          const shade = [
+            '#c05828', '#b84820', '#d06030', '#a83818', '#cc5425',
+          ][Math.floor(Math.abs(Math.sin(r * 7.3 + c * 3.7) * 100)) % 5]
+          ctx.fillStyle = shade
+          ctx.fillRect(x + 1, y + 1, brickW - 2, brickH - 2)
+          // subtle highlight on top edge
+          ctx.fillStyle = 'rgba(255,200,160,0.15)'
+          ctx.fillRect(x + 1, y + 1, brickW - 2, 3)
+        }
+      }
+    } else if (wallMaterial === 'Stone') {
+      const mortar = bg || '#1e1c18'
+      ctx.fillStyle = mortar
+      ctx.fillRect(0, 0, W, H)
+      let y = 0
+      let rowIdx = 0
+      while (y < H) {
+        const stH = 30 + (rowIdx % 3) * 8
+        const offset = rowIdx % 2 === 0 ? 0 : 70
+        let x = -offset
+        while (x < W) {
+          const stW = 80 + ((rowIdx * 5 + Math.floor(x / 80)) % 4) * 20
+          const shade = ['#a09888','#b0a898','#8a8278','#c0b4a8','#988e82'][
+            Math.floor(Math.abs(Math.sin(rowIdx * 13 + x) * 100)) % 5]
+          ctx.fillStyle = shade
+          ctx.fillRect(x + 2, y + 2, stW - 4, stH - 4)
+          ctx.fillStyle = 'rgba(255,255,255,0.08)'
+          ctx.fillRect(x + 2, y + 2, stW - 4, 4)
+          x += stW
+        }
+        y += stH; rowIdx++
+      }
+    } else if (wallMaterial === 'Ceramic') {
+      const grout = bg ? shadeHexCanvas(bg, 0.4) : '#333'
+      ctx.fillStyle = grout
+      ctx.fillRect(0, 0, W, H)
+      const tileW = 80, tileH = 80, gap = 5
+      const rows = Math.ceil(H / (tileH + gap)) + 1
+      const cols = Math.ceil(W / (tileW + gap)) + 1
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * (tileW + gap), y = r * (tileH + gap)
+          const base = bg || ((r + c) % 2 === 0 ? '#f0ece8' : '#e4e0dc')
+          ctx.fillStyle = base
+          ctx.fillRect(x + 1, y + 1, tileW - 2, tileH - 2)
+          ctx.fillStyle = 'rgba(255,255,255,0.3)'
+          ctx.fillRect(x + 1, y + 1, tileW - 2, 6)
+          // subtle reflection line
+          ctx.fillStyle = 'rgba(255,255,255,0.12)'
+          ctx.fillRect(x + 1, y + tileH * 0.3, tileW - 2, 3)
+        }
+      }
+    } else if (wallMaterial === 'Panel') {
+      // Wood Panel — vertical planks with wood grain
+      ctx.fillStyle = bg || '#8b5e30'
+      ctx.fillRect(0, 0, W, H)
+      const plankW = 64
+      const planks = Math.ceil(W / plankW) + 1
+      for (let p = 0; p < planks; p++) {
+        const x = p * plankW
+        const hue = 25 + (p % 3) * 4
+        const sat = 45 + (p % 5) * 3
+        const lig = 28 + (p % 4) * 4
+        ctx.fillStyle = bg || `hsl(${hue}, ${sat}%, ${lig}%)`
+        ctx.fillRect(x + 2, 0, plankW - 4, H)
+        // wood grain lines
+        for (let g = 0; g < 12; g++) {
+          const gx = x + 4 + (g * 5) % (plankW - 8)
+          ctx.strokeStyle = 'rgba(0,0,0,0.12)'
+          ctx.lineWidth = 1
+          ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx + Math.sin(g * 0.8) * 6, H); ctx.stroke()
+        }
+        // edge shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.25)'
+        ctx.fillRect(x, 0, 2, H)
+        ctx.fillRect(x + plankW - 2, 0, 2, H)
+      }
+    } else if (wallMaterial === 'Fluted') {
+      const base = bg || '#2d333b'
+      ctx.fillStyle = base
+      ctx.fillRect(0, 0, W, H)
+      const fluteW = 20
+      const flutes = Math.ceil(W / fluteW) + 1
+      for (let f = 0; f < flutes; f++) {
+        const x = f * fluteW
+        // gradient from light edge to dark body to light edge
+        const grad = ctx.createLinearGradient(x, 0, x + fluteW, 0)
+        grad.addColorStop(0,    'rgba(255,255,255,0.22)')
+        grad.addColorStop(0.25, bg || '#3a4150')
+        grad.addColorStop(0.75, bg ? 'rgba(0,0,0,0.3)' : '#1e2228')
+        grad.addColorStop(1,    'rgba(255,255,255,0.18)')
+        ctx.fillStyle = grad
+        ctx.fillRect(x, 0, fluteW, H)
+      }
+    } else if (wallMaterial === 'Fabric') {
+      const base = bg || '#c8bca8'
+      ctx.fillStyle = base
+      ctx.fillRect(0, 0, W, H)
+      const panelW = 120, panelH = 120, gap = 8
+      const cols = Math.ceil(W / (panelW + gap)) + 1
+      const rows = Math.ceil(H / (panelH + gap)) + 1
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * (panelW + gap), y = r * (panelH + gap)
+          const shade = bg || ((r + c) % 2 === 0 ? '#d4c8b4' : '#c0b4a0')
+          // Padded panel
+          ctx.fillStyle = shade
+          ctx.fillRect(x + 2, y + 2, panelW - 4, panelH - 4)
+          // Diamond stitch pattern
+          ctx.strokeStyle = 'rgba(0,0,0,0.18)'
+          ctx.lineWidth = 1
+          const cx2 = x + panelW / 2, cy2 = y + panelH / 2
+          ctx.beginPath(); ctx.moveTo(x + 4, cy2); ctx.lineTo(cx2, y + 4); ctx.lineTo(x + panelW - 4, cy2); ctx.lineTo(cx2, y + panelH - 4); ctx.closePath(); ctx.stroke()
+          // Button dot at center
+          ctx.fillStyle = 'rgba(0,0,0,0.3)'
+          ctx.beginPath(); ctx.arc(cx2, cy2, 3, 0, Math.PI * 2); ctx.fill()
+        }
+      }
+    } else if (wallMaterial === 'Wallpaper') {
+      const base = bg || '#e8dfd4'
+      ctx.fillStyle = base
+      ctx.fillRect(0, 0, W, H)
+      // Damask-style repeating pattern
+      const motifW = 80, motifH = 100
+      const cols = Math.ceil(W / motifW) + 1
+      const rows = Math.ceil(H / motifH) + 1
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const cx2 = c * motifW + (r % 2 === 0 ? 0 : motifW / 2)
+          const cy2 = r * motifH
+          ctx.fillStyle = 'rgba(0,0,0,0.07)'
+          // Oval center
+          ctx.beginPath(); ctx.ellipse(cx2 + motifW/2, cy2 + motifH/2, 16, 24, 0, 0, Math.PI*2); ctx.fill()
+          // Four petals
+          for (let a = 0; a < 4; a++) {
+            const angle = a * Math.PI / 2
+            const px = cx2 + motifW/2 + Math.cos(angle) * 22
+            const py = cy2 + motifH/2 + Math.sin(angle) * 28
+            ctx.beginPath(); ctx.ellipse(px, py, 8, 14, angle, 0, Math.PI*2); ctx.fill()
+          }
+        }
+      }
+      // Horizontal chair rail line
+      ctx.fillStyle = 'rgba(160,128,80,0.4)'
+      ctx.fillRect(0, H * 0.38, W, 4)
+    } else if (wallMaterial === 'Textured' || wallMaterial === 'Plaster') {
+      const base = bg || '#d8d0c4'
+      ctx.fillStyle = base
+      ctx.fillRect(0, 0, W, H)
+      // Random stucco bumps
+      for (let i = 0; i < 300; i++) {
+        const sx = Math.random() * W, sy = Math.random() * H
+        const sr = 4 + Math.random() * 10
+        const brightness = 0.92 + Math.random() * 0.12
+        ctx.globalAlpha = 0.15 + Math.random() * 0.15
+        ctx.fillStyle = brightness > 1 ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.3)'
+        ctx.beginPath(); ctx.ellipse(sx, sy, sr, sr * 0.5, Math.random() * Math.PI, 0, Math.PI*2); ctx.fill()
+      }
+      ctx.globalAlpha = 1
+    } else if (wallMaterial === 'Concrete') {
+      const base = bg || '#888'
+      ctx.fillStyle = base
+      ctx.fillRect(0, 0, W, H)
+      // Horizontal pour marks
+      for (let i = 0; i < 10; i++) {
+        const y2 = (i / 10) * H
+        ctx.fillStyle = 'rgba(0,0,0,0.18)'
+        ctx.fillRect(0, y2, W, 2)
+        ctx.fillStyle = 'rgba(255,255,255,0.06)'
+        ctx.fillRect(0, y2 + 2, W, 1)
+      }
+      // Subtle pitting
+      for (let i = 0; i < 60; i++) {
+        ctx.fillStyle = 'rgba(0,0,0,0.12)'
+        ctx.beginPath(); ctx.arc(Math.random()*W, Math.random()*H, 1+Math.random()*3, 0, Math.PI*2); ctx.fill()
+      }
+    } else if (wallMaterial === 'Lime') {
+      const base = bg || '#e4dcc8'
+      ctx.fillStyle = base
+      ctx.fillRect(0, 0, W, H)
+      // Limewash brush strokes
+      for (let i = 0; i < 60; i++) {
+        const sx = Math.random() * W, sy = Math.random() * H
+        const sw = 30 + Math.random() * 80
+        ctx.globalAlpha = 0.08 + Math.random() * 0.12
+        ctx.fillStyle = Math.random() > 0.5 ? 'white' : '#c0b898'
+        ctx.save()
+        ctx.translate(sx, sy)
+        ctx.rotate(Math.random() * 0.4 - 0.2)
+        ctx.fillRect(-sw/2, -3, sw, 5 + Math.random() * 6)
+        ctx.restore()
+      }
+      ctx.globalAlpha = 1
+    } else {
+      // Plain / default
+      ctx.fillStyle = bg || '#f5f5f4'
+      ctx.fillRect(0, 0, W, H)
+    }
+
+    const texture = new THREE.CanvasTexture(canvas)
+    texture.wrapS = THREE.RepeatWrapping
+    texture.wrapT = THREE.RepeatWrapping
+    // Repeat based on room dimension so bricks stay proportional
+    texture.repeat.set(wallW / 2.5, wallH / 2.5)
+    texture.needsUpdate = true
+    return texture
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallMaterial, wallColor, wallW, wallH])
+}
+
+function shadeHexCanvas(hex: string, amount: number): string {
+  const r = Math.min(255, Math.round(parseInt(hex.slice(1,3),16)*(1-amount)))
+  const g = Math.min(255, Math.round(parseInt(hex.slice(3,5),16)*(1-amount)))
+  const b = Math.min(255, Math.round(parseInt(hex.slice(5,7),16)*(1-amount)))
+  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`
+}
+
+// ── WallTextureOverlay: applies canvas texture on all 4 walls ──────────────────
+function WallTextureOverlay({ widthM, lengthM, wallH }: { widthM: number; lengthM: number; wallH: number }) {
+  const wallMaterial = useStudioStore(s => s.wallMaterial)
+  const wallColor    = useStudioStore(s => s.wallColor)
+
+  // Hooks MUST be called unconditionally (React rules of hooks)
+  // Back wall texture (widthM wide)
+  const backTex  = useWallCanvasTexture(wallMaterial, wallColor, widthM, wallH)
+  // Side wall texture (lengthM wide)
+  const sideTex  = useWallCanvasTexture(wallMaterial, wallColor, lengthM, wallH)
+
+  // Skip rendering for Plain/default — base wall material is enough
+  if (wallMaterial === 'Plain') return null
+
+  const halfW = widthM / 2, halfL = lengthM / 2
+
+  return (
+    <group>
+      {/* Back wall */}
+      <mesh position={[0, wallH / 2, -halfL + 0.04]}>
+        <planeGeometry args={[widthM, wallH]} />
+        <meshStandardMaterial map={backTex} roughness={0.85} />
+      </mesh>
+      {/* Front wall */}
+      <mesh position={[0, wallH / 2, halfL - 0.04]} rotation={[0, Math.PI, 0]}>
+        <planeGeometry args={[widthM, wallH]} />
+        <meshStandardMaterial map={backTex} roughness={0.85} />
+      </mesh>
+      {/* Left wall */}
+      <mesh position={[-halfW + 0.04, wallH / 2, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[lengthM, wallH]} />
+        <meshStandardMaterial map={sideTex} roughness={0.85} />
+      </mesh>
+      {/* Right wall */}
+      <mesh position={[halfW - 0.04, wallH / 2, 0]} rotation={[0, -Math.PI / 2, 0]}>
+        <planeGeometry args={[lengthM, wallH]} />
+        <meshStandardMaterial map={sideTex} roughness={0.85} />
+      </mesh>
+    </group>
+  )
+}
+
+
+
+
 function WallDecorations({ width, length, wallH, styleSliders }: {
   width: number; length: number; wallH: number; styleSliders?: StyleSliders
 }) {
-  if (!styleSliders) return null
+  const wallMaterial = useStudioStore(s => s.wallMaterial)
   const halfW = width / 2
   const halfL = length / 2
-  const isLuxury = styleSliders.Luxury > 0.4
-  const isModern = styleSliders.Modern > 0.45
-  const isIndustrial = styleSliders.Industrial > 0.45
-  const isCoastal = styleSliders.Coastal > 0.45
-  const isBohemian = styleSliders.Bohemian > 0.45
-  const isCozy = styleSliders.Cozy > 0.45
+  const isLuxury = (styleSliders?.Luxury ?? 0) > 0.4
+  const isModern = (styleSliders?.Modern ?? 0) > 0.45
+  const isIndustrial = (styleSliders?.Industrial ?? 0) > 0.45
+  const isCoastal = (styleSliders?.Coastal ?? 0) > 0.45
+  const isBohemian = (styleSliders?.Bohemian ?? 0) > 0.45
+  const isCozy = (styleSliders?.Cozy ?? 0) > 0.45
+
+  // Wall-material-based textures (applied in addition to style decorations)
+  const isWallpaper = wallMaterial === 'Wallpaper'
+  const isTextured = wallMaterial === 'Textured'
 
   return (
     <group>
       {/* ── MODERN: PVC fluted panels on accent wall ── */}
       {isModern && (
-        <group position={[0, wallH / 2, -halfL + 0.01]}>
+        <group position={[0, wallH / 2, -halfL + 0.06]}>
           <mesh receiveShadow>
             <planeGeometry args={[width, wallH]} />
             <meshStandardMaterial color="#2d333b" roughness={0.85} />
@@ -254,7 +684,7 @@ function WallDecorations({ width, length, wallH, styleSliders }: {
 
       {/* ── INDUSTRIAL: Exposed brick accent wall ── */}
       {isIndustrial && (
-        <group position={[0, wallH / 2, -halfL + 0.01]}>
+        <group position={[0, wallH / 2, -halfL + 0.06]}>
           <mesh receiveShadow>
             <planeGeometry args={[width, wallH]} />
             <meshStandardMaterial color="#6a3828" roughness={0.95} />
@@ -287,7 +717,7 @@ function WallDecorations({ width, length, wallH, styleSliders }: {
 
       {/* ── COASTAL: Ship-lap paneling ── */}
       {isCoastal && (
-        <group position={[0, wallH / 2, -halfL + 0.01]}>
+        <group position={[0, wallH / 2, -halfL + 0.06]}>
           <mesh receiveShadow>
             <planeGeometry args={[width, wallH]} />
             <meshStandardMaterial color="#7aaac0" roughness={0.85} />
@@ -396,6 +826,45 @@ function WallDecorations({ width, length, wallH, styleSliders }: {
           )}
         </group>
       )}
+
+      {/* ── WALLPAPER: Damask pattern on left wall ── */}
+      {isWallpaper && (
+        <group position={[-halfW + 0.015, wallH / 2, 0]} rotation={[0, Math.PI / 2, 0]}>
+          <mesh receiveShadow>
+            <planeGeometry args={[length, wallH]} />
+            <meshStandardMaterial color="#e8dfd4" roughness={0.85} />
+          </mesh>
+          {Array.from({ length: Math.floor(length / 0.5) }).map((_, col) =>
+            Array.from({ length: Math.floor(wallH / 0.5) }).map((_, row) => (
+              <mesh key={`wp-${col}-${row}`} position={[-length / 2 + col * 0.5 + 0.25, -wallH / 2 + row * 0.5 + 0.25, 0.005]} rotation={[0, 0, Math.PI / 4]}>
+                <planeGeometry args={[0.18, 0.18]} />
+                <meshStandardMaterial color={(col + row) % 2 === 0 ? '#d8c8b4' : '#e0d4c4'} roughness={0.9} transparent opacity={0.5} />
+              </mesh>
+            ))
+          )}
+          <mesh position={[0, wallH * 0.35, 0.008]}>
+            <boxGeometry args={[length, 0.03, 0.005]} />
+            <meshStandardMaterial color="#c9a860" roughness={0.4} metalness={0.3} />
+          </mesh>
+        </group>
+      )}
+
+      {/* ── TEXTURED: Stucco on accent wall ── */}
+      {isTextured && (
+        <group position={[0, wallH / 2, -halfL + 0.06]}>
+          <mesh receiveShadow>
+            <planeGeometry args={[width, wallH]} />
+            <meshStandardMaterial color="#d8d0c8" roughness={0.98} />
+          </mesh>
+          {Array.from({ length: 30 }).map((_, i) => (
+            <mesh key={`tx-${i}`} position={[(Math.sin(i * 7.3) * 0.45) * width, (Math.cos(i * 5.1) * 0.4) * wallH, 0.003]}>
+              <planeGeometry args={[0.08 + Math.abs(Math.sin(i * 3.7)) * 0.12, 0.06 + Math.abs(Math.cos(i * 2.3)) * 0.08]} />
+              <meshStandardMaterial color={i % 3 === 0 ? '#ccc5bd' : '#d4cdc5'} roughness={1} transparent opacity={0.35} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
     </group>
   )
 }
@@ -507,7 +976,7 @@ function CeilingDecorations({ width, length, wallH, styleSliders }: {
             const z = -length / 2 + i * 1.2
             return (
               <mesh key={i} position={[0, -0.1, z]} castShadow>
-                <boxGeometry args={[width + 0.1, 0.14, 0.18]} />
+                <boxGeometry args={[width - 0.02, 0.14, 0.18]} />
                 <meshStandardMaterial color="#8b5a2b" roughness={0.8} />
               </mesh>
             )
@@ -565,21 +1034,24 @@ function Baseboard({ width, length, height, color, styleSliders }: {
   const t = 0.025
   const halfW = width / 2
   const halfL = length / 2
-  const isLuxury = styleSliders?.Luxury ?? 0 > 0.4
-  const isModern = styleSliders?.Modern ?? 0 > 0.45
+  const isLuxury = (styleSliders?.Luxury ?? 0) > 0.4
+  const isModern = (styleSliders?.Modern ?? 0) > 0.45
 
   const bh = isLuxury ? height * 1.4 : height
   const bc = isModern ? '#303030' : color
   const met = isLuxury ? 0.3 : 0
   const rou = isLuxury ? 0.3 : 0.75
 
+  // Inset side strips by thickness to prevent corner overlap / protrusion
+  const sideLen = length - t * 2
+
   return (
     <group>
       {[
         [[0, bh / 2, -halfL + t / 2], [width, bh, t]],
         [[0, bh / 2, halfL - t / 2], [width, bh, t]],
-        [[-halfW + t / 2, bh / 2, 0], [t, bh, length]],
-        [[halfW - t / 2, bh / 2, 0], [t, bh, length]],
+        [[-halfW + t / 2, bh / 2, 0], [t, bh, sideLen]],
+        [[halfW - t / 2, bh / 2, 0], [t, bh, sideLen]],
       ].map(([pos, size], i) => (
         <mesh key={i} position={pos as [number,number,number]}>
           <boxGeometry args={size as [number,number,number]} />
@@ -600,9 +1072,9 @@ function CrownMolding({ width, length, wallH, color, styleSliders }: {
   const halfL = length / 2
   const mh = 0.1
   const md = 0.05
-  const isLuxury = styleSliders?.Luxury ?? 0 > 0.4
-  const isMinimal = styleSliders?.Minimal ?? 0 > 0.5
-  const isModern = styleSliders?.Modern ?? 0 > 0.45
+  const isLuxury = (styleSliders?.Luxury ?? 0) > 0.4
+  const isMinimal = (styleSliders?.Minimal ?? 0) > 0.5
+  const isModern = (styleSliders?.Modern ?? 0) > 0.45
 
   if (isMinimal && !isLuxury) return null
 
@@ -610,13 +1082,16 @@ function CrownMolding({ width, length, wallH, color, styleSliders }: {
   const met = isLuxury ? 0.45 : 0
   const rou = isLuxury ? 0.25 : 0.7
 
+  // Inset side moldings by depth to prevent corner protrusion
+  const sideLen = length - md * 2
+
   return (
     <group>
       {[
         [[0, wallH - mh / 2, -halfL + md / 2], [width, mh, md]],
         [[0, wallH - mh / 2, halfL - md / 2], [width, mh, md]],
-        [[-halfW + md / 2, wallH - mh / 2, 0], [md, mh, length]],
-        [[halfW - md / 2, wallH - mh / 2, 0], [md, mh, length]],
+        [[-halfW + md / 2, wallH - mh / 2, 0], [md, mh, sideLen]],
+        [[halfW - md / 2, wallH - mh / 2, 0], [md, mh, sideLen]],
       ].map(([pos, size], i) => (
         <mesh key={i} position={pos as [number,number,number]}>
           <boxGeometry args={size as [number,number,number]} />
@@ -627,8 +1102,8 @@ function CrownMolding({ width, length, wallH, color, styleSliders }: {
       {isLuxury && [
         [[0, wallH - mh * 1.8, -halfL + md / 2], [width, mh * 0.5, md * 0.6]],
         [[0, wallH - mh * 1.8, halfL - md / 2], [width, mh * 0.5, md * 0.6]],
-        [[-halfW + md / 2, wallH - mh * 1.8, 0], [md * 0.6, mh * 0.5, length]],
-        [[halfW - md / 2, wallH - mh * 1.8, 0], [md * 0.6, mh * 0.5, length]],
+        [[-halfW + md / 2, wallH - mh * 1.8, 0], [md * 0.6, mh * 0.5, sideLen]],
+        [[halfW - md / 2, wallH - mh * 1.8, 0], [md * 0.6, mh * 0.5, sideLen]],
       ].map(([pos, size], i) => (
         <mesh key={`d${i}`} position={pos as [number,number,number]}>
           <boxGeometry args={size as [number,number,number]} />
@@ -646,12 +1121,12 @@ function WindowWithCurtains({ width, length, wallH, curtainColor, styleSliders }
   width: number; length: number; wallH: number; curtainColor: string; styleSliders?: StyleSliders
 }) {
   const halfL = length / 2
-  const isMinimal = styleSliders?.Minimal ?? 0 > 0.5
-  const isModern = styleSliders?.Modern ?? 0 > 0.45
-  const isCozy = styleSliders?.Cozy ?? 0 > 0.45
-  const isLuxury = styleSliders?.Luxury ?? 0 > 0.4
-  const isCoastal = styleSliders?.Coastal ?? 0 > 0.45
-  const isBohemian = styleSliders?.Bohemian ?? 0 > 0.45
+  const isMinimal = (styleSliders?.Minimal ?? 0) > 0.5
+  const isModern = (styleSliders?.Modern ?? 0) > 0.45
+  const isCozy = (styleSliders?.Cozy ?? 0) > 0.45
+  const isLuxury = (styleSliders?.Luxury ?? 0) > 0.4
+  const isCoastal = (styleSliders?.Coastal ?? 0) > 0.45
+  const isBohemian = (styleSliders?.Bohemian ?? 0) > 0.45
 
   const winWidth = width * 0.42
   const winHeight = wallH * 0.58
@@ -758,13 +1233,13 @@ function WallArt({ width, length, wallH, styleSliders, roomType }: {
 }) {
   const halfW = width / 2
   const halfL = length / 2
-  const isLuxury = styleSliders?.Luxury ?? 0 > 0.4
-  const isModern = styleSliders?.Modern ?? 0 > 0.45
-  const isCozy = styleSliders?.Cozy ?? 0 > 0.45
-  const isMinimal = styleSliders?.Minimal ?? 0 > 0.5
-  const isCoastal = styleSliders?.Coastal ?? 0 > 0.45
-  const isBohemian = styleSliders?.Bohemian ?? 0 > 0.45
-  const isIndustrial = styleSliders?.Industrial ?? 0 > 0.45
+  const isLuxury = (styleSliders?.Luxury ?? 0) > 0.4
+  const isModern = (styleSliders?.Modern ?? 0) > 0.45
+  const isCozy = (styleSliders?.Cozy ?? 0) > 0.45
+
+  const isCoastal = (styleSliders?.Coastal ?? 0) > 0.45
+  const isBohemian = (styleSliders?.Bohemian ?? 0) > 0.45
+  const isIndustrial = (styleSliders?.Industrial ?? 0) > 0.45
 
   const artY = wallH * 0.62
   const artW = width * 0.28
@@ -881,25 +1356,33 @@ function WallArt({ width, length, wallH, styleSliders, roomType }: {
         </group>
       )}
 
-      {/* Industrial wall clock */}
+      {/* Industrial wall clock — face flat against left wall */}
       {isIndustrial && (
         <group position={[-halfW + 0.025, wallH * 0.65, 0]} rotation={[0, Math.PI / 2, 0]}>
-          <mesh>
+          {/* Cylinder rotated so its flat face looks into the room (local +Z) */}
+          <mesh rotation={[Math.PI / 2, 0, 0]} castShadow>
             <cylinderGeometry args={[0.28, 0.28, 0.04, 32]} />
             <meshStandardMaterial color="#2a2a2a" roughness={0.5} metalness={0.7} />
           </mesh>
-          <mesh position={[0, 0.025, 0]}>
-            <cylinderGeometry args={[0.26, 0.26, 0.01, 32]} />
-            <meshStandardMaterial color="#e0d8c8" roughness={0.8} />
+          {/* Clock face disc */}
+          <mesh position={[0, 0, 0.022]}>
+            <circleGeometry args={[0.265, 32]} />
+            <meshStandardMaterial color="#e8e0cc" roughness={0.8} />
           </mesh>
-          {/* Clock hands */}
-          <mesh position={[0.06, 0.04, 0]} rotation={[Math.PI / 2, 0, 0.5]}>
-            <boxGeometry args={[0.01, 0.16, 0.01]} />
+          {/* Hour hand — in XY plane with Z-axis rotation */}
+          <mesh position={[0, 0.055, 0.034]} rotation={[0, 0, 0.5]} castShadow>
+            <boxGeometry args={[0.014, 0.13, 0.009]} />
             <meshStandardMaterial color="#1a1a1a" />
           </mesh>
-          <mesh position={[0.02, 0.04, 0]} rotation={[Math.PI / 2, 0, 1.2]}>
-            <boxGeometry args={[0.01, 0.1, 0.01]} />
+          {/* Minute hand */}
+          <mesh position={[0, 0.085, 0.034]} rotation={[0, 0, 1.2]} castShadow>
+            <boxGeometry args={[0.009, 0.19, 0.007]} />
             <meshStandardMaterial color="#1a1a1a" />
+          </mesh>
+          {/* Center pin */}
+          <mesh position={[0, 0, 0.038]}>
+            <sphereGeometry args={[0.018, 8, 8]} />
+            <meshStandardMaterial color="#c75000" roughness={0.3} metalness={0.5} />
           </mesh>
         </group>
       )}
@@ -935,15 +1418,15 @@ function WallArt({ width, length, wallH, styleSliders, roomType }: {
 // ====================================================
 // CEILING LIGHT FIXTURE — premium variants
 // ====================================================
-function CeilingLight({ width, length, wallH, styleSliders }: {
-  width: number; length: number; wallH: number; styleSliders?: StyleSliders
+function CeilingLight({ wallH, styleSliders }: {
+  wallH: number; styleSliders?: StyleSliders
 }) {
-  const isLuxury = styleSliders?.Luxury ?? 0 > 0.4
-  const isModern = styleSliders?.Modern ?? 0 > 0.45
-  const isBohemian = styleSliders?.Bohemian ?? 0 > 0.45
-  const isCozy = styleSliders?.Cozy ?? 0 > 0.45
-  const isCoastal = styleSliders?.Coastal ?? 0 > 0.45
-  const isIndustrial = styleSliders?.Industrial ?? 0 > 0.45
+  const isLuxury = (styleSliders?.Luxury ?? 0) > 0.4
+  const isModern = (styleSliders?.Modern ?? 0) > 0.45
+  const isBohemian = (styleSliders?.Bohemian ?? 0) > 0.45
+
+  const isCoastal = (styleSliders?.Coastal ?? 0) > 0.45
+  const isIndustrial = (styleSliders?.Industrial ?? 0) > 0.45
 
   // Modern/Industrial use ceiling decoration lights
   if (isModern || isIndustrial) return null
@@ -1044,12 +1527,12 @@ function CeilingLight({ width, length, wallH, styleSliders }: {
 function Rug({ widthM, lengthM, color, styleSliders }: {
   widthM: number; lengthM: number; color: string; styleSliders?: StyleSliders
 }) {
-  const isMinimal = styleSliders?.Minimal ?? 0 > 0.5
-  const isModern = styleSliders?.Modern ?? 0 > 0.45
-  const isLuxury = styleSliders?.Luxury ?? 0 > 0.4
-  const isCozy = styleSliders?.Cozy ?? 0 > 0.45
-  const isBohemian = styleSliders?.Bohemian ?? 0 > 0.45
-  const isCoastal = styleSliders?.Coastal ?? 0 > 0.45
+  const isMinimal = (styleSliders?.Minimal ?? 0) > 0.5
+  const isModern = (styleSliders?.Modern ?? 0) > 0.45
+  const isLuxury = (styleSliders?.Luxury ?? 0) > 0.4
+  const isCozy = (styleSliders?.Cozy ?? 0) > 0.45
+  const isBohemian = (styleSliders?.Bohemian ?? 0) > 0.45
+  const isCoastal = (styleSliders?.Coastal ?? 0) > 0.45
 
   if (isMinimal && !isCozy) return null
 
@@ -1093,8 +1576,8 @@ function Rug({ widthM, lengthM, color, styleSliders }: {
 function DecorativePlant({ width, length, styleSliders }: {
   width: number; length: number; styleSliders?: StyleSliders
 }) {
-  const isMinimal = styleSliders?.Minimal ?? 0 > 0.6
-  const isModern = styleSliders?.Modern ?? 0 > 0.45
+  const isMinimal = (styleSliders?.Minimal ?? 0) > 0.6
+  const isModern = (styleSliders?.Modern ?? 0) > 0.45
   if (isMinimal) return null
 
   const potX = width / 2 - 0.35
@@ -1128,11 +1611,12 @@ function DecorativePlant({ width, length, styleSliders }: {
 // ====================================================
 // MAIN ROOM COMPONENT
 // ====================================================
-export function Room({ lengthM, widthM, wallH = 2.7, styleSliders, roomType = 'Living Room' }: RoomProps) {
+export function Room({ lengthM, widthM, wallH = 3.2, styleSliders, roomType = 'Living Room' }: RoomProps) {
   const halfW = widthM / 2
   const halfL = lengthM / 2
   const floorMaterial = useStudioStore(s => s.floorMaterial)
   const wallMaterial = useStudioStore(s => s.wallMaterial)
+  const wallColor = useStudioStore(s => s.wallColor)
 
   const colors = useMemo(() => {
     let base = {
@@ -1144,13 +1628,34 @@ export function Room({ lengthM, widthM, wallH = 2.7, styleSliders, roomType = 'L
       rug: '#a39382', curtain: '#e0dbd5', trim: '#d4d4d4',
     }
     if (styleSliders) base = getStyleColors(styleSliders)
-    if (floorMaterial === 'Wood') { base.floor = '#7a5230'; base.floorRoughness = 0.5 }
-    else if (floorMaterial === 'Tile') { base.floor = '#e0e6ec'; base.floorRoughness = 0.18 }
-    else if (floorMaterial === 'Carpet') { base.floor = '#c8c4bc'; base.floorRoughness = 0.96 }
+    // Apply custom wall color for plain/plaster/lime
+    // Apply wall color for all material types when user changes from default
+    const userChangedColor = wallColor !== '#f5f5f4'
+    if (wallMaterial === 'Plain' || wallMaterial === 'Plaster' || wallMaterial === 'Lime' || userChangedColor) {
+      base.wall = wallColor; base.accentWall = wallColor
+    }
+    if (floorMaterial === 'Wood') { base.floor = '#8b5e30'; base.floorRoughness = 0.45 }
+    else if (floorMaterial === 'Parquet') { base.floor = '#a87848'; base.floorRoughness = 0.55 }
+    else if (floorMaterial === 'Tile') { base.floor = '#c8d8e8'; base.floorRoughness = 0.12 }
+    else if (floorMaterial === 'Carpet') { base.floor = '#9e8870'; base.floorRoughness = 0.99 }
+    else if (floorMaterial === 'Marble') { base.floor = '#f5f0ea'; base.floorRoughness = 0.04 }
+    else if (floorMaterial === 'Granite') { base.floor = '#282420'; base.floorRoughness = 0.2 }
+    else if (floorMaterial === 'Epoxy') { base.floor = '#c8e8d0'; base.floorRoughness = 0.01 }
+    else if (floorMaterial === 'Concrete') { base.floor = '#848484'; base.floorRoughness = 0.88 }
+    else if (floorMaterial === 'Terrazzo') { base.floor = '#e0d4c4'; base.floorRoughness = 0.28 }
     if (wallMaterial === 'Panel') { base.wall = '#2d2d2d'; base.accentWall = '#1a1a1a' }
     else if (wallMaterial === 'Brick') { base.wall = '#7a3828'; base.wallRoughness = 1.0 }
+    else if (wallMaterial === 'Wallpaper') { base.wall = '#e8dfd4'; base.accentWall = '#d4c8b8'; base.wallRoughness = 0.85 }
+    else if (wallMaterial === 'Textured') { base.wall = '#d8d0c8'; base.accentWall = '#c0b8b0'; base.wallRoughness = 0.95 }
+    else if (wallMaterial === 'Stone') { base.wall = '#8a8078'; base.accentWall = '#6a6058'; base.wallRoughness = 0.92 }
+    else if (wallMaterial === 'Concrete') { base.wall = '#909090'; base.accentWall = '#808080'; base.wallRoughness = 0.9 }
+    else if (wallMaterial === 'Plaster') { base.wallRoughness = 0.95 }
+    else if (wallMaterial === 'Lime') { base.wallRoughness = 0.88 }
+    else if (wallMaterial === 'Fabric') { base.wall = '#d4c8b8'; base.wallRoughness = 0.98 }
+    else if (wallMaterial === 'Ceramic') { base.wall = '#d0ccc8'; base.wallRoughness = 0.15 }
+    else if (wallMaterial === 'Fluted') { base.wall = '#3a4048'; base.wallRoughness = 0.55 }
     return base
-  }, [styleSliders, roomType, floorMaterial, wallMaterial])
+  }, [styleSliders, roomType, floorMaterial, wallMaterial, wallColor])
 
   const lighting = useMemo(() => {
     if (!styleSliders) return { ambientIntensity: 0.6, ambientColor: '#ffffff', mainLightIntensity: 1.8, mainLightColor: '#fff8f0', fillLightIntensity: 0.35, accentLightIntensity: 0.4 }
@@ -1175,7 +1680,7 @@ export function Room({ lengthM, widthM, wallH = 2.7, styleSliders, roomType = 'L
         shadow-camera-top={halfL * 2}
         shadow-camera-bottom={-halfL * 2}
       />
-      <hemisphereLight skyColor="#fff5e6" groundColor="#8a7a6a" intensity={0.25} />
+      <hemisphereLight color="#fff5e6" groundColor="#8a7a6a" intensity={0.25} />
 
       {/* ── Base Floor ── */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
@@ -1199,14 +1704,14 @@ export function Room({ lengthM, widthM, wallH = 2.7, styleSliders, roomType = 'L
         <planeGeometry args={[widthM, wallH]} />
         <meshStandardMaterial color={colors.wall} roughness={colors.wallRoughness} />
       </mesh>
-      {/* ── Left wall ── */}
+      {/* ── Left wall — extended past corners to kill white lines ── */}
       <mesh receiveShadow position={[-halfW, wallH / 2, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <planeGeometry args={[lengthM, wallH]} />
+        <planeGeometry args={[lengthM + 0.06, wallH]} />
         <meshStandardMaterial color={colors.wall} roughness={colors.wallRoughness} />
       </mesh>
-      {/* ── Right wall ── */}
+      {/* ── Right wall — extended past corners ── */}
       <mesh receiveShadow position={[halfW, wallH / 2, 0]} rotation={[0, -Math.PI / 2, 0]}>
-        <planeGeometry args={[lengthM, wallH]} />
+        <planeGeometry args={[lengthM + 0.06, wallH]} />
         <meshStandardMaterial color={colors.wall} roughness={colors.wallRoughness} />
       </mesh>
 
@@ -1216,14 +1721,28 @@ export function Room({ lengthM, widthM, wallH = 2.7, styleSliders, roomType = 'L
         <meshStandardMaterial color={colors.ceiling} roughness={0.92} />
       </mesh>
 
+      {/* ── Corner pillars to hide wall seams / white lines — slightly oversized ── */}
+      {[
+        [halfW + 0.02, wallH / 2, halfL + 0.02],
+        [halfW + 0.02, wallH / 2, -halfL - 0.02],
+        [-halfW - 0.02, wallH / 2, halfL + 0.02],
+        [-halfW - 0.02, wallH / 2, -halfL - 0.02],
+      ].map(([cx, cy, cz], i) => (
+        <mesh key={`corner-${i}`} position={[cx, cy, cz]}>
+          <boxGeometry args={[0.12, wallH + 0.04, 0.12]} />
+          <meshStandardMaterial color={colors.wall} roughness={colors.wallRoughness} />
+        </mesh>
+      ))}
+
       {/* ── Architectural features ── */}
       <WallDecorations width={widthM} length={lengthM} wallH={wallH} styleSliders={styleSliders} />
+      <WallTextureOverlay widthM={widthM} lengthM={lengthM} wallH={wallH} />
       <CeilingDecorations width={widthM} length={lengthM} wallH={wallH} styleSliders={styleSliders} />
       <Baseboard width={widthM} length={lengthM} height={0.12} color={colors.baseboard} styleSliders={styleSliders} />
       <CrownMolding width={widthM} length={lengthM} wallH={wallH} color={colors.trim} styleSliders={styleSliders} />
       <WindowWithCurtains width={widthM} length={lengthM} wallH={wallH} curtainColor={colors.curtain} styleSliders={styleSliders} />
       <WallArt width={widthM} length={lengthM} wallH={wallH} styleSliders={styleSliders} roomType={roomType} />
-      <CeilingLight width={widthM} length={lengthM} wallH={wallH} styleSliders={styleSliders} />
+      <CeilingLight wallH={wallH} styleSliders={styleSliders} />
 
       {/* ── Corner decorative plant ── */}
       {Math.min(widthM, lengthM) > 3 && (
@@ -1233,27 +1752,27 @@ export function Room({ lengthM, widthM, wallH = 2.7, styleSliders, roomType = 'L
       {/* ── Wall sconce lights ── */}
       {widthM > 4 && (
         <>
-          <group position={[halfW - 0.05, wallH * 0.5, 0]}>
-            <mesh rotation={[0, -Math.PI / 2, 0]}>
+          <group position={[halfW * 0.4, wallH * 0.72, -halfL + 0.06]}>
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
               <cylinderGeometry args={[0.06, 0.02, 0.1, 8]} />
               <meshStandardMaterial color={colors.trim} roughness={0.4} metalness={0.3} />
             </mesh>
-            <mesh position={[-0.06, 0.04, 0]}>
+            <mesh position={[0, 0.04, 0.06]}>
               <sphereGeometry args={[0.04, 8, 8]} />
               <meshStandardMaterial color="#fff8e0" emissive="#ffcc66" emissiveIntensity={2} />
             </mesh>
-            <pointLight position={[-0.1, 0.04, 0]} intensity={0.6} color="#ffedcc" distance={3.5} />
+            <pointLight position={[0, 0.04, 0.1]} intensity={0.6} color="#ffedcc" distance={3.5} />
           </group>
-          <group position={[-halfW + 0.05, wallH * 0.5, 0]}>
-            <mesh rotation={[0, Math.PI / 2, 0]}>
+          <group position={[-halfW * 0.4, wallH * 0.72, -halfL + 0.06]}>
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
               <cylinderGeometry args={[0.06, 0.02, 0.1, 8]} />
               <meshStandardMaterial color={colors.trim} roughness={0.4} metalness={0.3} />
             </mesh>
-            <mesh position={[0.06, 0.04, 0]}>
+            <mesh position={[0, 0.04, 0.06]}>
               <sphereGeometry args={[0.04, 8, 8]} />
               <meshStandardMaterial color="#fff8e0" emissive="#ffcc66" emissiveIntensity={2} />
             </mesh>
-            <pointLight position={[0.1, 0.04, 0]} intensity={0.6} color="#ffedcc" distance={3.5} />
+            <pointLight position={[0, 0.04, 0.1]} intensity={0.6} color="#ffedcc" distance={3.5} />
           </group>
         </>
       )}

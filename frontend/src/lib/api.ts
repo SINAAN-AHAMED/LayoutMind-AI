@@ -1,5 +1,48 @@
 import { z } from 'zod'
-import type { OptimizationResult, RoomType, StyleChip } from '../types/layout'
+import type { OptimizationResult } from '../types/layout'
+
+const FurnitureItemSchema = z.object({
+  id: z.string(),
+  type: z.union([
+    z.literal('sofa'),
+    z.literal('bed'),
+    z.literal('table'),
+    z.literal('chair'),
+    z.literal('wardrobe'),
+    z.literal('tvUnit'),
+    z.literal('plant'),
+    z.literal('rug'),
+    z.literal('floorLamp'),
+    z.literal('sideTable'),
+    z.literal('bookshelf'),
+    z.literal('ottoman'),
+    z.literal('dresser'),
+  ]),
+  x: z.number(),
+  z: z.number(),
+  y: z.number(),
+  rotationY: z.number(),
+  scale: z.number(),
+  costINR: z.number(),
+})
+
+const MetricsSchema = z.object({
+  totalCostINR: z.number(),
+  budgetINR: z.number(),
+  budgetCompliancePct: z.number(),
+  spaceUtilizationPct: z.number(),
+  styleAlignmentPct: z.number(),
+  clearanceScorePct: z.number(),
+  comfortIndexPct: z.number(),
+  fitness: z.number(),
+})
+
+const HistoryStepSchema = z.object({
+  generation: z.number(),
+  items: z.array(FurnitureItemSchema),
+  metrics: MetricsSchema,
+  totalCostINR: z.number(),
+})
 
 const OptimizeResponseSchema = z.object({
   requestId: z.string(),
@@ -24,40 +67,8 @@ const OptimizeResponseSchema = z.object({
       selectedStyles: z.array(
         z.union([z.literal('Cozy'), z.literal('Minimal'), z.literal('Modern'), z.literal('Luxury'), z.literal('Compact'), z.literal('Bohemian'), z.literal('Industrial'), z.literal('Coastal')]),
       ),
-      items: z.array(
-        z.object({
-          id: z.string(),
-          type: z.union([
-            z.literal('sofa'),
-            z.literal('bed'),
-            z.literal('table'),
-            z.literal('chair'),
-            z.literal('wardrobe'),
-            z.literal('tvUnit'),
-            z.literal('plant'),
-            z.literal('rug'),
-            z.literal('floorLamp'),
-            z.literal('sideTable'),
-            z.literal('bookshelf'),
-          ]),
-          x: z.number(),
-          z: z.number(),
-          y: z.number(),
-          rotationY: z.number(),
-          scale: z.number(),
-          costINR: z.number(),
-        }),
-      ),
-      metrics: z.object({
-        totalCostINR: z.number(),
-        budgetINR: z.number(),
-        budgetCompliancePct: z.number(),
-        spaceUtilizationPct: z.number(),
-        styleAlignmentPct: z.number(),
-        clearanceScorePct: z.number(),
-        comfortIndexPct: z.number(),
-        fitness: z.number(),
-      }),
+      items: z.array(FurnitureItemSchema),
+      metrics: MetricsSchema,
       explanation: z.string(),
       removedItems: z.array(
         z.object({
@@ -67,6 +78,7 @@ const OptimizeResponseSchema = z.object({
       ).optional(),
     }),
   ),
+  history_steps: z.array(HistoryStepSchema).optional().default([]),
 })
 
 export type OptimizeRequest = {
@@ -77,7 +89,10 @@ export type OptimizeRequest = {
 }
 
 export async function optimizeLayout(req: OptimizeRequest): Promise<OptimizationResult> {
-  const baseUrl = import.meta.env.VITE_API_URL || '/api'
+  // In Electron the app loads from file:// — relative /api paths don't work.
+  // Detect Electron by protocol and hit the Python engine directly on localhost:8000.
+  const isElectron = typeof window !== 'undefined' && window.location.protocol === 'file:'
+  const baseUrl = import.meta.env.VITE_API_URL || (isElectron ? 'http://localhost:8000' : '/api')
   const res = await fetch(`${baseUrl}/optimize`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -91,3 +106,13 @@ export async function optimizeLayout(req: OptimizeRequest): Promise<Optimization
   return OptimizeResponseSchema.parse(json) as OptimizationResult
 }
 
+export async function checkHealth(signal?: AbortSignal): Promise<boolean> {
+  try {
+    const isElectron = typeof window !== 'undefined' && window.location.protocol === 'file:'
+    const baseUrl = import.meta.env.VITE_API_URL || (isElectron ? 'http://localhost:8000' : '/api')
+    const res = await fetch(`${baseUrl}/health`, { signal })
+    return res.ok
+  } catch {
+    return false
+  }
+}

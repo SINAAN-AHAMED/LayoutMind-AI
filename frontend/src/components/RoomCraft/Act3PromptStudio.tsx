@@ -123,17 +123,17 @@ export function Act3PromptStudio() {
                <div className="space-y-4 relative z-10">
                  <div>
                    <label className="text-xs font-semibold text-text-secondary mb-2 block uppercase">Floor</label>
-                   <div className="flex gap-2 bg-skeuo-inner p-1 rounded-lg">
-                     {(['Wood', 'Tile', 'Carpet'] as const).map(m => (
-                       <button onClick={() => setFloorMaterial(m)} key={m} className={`flex-1 py-1.5 text-xs rounded transition-all duration-300 ${floorMaterial === m ? 'bg-white text-black font-bold shadow-md transform scale-105' : 'text-text-secondary hover:bg-white/50 hover:text-text-primary'}`}>{m}</button>
+                   <div className="grid grid-cols-3 gap-1.5 bg-skeuo-inner p-1.5 rounded-lg">
+                     {(['Wood', 'Tile', 'Carpet', 'Marble', 'Granite', 'Epoxy'] as const).map(m => (
+                       <button onClick={() => setFloorMaterial(m)} key={m} className={`py-1.5 text-xs rounded transition-all duration-300 ${floorMaterial === m ? 'bg-white text-black font-bold shadow-md transform scale-105' : 'text-text-secondary hover:bg-white/50 hover:text-text-primary'}`}>{m}</button>
                      ))}
                    </div>
                  </div>
                  <div>
                    <label className="text-xs font-semibold text-text-secondary mb-2 block uppercase">Walls</label>
-                   <div className="flex gap-2 bg-skeuo-inner p-1 rounded-lg">
-                     {(['Plain', 'Panel', 'Brick'] as const).map(m => (
-                       <button onClick={() => setWallMaterial(m)} key={m} className={`flex-1 py-1.5 text-xs rounded transition-all duration-300 ${wallMaterial === m ? 'bg-white text-black font-bold shadow-md transform scale-105' : 'text-text-secondary hover:bg-white/50 hover:text-text-primary'}`}>{m}</button>
+                   <div className="grid grid-cols-3 gap-1.5 bg-skeuo-inner p-1.5 rounded-lg">
+                     {(['Plain', 'Panel', 'Brick', 'Wallpaper', 'Textured', 'Stone'] as const).map(m => (
+                       <button onClick={() => setWallMaterial(m)} key={m} className={`py-1.5 text-xs rounded transition-all duration-300 ${wallMaterial === m ? 'bg-white text-black font-bold shadow-md transform scale-105' : 'text-text-secondary hover:bg-white/50 hover:text-text-primary'}`}>{m}</button>
                      ))}
                    </div>
                  </div>

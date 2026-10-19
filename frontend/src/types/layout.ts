@@ -1,6 +1,6 @@
 export type RoomType = 'Bedroom' | 'Living Room'
 export type StyleChip = 'Cozy' | 'Minimal' | 'Modern' | 'Luxury' | 'Compact' | 'Bohemian' | 'Industrial' | 'Coastal'
-export type FurnitureType = 'sofa' | 'bed' | 'table' | 'chair' | 'wardrobe' | 'tvUnit' | 'rug' | 'plant' | 'floorLamp' | 'sideTable' | 'bookshelf'
+export type FurnitureType = 'sofa' | 'bed' | 'table' | 'chair' | 'wardrobe' | 'tvUnit' | 'rug' | 'plant' | 'floorLamp' | 'sideTable' | 'bookshelf' | 'ottoman' | 'dresser'
 
 export type NLPExtracted = {
   roomType: RoomType
@@ -9,8 +9,8 @@ export type NLPExtracted = {
   budgetINR: number
   styles: StyleChip[]
   styleSliders: Record<StyleChip, number>
-  floorMaterial?: 'Wood' | 'Tile' | 'Carpet'
-  wallMaterial?: 'Plain' | 'Panel' | 'Brick'
+  floorMaterial?: 'Wood' | 'Tile' | 'Carpet' | 'Marble' | 'Granite' | 'Epoxy'
+  wallMaterial?: 'Plain' | 'Panel' | 'Brick' | 'Wallpaper' | 'Textured' | 'Stone'
 }
 
 export type OptimizeRequest = {
@@ -39,6 +39,10 @@ export type FurnitureItem = {
   rotationY: number
   scale: number
   costINR: number
+  /** Style override applied by the furniture swap panel */
+  _swapStyle?: StyleChip
+  /** Label override applied by the furniture swap panel */
+  _swapLabel?: string
 }
 
 export type RemovedItemInfo = {
@@ -58,9 +62,19 @@ export type LayoutSolution = {
   removedItems?: RemovedItemInfo[]
 }
 
+/** Snapshot of the best individual at a given generation milestone */
+export type HistoryStep = {
+  generation: number
+  items: FurnitureItem[]
+  metrics: Metrics
+  /** @deprecated Use metrics.totalCostINR instead — kept for API compatibility */
+  totalCostINR: number
+}
+
 export type OptimizationResult = {
   requestId: string
   generatedAtISO: string
   evolution: EvolutionPoint[]
   solutions: LayoutSolution[]
+  history_steps: HistoryStep[]
 }

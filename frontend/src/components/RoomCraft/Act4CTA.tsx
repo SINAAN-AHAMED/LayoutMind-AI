@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -6,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function Act4CTA() {
   const sectionRef = useRef<HTMLElement>(null)
+  const nav = useNavigate()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -79,14 +81,15 @@ export function Act4CTA() {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4" data-animate="fade-up">
-          <a href="#prompt-studio" 
-            className="btn-glow magnetic-hover px-10 py-4 bg-white text-black rounded-full font-bold text-lg tracking-wide shadow-2xl inline-flex items-center gap-3 transition-all"
+          <button
+            onClick={() => nav('/studio')}
+            className="btn-glow magnetic-hover px-10 py-4 bg-white text-black rounded-full font-bold text-lg tracking-wide shadow-2xl inline-flex items-center gap-3 transition-all cursor-pointer border-0"
           >
             Start Designing
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
-          </a>
+          </button>
           <a href="https://github.com/SINAAN-AHAMED" target="_blank" rel="noopener noreferrer"
             className="magnetic-hover px-8 py-4 border border-white/15 text-white/60 rounded-full font-medium text-sm tracking-wide hover:border-white/30 hover:text-white/80 transition-all inline-flex items-center gap-2"
           >

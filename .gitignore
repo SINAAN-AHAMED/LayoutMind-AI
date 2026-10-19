@@ -6,3 +6,9 @@ venv/
 .env
 dist/
 build/
+.pytest_cache/
+coverage/
+.coverage
+*.log
+.DS_Store
+Thumbs.db
