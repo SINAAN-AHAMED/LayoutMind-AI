@@ -156,7 +156,7 @@ function AnimatedScene({
 
   return (
     <group ref={groupRef} position={[0, -5, 0]} scale={[0.8, 0.8, 0.8]} onClick={handleBackgroundClick}>
-      <Room lengthM={lengthM} widthM={widthM} wallH={wallH} styleSliders={styleSliders} roomType={roomType} />
+      <Room key={`room-${lengthM}-${widthM}-${wallH}`} lengthM={lengthM} widthM={widthM} wallH={wallH} styleSliders={styleSliders} roomType={roomType} />
       
       {/* Ghost overlay from previous generation */}
       {showGhost && ghostItems.length > 0 && (

@@ -185,6 +185,63 @@ export function WorkspacePage() {
                 {sol.room.lengthM}m × {sol.room.widthM}m
               </span>
               <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#C9A96E', display: 'inline-block' }} />
+              {/* Interactive Ceiling Height Badge & Stepper in Top Bar */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'white',
+                  border: '1px solid #E8E2DA',
+                  padding: '2px 8px',
+                  borderRadius: '16px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                }}
+              >
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '8px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#C9A96E' }}>
+                  Ceiling
+                </span>
+                <button
+                  id="btn-height-decrease"
+                  title="Decrease Room Height (-0.2m)"
+                  onClick={() => setRoomHeight(Math.max(2.0, +(roomHeightM - 0.2).toFixed(1)))}
+                  style={{
+                    width: '18px', height: '18px', border: '1px solid #E8E2DA', background: '#FAF8F5',
+                    borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', fontSize: '12px', lineHeight: 1, color: '#1A1A1A', fontWeight: 'bold',
+                    padding: 0,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#2D3B2D'; e.currentTarget.style.color = '#FAF8F5' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#FAF8F5'; e.currentTarget.style.color = '#1A1A1A' }}
+                >
+                  −
+                </button>
+                <span
+                  id="topbar-room-height-display"
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: 700, color: '#1A1A1A',
+                    minWidth: '34px', textAlign: 'center',
+                  }}
+                >
+                  {roomHeightM.toFixed(1)}m
+                </span>
+                <button
+                  id="btn-height-increase"
+                  title="Increase Room Height (+0.2m)"
+                  onClick={() => setRoomHeight(Math.min(5.0, +(roomHeightM + 0.2).toFixed(1)))}
+                  style={{
+                    width: '18px', height: '18px', border: '1px solid #E8E2DA', background: '#FAF8F5',
+                    borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', fontSize: '12px', lineHeight: 1, color: '#1A1A1A', fontWeight: 'bold',
+                    padding: 0,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#2D3B2D'; e.currentTarget.style.color = '#FAF8F5' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#FAF8F5'; e.currentTarget.style.color = '#1A1A1A' }}
+                >
+                  +
+                </button>
+              </div>
+              <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#C9A96E', display: 'inline-block' }} />
               <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#6B6560' }}>
                 {sol.selectedStyles.join(' · ')}
               </span>
@@ -228,21 +285,34 @@ export function WorkspacePage() {
             { id: 'btn-cost-breakdown', label: 'Cost', title: 'Cost Breakdown', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />, action: () => setShowCostBreakdown(true) },
             { id: 'btn-furniture-swap', label: 'Swap', title: 'Swap Furniture', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />, action: () => setShowFurnitureSwap(true) },
             { id: 'btn-room-materials', label: 'Surfaces', title: 'Room Materials', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />, action: () => setShowMaterialsPanel(true) },
+            { id: 'btn-room-height', label: 'Height', title: 'Adjust Room Height', active: showHeightSlider, icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25m-18 0V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M12 3v4.5" />, action: () => setShowHeightSlider(p => !p) },
             { id: 'btn-suggestions', label: 'Suggest', title: 'AI Design Suggestions', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />, action: () => setShowSuggestions(true) },
-          ].map(btn => (
-            <button
-              key={btn.id}
-              id={btn.id}
-              title={btn.title}
-              onClick={btn.action}
-              style={{ width: '52px', padding: '14px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', background: 'white', border: 'none', cursor: 'pointer', color: '#6B6560', transition: 'all 0.2s', borderLeft: '2px solid transparent' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#F2EDE8'; e.currentTarget.style.borderLeftColor = '#C9A96E'; e.currentTarget.style.color = '#1A1A1A' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'white'; e.currentTarget.style.borderLeftColor = 'transparent'; e.currentTarget.style.color = '#6B6560' }}
-            >
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>{btn.icon}</svg>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '7px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{btn.label}</span>
-            </button>
-          ))}
+          ].map(btn => {
+            const isActive = btn.active ?? false
+            return (
+              <button
+                key={btn.id}
+                id={btn.id}
+                title={btn.title}
+                onClick={btn.action}
+                style={{
+                  width: '52px', padding: '10px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+                  background: isActive ? '#FAF8F5' : 'white', border: 'none', cursor: 'pointer',
+                  color: isActive ? '#2D3B2D' : '#6B6560', transition: 'all 0.2s',
+                  borderLeft: `2px solid ${isActive ? '#C9A96E' : 'transparent'}`,
+                }}
+                onMouseEnter={e => {
+                  if (!isActive) { e.currentTarget.style.background = '#F2EDE8'; e.currentTarget.style.borderLeftColor = '#C9A96E'; e.currentTarget.style.color = '#1A1A1A' }
+                }}
+                onMouseLeave={e => {
+                  if (!isActive) { e.currentTarget.style.background = 'white'; e.currentTarget.style.borderLeftColor = 'transparent'; e.currentTarget.style.color = '#6B6560' }
+                }}
+              >
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>{btn.icon}</svg>
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '7px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{btn.label}</span>
+              </button>
+            )
+          })}
 
           {/* ── DRAG MODE TOGGLE ── */}
           <button
@@ -250,7 +320,7 @@ export function WorkspacePage() {
             title={dragMode ? 'Exit Drag Mode (orbit camera)' : 'Drag Furniture Mode'}
             onClick={() => toggleDragMode()}
             style={{
-              width: '52px', padding: '14px 0', display: 'flex', flexDirection: 'column',
+              width: '52px', padding: '10px 0', display: 'flex', flexDirection: 'column',
               alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer',
               transition: 'all 0.2s', borderLeft: '2px solid transparent',
               background: dragMode ? '#2D3B2D' : 'white',
@@ -270,32 +340,6 @@ export function WorkspacePage() {
             <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '7px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Drag</span>
           </button>
 
-          {/* ── ROOM HEIGHT SLIDER ── */}
-          <button
-            id="btn-room-height"
-            title="Adjust Room Height"
-            onClick={() => setShowHeightSlider(p => !p)}
-            style={{
-              width: '52px', padding: '14px 0', display: 'flex', flexDirection: 'column',
-              alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer',
-              transition: 'all 0.2s', borderLeft: '2px solid transparent',
-              background: showHeightSlider ? '#FAF8F5' : 'white',
-              color: showHeightSlider ? '#2D3B2D' : '#6B6560',
-              borderLeftColor: showHeightSlider ? '#C9A96E' : 'transparent',
-            }}
-            onMouseEnter={e => {
-              if (!showHeightSlider) { e.currentTarget.style.background = '#F2EDE8'; e.currentTarget.style.borderLeftColor = '#C9A96E' }
-            }}
-            onMouseLeave={e => {
-              if (!showHeightSlider) { e.currentTarget.style.background = 'white'; e.currentTarget.style.borderLeftColor = 'transparent' }
-            }}
-          >
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25m-18 0V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M12 3v4.5" />
-            </svg>
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '7px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Height</span>
-          </button>
-
           {/* ── Height slider flyout ── */}
           <AnimatePresence>
             {showHeightSlider && (
@@ -305,10 +349,10 @@ export function WorkspacePage() {
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.2 }}
                 style={{
-                  position: 'absolute', left: '60px', top: '50%', transform: 'translateY(-50%)',
-                  background: 'white', border: '1px solid #E8E2DA', boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
+                  position: 'absolute', left: '60px', top: '160px',
+                  background: 'white', border: '1px solid #E8E2DA', boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
                   padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '10px',
-                  minWidth: '180px', zIndex: 100,
+                  minWidth: '220px', zIndex: 120, borderRadius: '2px',
                 }}
               >
                 <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '9px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#C9A96E' }}>Room Height</div>

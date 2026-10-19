@@ -250,6 +250,44 @@ export function PromptStudioPage() {
             </div>
           </section>
 
+          {/* Section 4.5 — Ceiling Height */}
+          <section>
+            <label style={S.label}>CEILING HEIGHT</label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px' }}>
+              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '24px', fontWeight: 300, color: '#1A1A1A', minWidth: '54px' }}>
+                {st.roomHeightM.toFixed(1)}m
+              </span>
+              <input
+                id="studio-room-height-slider"
+                type="range"
+                min={2.0}
+                max={5.0}
+                step={0.1}
+                value={st.roomHeightM}
+                onChange={e => st.setRoomHeight(parseFloat(e.target.value))}
+                style={{ flex: 1, accentColor: '#C9A96E', cursor: 'pointer' }}
+              />
+            </div>
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+              {[2.4, 2.8, 3.2, 3.6, 4.0, 4.5].map(h => (
+                <button
+                  key={h}
+                  onClick={() => st.setRoomHeight(h)}
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600,
+                    padding: '6px 12px',
+                    border: `1px solid ${Math.abs(st.roomHeightM - h) < 0.05 ? '#2D3B2D' : '#E8E2DA'}`,
+                    background: Math.abs(st.roomHeightM - h) < 0.05 ? '#2D3B2D' : 'transparent',
+                    color: Math.abs(st.roomHeightM - h) < 0.05 ? '#FAF8F5' : '#6B6560',
+                    cursor: 'pointer', transition: 'all 0.2s',
+                  }}
+                >
+                  {h.toFixed(1)}m
+                </button>
+              ))}
+            </div>
+          </section>
+
           {/* Section 5 — Presets */}
           <section>
             <label style={S.label}>QUICK COMPOSITIONS</label>
