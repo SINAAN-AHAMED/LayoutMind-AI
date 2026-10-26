@@ -1,82 +1,25 @@
-import type { OptimizationResult } from '../types/layout'
-
-export type SavedLayout = {
-  id: string
-  name: string
-  savedAt: string
-  thumbnail?: string // base64 data URL
-  result: OptimizationResult
+import {parseStoredResult} from './layoutValidation'
+import type {OptimizationResult} from '../types/layout'
+export type SavedLayout={id:string;name:string;savedAt:string;thumbnail?:string;result:OptimizationResult}
+const STORAGE_KEY='roomcraft-saved-layouts'
+function entries(strict=false):unknown[]{
+ try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return [];const parsed:unknown=JSON.parse(raw);if(!Array.isArray(parsed))throw new Error('Invalid saved layout list');return parsed}
+ catch(error){if(strict)throw new Error('Saved layouts could not be read. Existing browser data has been kept intact.',{cause:error});return []}
 }
-
-const STORAGE_KEY = 'roomcraft-saved-layouts'
-
-export function getSavedLayouts(): SavedLayout[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    // Validate parsed data is an array with expected shape
-    if (!Array.isArray(parsed)) return []
-    return parsed.filter(
-      (item: any) => item && typeof item.id === 'string' && typeof item.name === 'string' && item.result
-    ) as SavedLayout[]
-  } catch {
-    return []
-  }
+function record(value:unknown):value is Record<string,unknown>{return !!value&&typeof value==='object'&&!Array.isArray(value)}
+export function getSavedLayouts():SavedLayout[]{
+ return entries().flatMap(value=>{if(!record(value)||typeof value.id!=='string'||typeof value.name!=='string'||typeof value.savedAt!=='string')return [];const result=parseStoredResult(value.result);return result?[{id:value.id,name:value.name,savedAt:value.savedAt,thumbnail:typeof value.thumbnail==='string'?value.thumbnail:undefined,result}]:[]})
 }
-
-export function saveLayout(name: string, result: OptimizationResult, thumbnail?: string): SavedLayout {
-  const layouts = getSavedLayouts()
-  const entry: SavedLayout = {
-    id: crypto.randomUUID(),
-    name,
-    savedAt: new Date().toISOString(),
-    thumbnail,
-    result,
-  }
-  layouts.unshift(entry) // newest first
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(layouts))
-    return entry
-  } catch (e: unknown) {
-    // Handle QuotaExceededError — remove oldest layouts and retry
-    if (e instanceof DOMException && e.name === 'QuotaExceededError') {
-      // Remove thumbnails first to free space
-      const trimmed = layouts.map(l => ({ ...l, thumbnail: undefined }))
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed))
-        return entry
-      } catch {
-        // If still too large, keep only the newest 3
-        const minimal = trimmed.slice(0, 3)
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(minimal))
-          return entry
-        } catch {
-          console.error('Unable to save layout: storage quota exceeded', e)
-          throw new Error('Unable to save layout: storage quota exceeded')
-        }
-      }
-    } else {
-      console.error('Unable to save layout:', e)
-      throw e
-    }
-  }
+function write(list:unknown[]){
+ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(list))}
+ catch(error){if(error instanceof DOMException&&error.name==='QuotaExceededError')throw new Error('Browser storage is full. Existing layouts are safe; free storage or remove an unneeded save, then try again.',{cause:error});throw new Error('Browser storage is unavailable. Your existing layouts have not been changed.',{cause:error})}
 }
-
-export function deleteLayout(id: string): boolean {
-  const layouts = getSavedLayouts()
-  const filtered = layouts.filter((l) => l.id !== id)
-  if (filtered.length === layouts.length) return false // not found
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered))
-  return true
+export function saveLayout(name:string,result:OptimizationResult,thumbnail?:string):SavedLayout{
+ const valid=parseStoredResult(result);if(!valid)throw new Error('This layout contains invalid or incomplete data and cannot be saved.')
+ const label=name.trim();if(!label)throw new Error('Enter a name for this layout.')
+ const entry:SavedLayout={id:crypto.randomUUID(),name:label,savedAt:new Date().toISOString(),thumbnail,result:valid}
+ // Preserve every existing record, including ones a future version may recover.
+ write([entry,...entries(true)]);return entry
 }
-
-export function renameLayout(id: string, newName: string): boolean {
-  const layouts = getSavedLayouts()
-  const target = layouts.find((l) => l.id === id)
-  if (!target) return false
-  target.name = newName
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(layouts))
-  return true
-}
+export function deleteLayout(id:string){const list=entries(true),next=list.filter(value=>!record(value)||value.id!==id);if(next.length===list.length)return false;write(next);return true}
+export function renameLayout(id:string,newName:string){const name=newName.trim();if(!name)return false;let found=false;const list=entries(true).map(value=>{if(record(value)&&value.id===id){found=true;return {...value,name}}return value});if(!found)return false;write(list);return true}

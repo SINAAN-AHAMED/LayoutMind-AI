@@ -9,11 +9,12 @@ export function Act2HowItWorks() {
   const sectionRef = useRef<HTMLElement>(null)
   
   useEffect(() => {
+    let ctx:gsap.Context|undefined
     const timer = setTimeout(() => {
-      const ctx = gsap.context(() => {
+      ctx = gsap.context(() => {
         const panels = gsap.utils.toArray('.panel') as HTMLElement[]
         
-        panels.forEach((panel, _i) => {
+        panels.forEach((panel) => {
           // Fade in and lift the panel as it enters
           gsap.fromTo(panel, 
             { opacity: 0, y: 100 },
@@ -84,10 +85,10 @@ export function Act2HowItWorks() {
           }
         })
       }, sectionRef)
-      return () => ctx.revert()
+
     }, 100)
     
-    return () => clearTimeout(timer)
+    return () => {clearTimeout(timer);ctx?.revert()}
   }, [])
   
   const steps = [
@@ -95,21 +96,21 @@ export function Act2HowItWorks() {
       num: "01",
       title: "The Prompt",
       desc: "Type out your dream space. Our NLP engine understands natural language, dimensions, furniture, and style constraints instantly.",
-      imgSrc: "/images/step1.jpg",
+      imgSrc: `${import.meta.env.BASE_URL}images/step1.jpg`,
       accent: "#2954FF"
     },
     {
       num: "02",
       title: "NLP Analytics",
       desc: "We parse your input highlighting specific styles, object requests, colors, and constraints in real-time with spaCy NLP.",
-      imgSrc: "/images/step2.jpg",
+      imgSrc: `${import.meta.env.BASE_URL}images/step2.jpg`,
       accent: "#8b5cf6"
     },
     {
       num: "03",
       title: "Genetic Optimization",
       desc: "40 generations of evolutionary algorithms optimize furniture placement for space utilization, clearance, and style alignment.",
-      imgSrc: "/images/step3.jpg",
+      imgSrc: `${import.meta.env.BASE_URL}images/step3.jpg`,
       accent: "#f43f5e"
     }
   ]

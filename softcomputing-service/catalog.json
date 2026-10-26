@@ -1,0 +1,575 @@
+{
+  "sofa": {
+    "type": "sofa",
+    "label": "Sofa",
+    "targetSizeM": {
+      "x": 2.3,
+      "z": 1,
+      "y": 1.1
+    },
+    "costINR": 48000,
+    "room": "Living Room",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "bed": {
+    "type": "bed",
+    "label": "Bed",
+    "targetSizeM": {
+      "x": 1.9,
+      "z": 2.1,
+      "y": 2.1
+    },
+    "costINR": 52000,
+    "room": "Bedroom",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "table": {
+    "type": "table",
+    "label": "Coffee table",
+    "targetSizeM": {
+      "x": 1.2,
+      "z": 0.8,
+      "y": 0.55
+    },
+    "costINR": 18000,
+    "room": "Living Room",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "chair": {
+    "type": "chair",
+    "label": "Accent chair",
+    "targetSizeM": {
+      "x": 0.6,
+      "z": 0.6,
+      "y": 1.15
+    },
+    "costINR": 12000,
+    "room": "Living Room",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "wardrobe": {
+    "type": "wardrobe",
+    "label": "Wardrobe",
+    "targetSizeM": {
+      "x": 1.6,
+      "z": 0.7,
+      "y": 2.1
+    },
+    "costINR": 35000,
+    "room": "Bedroom",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "tvUnit": {
+    "type": "tvUnit",
+    "label": "TV console",
+    "targetSizeM": {
+      "x": 1.8,
+      "z": 0.5,
+      "y": 1.6
+    },
+    "costINR": 22000,
+    "room": "Living Room",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "plant": {
+    "type": "plant",
+    "label": "Potted plant",
+    "targetSizeM": {
+      "x": 0.45,
+      "z": 0.45,
+      "y": 1.3
+    },
+    "costINR": 4500,
+    "room": "All",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "rug": {
+    "type": "rug",
+    "label": "Area rug",
+    "targetSizeM": {
+      "x": 2.5,
+      "z": 1.5,
+      "y": 0.025
+    },
+    "costINR": 8000,
+    "room": "All",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "floorLamp": {
+    "type": "floorLamp",
+    "label": "Floor lamp",
+    "targetSizeM": {
+      "x": 0.5,
+      "z": 0.5,
+      "y": 1.8
+    },
+    "costINR": 6000,
+    "room": "All",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "sideTable": {
+    "type": "sideTable",
+    "label": "Bedside table",
+    "targetSizeM": {
+      "x": 0.5,
+      "z": 0.5,
+      "y": 0.6
+    },
+    "costINR": 4000,
+    "room": "Bedroom",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "bookshelf": {
+    "type": "bookshelf",
+    "label": "Bookshelf",
+    "targetSizeM": {
+      "x": 1.1,
+      "z": 0.4,
+      "y": 2.05
+    },
+    "costINR": 15000,
+    "room": "All",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "ottoman": {
+    "type": "ottoman",
+    "label": "Ottoman",
+    "targetSizeM": {
+      "x": 0.75,
+      "z": 0.75,
+      "y": 0.46
+    },
+    "costINR": 8500,
+    "room": "Living Room",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "dresser": {
+    "type": "dresser",
+    "label": "Dresser",
+    "targetSizeM": {
+      "x": 1.1,
+      "z": 0.5,
+      "y": 1.1
+    },
+    "costINR": 24000,
+    "room": "Bedroom",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "kitchenCounter": {
+    "type": "kitchenCounter",
+    "label": "Base cabinets + worktop",
+    "targetSizeM": {
+      "x": 1.2,
+      "z": 0.64,
+      "y": 1.12
+    },
+    "costINR": 28000,
+    "room": "Kitchen",
+    "mountY": 0,
+    "wallAnchored": true,
+    "collisionHeightM": 0.92
+  },
+  "kitchenIsland": {
+    "type": "kitchenIsland",
+    "label": "Kitchen island",
+    "targetSizeM": {
+      "x": 1.8,
+      "z": 0.9,
+      "y": 0.94
+    },
+    "costINR": 42000,
+    "room": "Kitchen",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "stove": {
+    "type": "stove",
+    "label": "Range cooker + oven",
+    "targetSizeM": {
+      "x": 0.64,
+      "z": 0.64,
+      "y": 0.94
+    },
+    "costINR": 24000,
+    "room": "Kitchen",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "refrigerator": {
+    "type": "refrigerator",
+    "label": "Double-door refrigerator",
+    "targetSizeM": {
+      "x": 0.76,
+      "z": 0.74,
+      "y": 1.98
+    },
+    "costINR": 35000,
+    "room": "Kitchen",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "sink": {
+    "type": "sink",
+    "label": "Sink base + mixer tap",
+    "targetSizeM": {
+      "x": 0.9,
+      "z": 0.64,
+      "y": 1.24
+    },
+    "costINR": 18000,
+    "room": "Kitchen",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "dishwasher": {
+    "type": "dishwasher",
+    "label": "Built-in dishwasher",
+    "targetSizeM": {
+      "x": 0.6,
+      "z": 0.64,
+      "y": 0.92
+    },
+    "costINR": 22000,
+    "room": "Kitchen",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "wallCabinet": {
+    "type": "wallCabinet",
+    "label": "Wall cabinets",
+    "targetSizeM": {
+      "x": 0.9,
+      "z": 0.34,
+      "y": 0.72
+    },
+    "costINR": 9000,
+    "room": "Kitchen",
+    "mountY": 1.5,
+    "wallAnchored": true
+  },
+  "rangeHood": {
+    "type": "rangeHood",
+    "label": "Extractor hood",
+    "targetSizeM": {
+      "x": 0.65,
+      "z": 0.45,
+      "y": 0.62
+    },
+    "costINR": 10000,
+    "room": "Kitchen",
+    "mountY": 1.5,
+    "wallAnchored": true
+  },
+  "tallCabinet": {
+    "type": "tallCabinet",
+    "label": "Pantry cabinet",
+    "targetSizeM": {
+      "x": 0.6,
+      "z": 0.64,
+      "y": 2.16
+    },
+    "costINR": 22000,
+    "room": "Kitchen",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "microwave": {
+    "type": "microwave",
+    "label": "Countertop microwave",
+    "targetSizeM": {
+      "x": 0.5,
+      "z": 0.4,
+      "y": 0.3
+    },
+    "costINR": 9000,
+    "room": "Kitchen",
+    "mountY": 0.94,
+    "wallAnchored": false
+  },
+  "barStool": {
+    "type": "barStool",
+    "label": "Counter stool",
+    "targetSizeM": {
+      "x": 0.42,
+      "z": 0.45,
+      "y": 0.9
+    },
+    "costINR": 6000,
+    "room": "Kitchen",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "toilet": {
+    "type": "toilet",
+    "label": "Close-coupled toilet",
+    "targetSizeM": {
+      "x": 0.42,
+      "z": 0.72,
+      "y": 0.82
+    },
+    "costINR": 15000,
+    "room": "Bathroom",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "shower": {
+    "type": "shower",
+    "label": "Glass shower enclosure",
+    "targetSizeM": {
+      "x": 0.98,
+      "z": 0.98,
+      "y": 2.1
+    },
+    "costINR": 30000,
+    "room": "Bathroom",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "bathtub": {
+    "type": "bathtub",
+    "label": "Freestanding bathtub",
+    "targetSizeM": {
+      "x": 0.82,
+      "z": 1.7,
+      "y": 0.68
+    },
+    "costINR": 38000,
+    "room": "Bathroom",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "vanity": {
+    "type": "vanity",
+    "label": "Vanity, basin + mirror",
+    "targetSizeM": {
+      "x": 1,
+      "z": 0.54,
+      "y": 2
+    },
+    "costINR": 26000,
+    "room": "Bathroom",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "towelRack": {
+    "type": "towelRack",
+    "label": "Heated towel rail",
+    "targetSizeM": {
+      "x": 0.58,
+      "z": 0.12,
+      "y": 0.8
+    },
+    "costINR": 4500,
+    "room": "Bathroom",
+    "mountY": 0.8,
+    "wallAnchored": true
+  },
+  "diningTable": {
+    "type": "diningTable",
+    "label": "Dining table + place settings",
+    "targetSizeM": {
+      "x": 1.8,
+      "z": 0.95,
+      "y": 0.94
+    },
+    "costINR": 28000,
+    "room": "Dining Room",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "diningChair": {
+    "type": "diningChair",
+    "label": "Dining chair",
+    "targetSizeM": {
+      "x": 0.53,
+      "z": 0.57,
+      "y": 0.96
+    },
+    "costINR": 9000,
+    "room": "Dining Room",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "sideboard": {
+    "type": "sideboard",
+    "label": "Dining sideboard",
+    "targetSizeM": {
+      "x": 1.5,
+      "z": 0.45,
+      "y": 0.98
+    },
+    "costINR": 24000,
+    "room": "Dining Room",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "desk": {
+    "type": "desk",
+    "label": "Writing desk",
+    "targetSizeM": {
+      "x": 1.3,
+      "z": 0.65,
+      "y": 1.06
+    },
+    "costINR": 19000,
+    "room": "Home Office",
+    "mountY": 0,
+    "wallAnchored": true
+  },
+  "officeChair": {
+    "type": "officeChair",
+    "label": "Office task chair",
+    "targetSizeM": {
+      "x": 0.64,
+      "z": 0.64,
+      "y": 1.18
+    },
+    "costINR": 16000,
+    "room": "Home Office",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "wallArt": {
+    "type": "wallArt",
+    "label": "Framed wall art",
+    "targetSizeM": {
+      "x": 0.8,
+      "z": 0.055,
+      "y": 0.65
+    },
+    "costINR": 5500,
+    "room": "All",
+    "mountY": 1.35,
+    "wallAnchored": true
+  },
+  "wallSconce": {
+    "type": "wallSconce",
+    "label": "Wall light",
+    "targetSizeM": {
+      "x": 0.18,
+      "z": 0.18,
+      "y": 0.48
+    },
+    "costINR": 4500,
+    "room": "All",
+    "mountY": 1.65,
+    "wallAnchored": true
+  },
+  "wallShelf": {
+    "type": "wallShelf",
+    "label": "Decorated wall shelf",
+    "targetSizeM": {
+      "x": 0.9,
+      "z": 0.26,
+      "y": 0.42
+    },
+    "costINR": 6500,
+    "room": "All",
+    "mountY": 1.35,
+    "wallAnchored": true
+  },
+  "kitchenVent": {
+    "type": "kitchenVent",
+    "label": "Kitchen ventilation grille",
+    "targetSizeM": {
+      "x": 0.4,
+      "z": 0.08,
+      "y": 0.4
+    },
+    "costINR": 3500,
+    "room": "Kitchen",
+    "mountY": 2.1,
+    "wallAnchored": true
+  },
+  "bathroomCabinet": {
+    "type": "bathroomCabinet",
+    "label": "Bathroom mirror cabinet",
+    "targetSizeM": {
+      "x": 0.5,
+      "z": 0.22,
+      "y": 0.8
+    },
+    "costINR": 12500,
+    "room": "Bathroom",
+    "mountY": 1.2,
+    "wallAnchored": true
+  },
+  "petBed": {
+    "type": "petBed",
+    "label": "Bolster pet bed",
+    "targetSizeM": {
+      "x": 0.86,
+      "z": 0.62,
+      "y": 0.19
+    },
+    "costINR": 3500,
+    "room": "Pets",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "petBowls": {
+    "type": "petBowls",
+    "label": "Pet feeding station",
+    "targetSizeM": {
+      "x": 0.5,
+      "z": 0.3,
+      "y": 0.13
+    },
+    "costINR": 1800,
+    "room": "Pets",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "catTree": {
+    "type": "catTree",
+    "label": "Cat climbing tree",
+    "targetSizeM": {
+      "x": 0.58,
+      "z": 0.58,
+      "y": 1.32
+    },
+    "costINR": 7500,
+    "room": "Pets",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "scratchingPost": {
+    "type": "scratchingPost",
+    "label": "Sisal scratching post",
+    "targetSizeM": {
+      "x": 0.36,
+      "z": 0.36,
+      "y": 0.72
+    },
+    "costINR": 2200,
+    "room": "Pets",
+    "mountY": 0,
+    "wallAnchored": false
+  },
+  "petToyBasket": {
+    "type": "petToyBasket",
+    "label": "Pet toy basket",
+    "targetSizeM": {
+      "x": 0.38,
+      "z": 0.34,
+      "y": 0.32
+    },
+    "costINR": 1600,
+    "room": "Pets",
+    "mountY": 0,
+    "wallAnchored": false
+  }
+}

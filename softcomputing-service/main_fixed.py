@@ -9,27 +9,23 @@ from typing import Dict, List, Literal, Tuple
 
 import numpy as np
 import skfuzzy as fuzz
-from deap import algorithms, base, creator, tools
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 import re
-import spacy
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    print("Warning: en_core_web_sm not found. Install with 'python -m spacy download en_core_web_sm'")
-    nlp = None
-
-RoomType = Literal["Bedroom", "Living Room"]
+RoomType = Literal["Bedroom", "Living Room", "Kitchen", "Bathroom", "Dining Room", "Home Office"]
 StyleChip = Literal["Cozy", "Minimal", "Modern", "Luxury", "Compact", "Bohemian", "Industrial", "Coastal"]
-FurnitureType = Literal["sofa", "bed", "table", "chair", "wardrobe", "tvUnit", "plant", "floorLamp", "sideTable", "bookshelf", "rug"]
+FurnitureType = Literal['sofa', 'bed', 'table', 'chair', 'wardrobe', 'tvUnit', 'plant', 'rug', 'floorLamp', 'sideTable', 'bookshelf', 'ottoman', 'dresser', 'kitchenCounter', 'kitchenIsland', 'stove', 'refrigerator', 'sink', 'dishwasher', 'wallCabinet', 'rangeHood', 'tallCabinet', 'microwave', 'barStool', 'toilet', 'shower', 'bathtub', 'vanity', 'towelRack', 'diningTable', 'diningChair', 'sideboard', 'desk', 'officeChair', 'wallArt', 'wallSconce', 'wallShelf', 'kitchenVent', 'bathroomCabinet', 'petBed', 'petBowls', 'catTree', 'scratchingPost', 'petToyBasket']
 
 class OptimizeRequest(BaseModel):
     prompt: str = Field(min_length=4, max_length=600)
     explicitStyle: str = Field(default="", max_length=30)
     addPlants: bool = False
     addRugs: bool = False
+    roomType: RoomType | None = None
+    lengthM: float | None = Field(default=None,ge=2,le=15)
+    widthM: float | None = Field(default=None,ge=2,le=15)
+    budgetINR: float | None = Field(default=None,ge=20000,le=1000000)
 
 class NLPExtracted(BaseModel):
     roomType: RoomType
@@ -45,6 +41,9 @@ class EvolutionPoint(BaseModel):
     avgFitness: float
 
 class HistoryStepItem(BaseModel):
+    widthM: float | None = None
+    depthM: float | None = None
+    groupId: str | None = None
     id: str
     type: FurnitureType
     x: float
@@ -65,12 +64,16 @@ class HistoryStepMetrics(BaseModel):
     fitness: float
 
 class HistoryStep(BaseModel):
+    doorWall: str | None = None
     generation: int
     items: List[HistoryStepItem]
     metrics: HistoryStepMetrics
     totalCostINR: float
 
 class FurnitureItem(BaseModel):
+    widthM: float | None = None
+    depthM: float | None = None
+    groupId: str | None = None
     id: str
     type: FurnitureType
     x: float
@@ -119,19 +122,8 @@ class Spec:
     d: float
     wall_bias: float
 
-CATALOG: Dict[FurnitureType, Spec] = {
-    "sofa": Spec("sofa", 48000.0, 2.10, 0.95, 0.75),
-    "bed": Spec("bed", 52000.0, 2.10, 1.60, 0.90),
-    "table": Spec("table", 18000.0, 1.00, 1.00, 0.10),
-    "chair": Spec("chair", 12000.0, 0.50, 0.50, 0.25),
-    "wardrobe": Spec("wardrobe", 35000.0, 1.40, 0.60, 0.95),
-    "tvUnit": Spec("tvUnit", 22000.0, 1.60, 0.45, 0.95),
-    "plant": Spec("plant", 4500.0, 0.50, 0.50, 0.15),
-    "floorLamp": Spec("floorLamp", 6000.0, 0.40, 0.40, 0.60),
-    "sideTable": Spec("sideTable", 4000.0, 0.45, 0.45, 0.40),
-    "bookshelf": Spec("bookshelf", 15000.0, 1.20, 0.35, 0.95),
-    "rug": Spec("rug", 8000.0, 2.50, 1.50, 0.05),
-}
+from room_planner import CATALOG as CATALOG_DATA, make_plan, dimensions, bounds, intersects, kitchen_family
+CATALOG: Dict[FurnitureType, Spec] = {t:Spec(t,s['costINR'],s['targetSizeM']['x'],s['targetSizeM']['z'],.9 if s['wallAnchored'] else .2) for t,s in CATALOG_DATA.items()}
 
 def clamp(x: float, lo: float, hi: float) -> float:
     return float(max(lo, min(hi, x)))
@@ -230,54 +222,12 @@ def fuzzy_profile(inp: Dict[str, float]) -> Dict[str, float]:
         "budget_sensitivity": clamp(bud, 0.0, 1.0),
     }
 
-def choose_furniture(room_type: RoomType, density: float, styles: List[StyleChip] = None) -> List[FurnitureType]:
-    """Style-aware furniture selection. Different styles produce different furniture sets."""
-    styles = styles or []
-    style_set = set(styles)
-    
-    if room_type == "Bedroom":
-        base: List[FurnitureType] = ["bed", "wardrobe", "sideTable", "floorLamp"]
-        # Style-conditional additions
-        if "Minimal" not in style_set:
-            base.append("tvUnit")
-        if "Minimal" not in style_set and "Compact" not in style_set:
-            base.append("table")
-            base.append("chair")
-        if any(s in style_set for s in ["Cozy", "Bohemian", "Coastal"]):
-            base.append("plant")
-        if any(s in style_set for s in ["Luxury", "Modern"]):
-            base.append("plant")
-        if "Bohemian" in style_set or "Cozy" in style_set:
-            base.append("bookshelf")
-    else:
-        base = ["sofa", "tvUnit", "table", "floorLamp"]
-        if "Minimal" not in style_set:
-            base.append("wardrobe")
-            base.append("sideTable")
-        if "Compact" not in style_set:
-            base.append("chair")
-        if any(s in style_set for s in ["Cozy", "Bohemian", "Coastal"]):
-            base.append("plant")
-        if any(s in style_set for s in ["Luxury", "Modern", "Industrial"]):
-            base.append("plant")
-        if any(s in style_set for s in ["Bohemian", "Cozy", "Industrial"]):
-            base.append("bookshelf")
-    
-    # Density-based extras
-    chairs_count = 1 + (1 if density > 0.55 else 0) + (1 if density > 0.78 else 0)
-    items: List[FurnitureType] = [t for t in base if t != "chair"] + ["chair"] * min(chairs_count, 2)
-    if density > 0.55 and "plant" not in items:
-        items.append("plant")
-    if density > 0.72 and "bookshelf" not in items:
-        items.append("bookshelf")
-    return items
+def choose_furniture(room_type: RoomType,density: float,styles=None):
+    return [t for t,s in CATALOG_DATA.items() if s['room']==room_type]
 
 def rect_dims(spec: Spec, rot: float, scale: float) -> Tuple[float, float]:
-    r = rot % (math.pi * 2)
-    k = (r / (math.pi / 2.0)) % 2.0
-    swap = abs(k - 1.0) < 0.35
-    w, d = (spec.d, spec.w) if swap else (spec.w, spec.d)
-    return w * scale, d * scale
+    c, sn = abs(math.cos(rot)), abs(math.sin(rot))
+    return (spec.w*c + spec.d*sn)*scale, (spec.w*sn + spec.d*c)*scale
 
 def overlap_area(a: Tuple[float, float, float, float], b: Tuple[float, float, float, float]) -> float:
     ax1, az1, ax2, az2 = a
@@ -334,7 +284,7 @@ def compute_metrics(
         r = make_rect(x, z, w, d)
         rects.append(r)
         total_cost += spec.cost
-        total_area += w * d
+        total_area += 0 if t == "rug" else w * d
         decoded.append({"type": t, "x": x, "z": z, "rot": rot, "scale": scale, "w": w, "d": d})
 
         # boundary with small wall padding
@@ -350,6 +300,8 @@ def compute_metrics(
 
     for i in range(len(rects)):
         for j in range(i + 1, len(rects)):
+            if items[i] == "rug" or items[j] == "rug":
+                continue
             o = overlap_area(rects[i], rects[j])
             overlap += o
             gap = separation(rects[i], rects[j])
@@ -434,19 +386,19 @@ def compute_metrics(
 def build_explanation(metrics: Dict[str, float], profile: Dict[str, float]) -> str:
     parts = []
     parts.append(
-        f"Selected for strong constraint satisfaction: clearance {metrics['clearanceScorePct']:.0f}% and budget compliance {metrics['budgetCompliancePct']:.0f}%."
+        f"Estimated layout scores: clearance {metrics['clearanceScorePct']:.0f}% and budget compliance {metrics['budgetCompliancePct']:.0f}%."
     )
     parts.append(
         f"Style alignment {metrics['styleAlignmentPct']:.0f}% reflects the fuzzy profile: openness {profile['openness_score']:.2f}, density {profile['furniture_density']:.2f}, budget sensitivity {profile['budget_sensitivity']:.2f}."
     )
     parts.append(
-        f"Space utilization {metrics['spaceUtilizationPct']:.0f}% balances circulation (≥0.8m) with practical furniture placement."
+        f"Space utilization {metrics['spaceUtilizationPct']:.0f}% uses catalog footprints. Clearance is scored against a 0.8m target; verify circulation in the final design."
     )
     return " ".join(parts)
 
 def parse_prompt(prompt: str) -> tuple[NLPExtracted, List[FurnitureType]]:
     """
-    NLP parser using spaCy + regex/keywords.
+    Deterministic room, dimensions, budget and furniture parser.
     Defaults for missing.
     """
     extracted = {
@@ -459,20 +411,30 @@ def parse_prompt(prompt: str) -> tuple[NLPExtracted, List[FurnitureType]]:
     }
 
     prompt_lower = prompt.lower()
-    doc = nlp(prompt_lower) if nlp else None
 
     # Room type
-    if re.search(r'(bed ?room|sleep)', prompt_lower):
+    if re.search(r'kitchen', prompt_lower):
+        extracted["roomType"] = "Kitchen"
+    elif re.search(r'bathroom|washroom|bath room', prompt_lower):
+        extracted["roomType"] = "Bathroom"
+    elif re.search(r'dining', prompt_lower):
+        extracted["roomType"] = "Dining Room"
+    elif re.search(r'office|study room', prompt_lower):
+        extracted["roomType"] = "Home Office"
+    elif re.search(r'(bed ?room|sleep)', prompt_lower):
         extracted["roomType"] = "Bedroom"
     elif re.search(r'(living|lounge|hall)', prompt_lower):
         extracted["roomType"] = "Living Room"
 
     # Matches '4x5', '4 x 5 m', '4m x 5m', '4 by 5', '4.5 by 3.5', '5m x 6m', '7 meter by 6 meter'
-    dim_match = re.search(r'(\d+(?:\.\d+)?)\s*(?:m(?:eters?|etres?)?)?\s*(?:[xX×]|by)\s*(\d+(?:\.\d+)?)\s*(?:m(?:eters?|etres?)?)?', prompt_lower)
+    dim_match = re.search(r'(\d+(?:\.\d+)?)\s*(?:m(?:eters?|etres?)?|ft|feet|foot)?\s*(?:[xX×]|by)\s*(\d+(?:\.\d+)?)\s*(?:m(?:eters?|etres?)?|ft|feet|foot)?', prompt_lower)
     if dim_match:
         try:
             v1 = float(dim_match.group(1))
             v2 = float(dim_match.group(2))
+            if re.search(r"(?:ft|feet|foot)\b", dim_match.group(0)):
+                v1 *= 0.3048
+                v2 *= 0.3048
             # Clamp to allowed range
             extracted["lengthM"] = max(2.0, min(15.0, v1))
             extracted["widthM"] = max(2.0, min(15.0, v2))
@@ -490,12 +452,12 @@ def parse_prompt(prompt: str) -> tuple[NLPExtracted, List[FurnitureType]]:
         except (ValueError, TypeError):
             pass
     else:
-        budget_match = re.search(r'(?:under|budget|\brs\b|₹|inr)\s*([\d,\.]+)', prompt_lower)
+        budget_match = re.search(r'(?:under|budget|\brs\b|₹|inr)\s*([\d,\.]+)\s*(k)?', prompt_lower)
         if budget_match:
             budget_str = budget_match.group(1).replace(',', '').strip('.')
             if budget_str:
                 try:
-                    val = float(budget_str)
+                    val = float(budget_str) * (1000 if budget_match.group(2) else 1)
                     extracted["budgetINR"] = max(20_000.0, min(1_000_000.0, val))
                 except (ValueError, TypeError):
                     pass  # Keep default budget
@@ -504,7 +466,7 @@ def parse_prompt(prompt: str) -> tuple[NLPExtracted, List[FurnitureType]]:
     furn_keywords = {
         'sofa': ['sofa', 'couch', 'settee'],
         'bed': ['bed'],
-        'table': ['table', 'desk', 'study table', 'coffee table', 'dining table'],
+        'table': ['table', 'coffee table'],
         'chair': ['chair', 'seat'],
         'wardrobe': ['wardrobe', 'closet', 'cupboard', 'almirah'],
         'tvUnit': ['tv', 'television', 'tv unit', 'tv stand'],
@@ -514,10 +476,33 @@ def parse_prompt(prompt: str) -> tuple[NLPExtracted, List[FurnitureType]]:
         'bookshelf': ['bookshelf', 'bookcase', 'shelving unit', 'book shelf'],
         'rug': ['rug', 'carpet', 'area rug', 'floor rug'],
     }
+    furn_keywords.update({
+        'ottoman': ['ottoman', 'pouf'], 'dresser': ['dresser'],
+        'kitchenCounter': ['kitchen counter', 'countertop', 'counter', 'cabinet'], 'sink': ['sink'],
+        'stove': ['stove', 'oven', 'cooktop'], 'refrigerator': ['fridge', 'refrigerator'],
+        'toilet': ['toilet', 'wc'], 'bathtub': ['bathtub', 'bath tub', 'tub'],
+        'shower': ['shower'], 'vanity': ['vanity', 'wash basin'],
+        'kitchenIsland': ['kitchen island','island'], 'dishwasher':['dishwasher'],
+        'wallCabinet':['wall cabinet','upper cabinet'], 'rangeHood':['range hood','extractor','chimney'],
+        'tallCabinet':['pantry','tall cabinet'], 'microwave':['microwave'],
+        'diningTable':['dining table'], 'diningChair':['dining chair'],
+        'sideboard':['sideboard'], 'desk':['desk','writing desk','study table','study desk','computer table','work table','workstation'], 'barStool':['bar stool'],
+        'towelRack':['towel rack','towel rail'],
+        'officeChair':['office chair','task chair'], 'wallArt':['painting','wall art','art print'],
+        'wallSconce':['wall light','sconce'], 'wallShelf':['wall shelf','display shelf'],
+        'kitchenVent':['air hole','ventilation','vent grille','air vent'],
+        'bathroomCabinet':['mirror cabinet','bathroom cabinet'],
+    })
     furn_req: List[FurnitureType] = []
-    for furn, keys in furn_keywords.items():
-        if any(re.search(r'\b' + k.replace(' ', r'\s+') + r'\b', prompt_lower) for k in keys):
-            furn_req.append(furn)
+    remaining = prompt_lower
+    aliases = sorted(((key, furn) for furn, keys in furn_keywords.items() for key in keys), key=lambda x: -len(x[0]))
+    for key, furn in aliases:
+        pattern = r'\b' + re.escape(key).replace(r'\ ', r'\s+') + r's?\b'
+        for match in list(re.finditer(pattern, remaining)):
+            prefix = remaining[max(0, match.start()-20):match.start()]
+            if not re.search(r'(?:no|without|exclude)\s+(?:(?:a|any)\s+)?$', prefix) and furn not in furn_req:
+                furn_req.append(furn)
+        remaining = re.sub(pattern, lambda m: ' '*len(m.group()), remaining)
 
     # Styles
     style_keywords = {
@@ -540,743 +525,84 @@ def parse_prompt(prompt: str) -> tuple[NLPExtracted, List[FurnitureType]]:
     elif re.search(r'(compact|tight)', prompt_lower):
         extracted["styleSliders"]["Compact"] = 0.8
 
+    extracted["styles"] = extracted["styles"][:5] or ["Modern"]
     return NLPExtracted(**extracted), furn_req
 
+def metrics_for_plan(items,width,length,budget,profile):
+    cost=sum(CATALOG_DATA[it['type']]['costINR'] for it in items)
+    floor=[it for it in items if it['y']<.1 and it['type']!='rug']
+    area=sum(dimensions(it)[0]*dimensions(it)[1] for it in floor)
+    # Check usable approach points for fixtures. Adjacent kitchen modules are a run,
+    # not aisle obstacles. Chairs are intentionally grouped around a table.
+    service={'toilet','vanity','shower','sink','stove','refrigerator','dishwasher','kitchenCounter','wardrobe','desk'}
+    tested=0;clear=0
+    for it in floor:
+        if it['type'] not in service:continue
+        tested+=1
+        distance=dimensions(it)[1]/2+.35
+        x=it['x']+math.sin(it['rot'])*distance;z=it['z']+math.cos(it['rot'])*distance
+        usable=abs(x)<width/2-.04 and abs(z)<length/2-.04
+        for other in floor:
+            if other is it:continue
+            hx,hz=bounds(other)
+            if abs(x-other['x'])<hx+.07 and abs(z-other['z'])<hz+.07:usable=False
+        clear+=int(usable)
+    clearance=100*clear/max(1,tested) if tested else 100.
+    compliance=100. if cost<=budget else 100*budget/cost
+    utilization=min(100,100*area/(width*length))
+    style_score=100. # All rendered catalog variants use the selected finish palette.
+    comfort=.75*clearance+25*profile['openness_score']
+    fitness=(.45*clearance+.25*compliance+.20*style_score+.10*comfort)/100
+    return dict(totalCostINR=cost,budgetINR=budget,budgetCompliancePct=compliance,
+                spaceUtilizationPct=utilization,styleAlignmentPct=style_score,
+                clearanceScorePct=clearance,comfortIndexPct=comfort,fitness=fitness)
+
+
 def optimize(req: OptimizeRequest) -> OptimizeResponse:
-    # Parse prompt to extracted params
-    extracted, furn_req_local = parse_prompt(req.prompt)
-
-    # ── Apply explicit style override from frontend ──
-    valid_styles: List[StyleChip] = ["Cozy", "Minimal", "Modern", "Luxury", "Compact", "Bohemian", "Industrial", "Coastal"]
-    if req.explicitStyle and req.explicitStyle in valid_styles:
-        # Frontend style chip overrides NLP-detected style
-        explicit = req.explicitStyle
-        if explicit not in extracted.styles:
-            extracted.styles.insert(0, explicit)  # Prepend so it takes priority
-        # Boost slider for the explicit style
-        if explicit in ["Cozy", "Minimal", "Modern", "Luxury", "Compact"]:
-            extracted.styleSliders[explicit] = 0.95
-
-    # Seed for repeatability per request
-    request_id = str(uuid.uuid4())
-    seed = int(uuid.UUID(request_id)) % (2**32 - 1)
-    rnd = random.Random(seed)
-
-    inp = style_inputs(extracted.styles, extracted.styleSliders)
-    profile = fuzzy_profile(inp)
-    
-    # If user explicitly requested furniture, use ONLY what they asked for.
-    # Only fall back to generic items if user didn't mention any furniture.
-    if furn_req_local:
-        items = list(dict.fromkeys(furn_req_local))  # preserve order, deduplicate
-    else:
-        generic_items = choose_furniture(extracted.roomType, profile["furniture_density"], extracted.styles)
-        items = list(dict.fromkeys(generic_items))
-
-    # ── Apply addPlants / addRugs overrides from frontend ──
-    if req.addPlants and "plant" not in items:
-        items.append("plant")
-    if req.addRugs and "rug" not in items:
-        # Only add rug if room is large enough (min 9m²)
-        if extracted.widthM * extracted.lengthM >= 9.0:
-            items.append("rug")
-
-    room_w = float(extracted.widthM)
-    room_l = float(extracted.lengthM)
-    room_area = room_w * room_l
-    clearance_m = 0.80
-
-    # ========== SMART CAPACITY FILTER ==========
-    # Each furniture type has a footprint area. Sum them up and compare to room area.
-    # If total footprint > 40% of room area, start removing non-essential items.
-    FOOTPRINT = {
-        "bed": 1.9 * 2.1, "sofa": 2.0 * 0.85, "table": 1.2 * 0.8,
-        "chair": 0.5 * 0.5, "wardrobe": 1.5 * 0.65, "tvUnit": 1.8 * 0.45,
-        "plant": 0.5 * 0.5, "floorLamp": 0.4 * 0.4, "sideTable": 0.45 * 0.45,
-        "bookshelf": 1.2 * 0.35, "rug": 2.5 * 1.5,
-    }
-    # Priority: lower number = more essential (never remove)
-    PRIORITY = {
-        "bed": 0, "sofa": 0, "tvUnit": 1, "wardrobe": 1,
-        "table": 2, "chair": 3, "sideTable": 4,
-        "floorLamp": 5, "plant": 6, "bookshelf": 7, "rug": 8,
-    }
-    MAX_FILL_RATIO = 0.40  # furniture should not cover more than 40% of the floor
-
-    removed_items_info: List[RemovedItemInfo] = []
-    total_footprint = sum(FOOTPRINT.get(t, 0.3) for t in items)
-
-    if total_footprint > room_area * MAX_FILL_RATIO:
-        # Sort items by priority (highest number = least essential, remove first)
-        # Use a stable list of (priority, index, type) to remove from the back
-        scored = sorted(enumerate(items), key=lambda x: -PRIORITY.get(x[1], 10))
-        indices_to_remove = []
-        current_fp = total_footprint
-        for orig_idx, item_type in scored:
-            if current_fp <= room_area * MAX_FILL_RATIO:
-                break
-            # Never remove priority 0 items
-            if PRIORITY.get(item_type, 10) <= 0:
-                continue
-            fp = FOOTPRINT.get(item_type, 0.3)
-            current_fp -= fp
-            indices_to_remove.append(orig_idx)
-            removed_items_info.append(RemovedItemInfo(
-                type=item_type,
-                reason=f"Room too small ({room_w}×{room_l}m = {room_area:.1f}m²). Removing {item_type} (footprint {fp:.2f}m²) to prevent overcrowding."
-            ))
-        # Remove in reverse index order to preserve indices
-        for idx in sorted(indices_to_remove, reverse=True):
-            items.pop(idx)
-
-    # DEAP setup
-    creator_name = f"FitnessMax_{request_id[:8]}"
-    if not hasattr(creator, "FitnessMax"):
-        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-    if not hasattr(creator, "Individual"):
-        creator.create("Individual", list, fitness=creator.FitnessMax)
-
-    toolbox = base.Toolbox()
-
-    def rand_pos(max_w: float, max_l: float, wallish: float) -> Tuple[float, float]:
-        # mix between center-biased and wall-biased sampling
-        half_w = max_w / 2.0
-        half_l = max_l / 2.0
-        if rnd.random() < wallish:
-            # near wall
-            side = rnd.choice(["left", "right", "front", "back"])
-            if side in ("left", "right"):
-                x = (half_w - 0.25) * (1 if side == "right" else -1)
-                z = rnd.uniform(-half_l + 0.4, half_l - 0.4)
-            else:
-                z = (half_l - 0.25) * (1 if side == "front" else -1)
-                x = rnd.uniform(-half_w + 0.4, half_w - 0.4)
-        else:
-            x = rnd.uniform(-half_w + 0.6, half_w - 0.6)
-            z = rnd.uniform(-half_l + 0.6, half_l - 0.6)
-        return x, z
-
-    def init_individual():
-        genes: List[float] = []
-        for t in items:
-            spec = CATALOG[t]
-            x, z = rand_pos(room_w, room_l, spec.wall_bias * 0.8)
-            rot = rnd.choice([0.0, math.pi / 2.0, math.pi, 3 * math.pi / 2.0]) + rnd.uniform(-0.12, 0.12)
-            scale = rnd.uniform(0.90, 1.10)
-            genes.extend([x, z, rot, scale])
-        return creator.Individual(genes)
-
-    toolbox.register("individual", init_individual)
-    toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-
-    # Ensure fitness returns tuple!
-    def evaluate_deap(genome: List[float]) -> tuple:
-        met, _ = compute_metrics(genome, items, room_w, room_l, float(extracted.budgetINR), profile, clearance_m, furn_req_local)
-        return (met["fitness"],)
-
-    toolbox.register("evaluate", evaluate_deap)
-    toolbox.register("select", tools.selTournament, tournsize=3)
-
-    def mate(a, b):
-        # Blend positions/scales, swap rotations
-        for i in range(0, len(a), 4):
-            if rnd.random() < 0.55:
-                a[i], b[i] = b[i], a[i]
-            if rnd.random() < 0.55:
-                a[i + 1], b[i + 1] = b[i + 1], a[i + 1]
-            if rnd.random() < 0.35:
-                a[i + 2], b[i + 2] = b[i + 2], a[i + 2]
-            if rnd.random() < 0.45:
-                alpha = 0.35
-                x = a[i + 3]
-                y = b[i + 3]
-                lo = min(x, y) - alpha * abs(x - y)
-                hi = max(x, y) + alpha * abs(x - y)
-                a[i + 3] = rnd.uniform(lo, hi)
-                b[i + 3] = rnd.uniform(lo, hi)
-        return a, b
-
-    toolbox.register("mate", mate)
-
-    def mutate(individual):
-        half_w = room_w / 2.0
-        half_l = room_l / 2.0
-        for i, t in enumerate(items):
-            base = i * 4
-            spec = CATALOG[t]
-            if rnd.random() < 0.35:
-                individual[base + 0] += rnd.gauss(0, 0.28)
-            if rnd.random() < 0.35:
-                individual[base + 1] += rnd.gauss(0, 0.28)
-            if rnd.random() < 0.22:
-                individual[base + 2] += rnd.gauss(0, 0.22)
-            if rnd.random() < 0.25:
-                individual[base + 3] += rnd.gauss(0, 0.05)
-
-            individual[base + 0] = clamp(individual[base + 0], -half_w + 0.55, half_w - 0.55)
-            individual[base + 1] = clamp(individual[base + 1], -half_l + 0.55, half_l - 0.55)
-            individual[base + 2] = float(individual[base + 2] % (2 * math.pi))
-            individual[base + 3] = clamp(individual[base + 3], 0.85, 1.20)
-
-            # encourage wall bias items to drift toward walls
-            if rnd.random() < 0.18 and spec.wall_bias > 0.8:
-                toward = rnd.choice(["x", "z"])
-                if toward == "x":
-                    individual[base + 0] = (half_w - 0.25) * (1 if rnd.random() > 0.5 else -1)
-                else:
-                    individual[base + 1] = (half_l - 0.25) * (1 if rnd.random() > 0.5 else -1)
-        return (individual,)
-
-    toolbox.register("mutate", mutate)
-
-    pop = toolbox.population(n=84)
-    hof = tools.HallOfFame(8)
-    stats = tools.Statistics(lambda ind: ind.fitness.values[0])
-    stats.register("avg", np.mean)
-    stats.register("max", np.max)
-
-    evolution: List[EvolutionPoint] = []
-    history_steps: List[HistoryStep] = []
-    SNAPSHOT_INTERVAL = 5  # capture every Nth generation
-
-    # Store raw snapshots (genome + gen number) to decode after relational_furniture_snap is defined
-    _raw_snapshots: List[Tuple[int, list]] = []
-
-    # Evaluate initial pop
-    invalid = [i for i in pop if not i.fitness.valid]
-    fits = list(map(toolbox.evaluate, invalid))
-    for ind, fit in zip(invalid, fits):
-        ind.fitness.values = fit
-
-    ngen = 40
-    cxpb = 0.55
-    mutpb = 0.40
-
-    for gen in range(ngen):
-        pop = algorithms.varAnd(pop, toolbox, cxpb=cxpb, mutpb=mutpb)
-        invalid = [i for i in pop if not i.fitness.valid]
-        fits = list(map(toolbox.evaluate, invalid))
-        for ind, fit in zip(invalid, fits):
-            ind.fitness.values = fit
-        hof.update(pop)
-
-        record = stats.compile(pop)
-        evolution.append(
-            EvolutionPoint(generation=gen, bestFitness=float(record["max"]), avgFitness=float(record["avg"]))
-        )
-
-        # ── Save best genome for later snapshot decoding ──
-        if gen % SNAPSHOT_INTERVAL == 0 or gen == ngen - 1:
-            best_ind = tools.selBest(pop, k=1)[0]
-            _raw_snapshots.append((gen, list(best_ind)))
-
-        pop = toolbox.select(pop, k=len(pop))
-
-    top_inds = tools.selBest(list(hof), k=3)
-    solutions: List[LayoutSolution] = []
-
-    def relational_furniture_snap(decoded_items: List[Dict]) -> List[Dict]:
-        """
-        Dimension-aware deterministic placement engine.
-        Uses actual 3D mesh dimensions to compute exact positions so nothing
-        clips through walls or overlaps. Places furniture like a real interior designer.
-        
-        Coordinate system:
-          - Center of room = (0, 0)
-          - Back wall at z = -halfL,  Front wall at z = +halfL
-          - Left wall at x = -halfW,  Right wall at x = +halfW
-          
-        Actual 3D mesh footprints (width x depth from FurnitureInstance.tsx):
-          bed:      1.9 x 2.1  (frame), headboard at z_local = -0.9
-          wardrobe: 1.5 x 0.65
-          tvUnit:   1.8 x 0.45 (console only)
-          sofa:     2.0 x 0.85 (with armrests ~2.25)
-          table:    1.2 x 0.8
-          chair:    ~0.5 x 0.5
-        """
-        items_dict = {i: item for i, item in enumerate(decoded_items)}
-        halfW = room_w / 2.0
-        halfL = room_l / 2.0
-        
-        def find_first(target_type):
-            for i, it in items_dict.items():
-                if it["type"] == target_type:
-                    return it
-            return None
-        
-        def find_all(target_type):
-            return [it for it in items_dict.values() if it["type"] == target_type]
-
-        is_bedroom = extracted.roomType == "Bedroom"
-        WALL_GAP = 0.35  # Generous gap from wall to prevent mesh clipping outside room
-
-        if is_bedroom:
-            # ========== BEDROOM LAYOUT ==========
-            # Back wall (z = -halfL): Bed, headboard flush against wall
-            # Front wall (z = +halfL): TV unit, facing the bed
-            # Right wall (x = +halfW): Wardrobe, flush against wall
-            # Left wall (x = -halfW): Table + Chair (study corner)
-            
-            bed = find_first("bed")
-            if bed:
-                # Bed mesh: 1.9w x 2.1d. Headboard at z_local=-0.9 from center.
-                # To flush headboard against back wall:
-                #   bed_center_z + (-0.9 - 0.075) = -halfL  =>  bed_center_z = -halfL + 0.975
-                # But the bed body extends +1.05 from center forward.
-                # So the front of the bed is at: bed_center_z + 1.05
-                bed_depth = 2.1
-                bed_center_z = -halfL + (bed_depth / 2.0) + WALL_GAP
-                bed["x"] = 0
-                bed["z"] = bed_center_z
-                bed["rot"] = 0  # Headboard at negative Z (towards back wall)
-
-            tv = find_first("tvUnit")
-            if tv:
-                # TV console: 1.8w x 0.45d. Flush against front wall, facing bed.
-                tv_depth = 0.45
-                tv["x"] = 0
-                tv["z"] = halfL - (tv_depth / 2.0) - WALL_GAP
-                tv["rot"] = math.pi  # Face towards back wall (towards the bed)
-
-            wardrobe = find_first("wardrobe")
-            if wardrobe:
-                # Wardrobe body is 0.65d but mirror panels protrude +0.36 from center.
-                # When rotated -90deg, protrusion extends in +X direction.
-                # Use 0.85m effective depth to keep everything inside.
-                wd_depth = 0.85
-                wardrobe["x"] = halfW - (wd_depth / 2.0) - WALL_GAP
-                wardrobe["z"] = 0
-                wardrobe["rot"] = -math.pi / 2  # Doors face left (inward)
-
-            table = find_first("table")
-            if table:
-                # Study table: 1.2w x 0.8d.  Push against left wall.
-                t_width = 1.2
-                t_depth = 0.8
-                table["x"] = -halfW + (t_depth / 2.0) + WALL_GAP
-                table["z"] = -halfL * 0.15  # Slightly off center towards back
-                table["rot"] = math.pi / 2  # Long side along left wall
-
-            chairs = find_all("chair")
-            if table and chairs:
-                # Place chair in front of table (towards room center), not overlapping bed
-                for ci, chair in enumerate(chairs):
-                    chair["x"] = table["x"]  # Same X as table (along left wall)
-                    # Use table depth to offset chair
-                    t_depth = 0.8
-                    chair["z"] = table["z"] + (t_depth / 2.0) + 0.5 + ci * 0.6 
-                    chair["rot"] = math.pi  # Face towards the table
-            elif chairs:
-                # No table — put chairs near left wall mid-room
-                for ci, chair in enumerate(chairs):
-                    chair["x"] = -halfW + 0.5
-                    chair["z"] = ci * 0.8
-                    chair["rot"] = math.pi / 2
-
-            sideTable = find_first("sideTable")
-            if sideTable and bed:
-                # Side table next to the bed (beside the headboard, offset from center)
-                bed_w = 1.9
-                sideTable["x"] = bed["x"] + (bed_w / 2.0) + 0.35  # Right of bed
-                sideTable["z"] = bed["z"] - 0.5
-                sideTable["rot"] = 0
-                # Clamp to room
-                if sideTable["x"] > halfW - 0.3:
-                    sideTable["x"] = bed["x"] - (bed_w / 2.0) - 0.35  # Put left instead
-
-            floorLamps = find_all("floorLamp")
-            for fli, fl in enumerate(floorLamps):
-                # Corner lamps - one near bed, one near study
-                if fli == 0:
-                    fl["x"] = halfW - 0.3
-                    fl["z"] = -halfL + 0.3
-                    fl["rot"] = 0
-                else:
-                    fl["x"] = -halfW + 0.3
-                    fl["z"] = halfL - 0.3
-                    fl["rot"] = 0
-
-            plants = find_all("plant")
-            for pi, pl in enumerate(plants):
-                if pi == 0:
-                    # Corner plant near front-right, well inside room
-                    pl["x"] = halfW - 0.7
-                    pl["z"] = halfL - 0.7
-                    pl["rot"] = 0
-                else:
-                    pl["x"] = -halfW + 0.7
-                    pl["z"] = -halfL + 0.7
-                    pl["rot"] = 0
-
-        else:
-            # ========== LIVING ROOM LAYOUT ==========
-            # Strategy: TV on back wall, Sofa facing it from middle,
-            # Table between sofa and front wall, Chairs beside table,
-            # Wardrobe on right wall, Bookshelf on left wall (far from sofa),
-            # Floor lamp in a free corner, Plants in far corners.
-
-            tv = find_first("tvUnit")
-            if tv:
-                tv_depth = 0.45
-                tv["x"] = 0
-                tv["z"] = -halfL + (tv_depth / 2.0) + WALL_GAP
-                tv["rot"] = 0
-
-            sofa = find_first("sofa")
-            if sofa:
-                sofa_depth = 1.0  # Account for L-sectional depth
-                viewing_dist = min(2.0, room_l * 0.38)
-                sofa["x"] = -0.3  # Slightly left to avoid center crowding from L-arm
-                sofa["z"] = -halfL + viewing_dist + (sofa_depth / 2.0)
-                sofa["rot"] = math.pi  # Face TV
-
-            table = find_first("table")
-            if table:
-                # Coffee table in front of the sofa with generous gap
-                sofa_front_z = (sofa["z"] + 0.55) if sofa else 0
-                table["x"] = 0
-                table["z"] = sofa_front_z + 0.75 + 0.4  # 75cm gap + table half-depth
-                table["rot"] = 0
-
-            chairs = find_all("chair")
-            if chairs:
-                if table:
-                    n = len(chairs)
-                    for ci, chair in enumerate(chairs):
-                        # Place chairs to the SIDE of the table, not in front
-                        side = 1 if ci % 2 == 0 else -1
-                        chair["x"] = table["x"] + side * (0.6 + 0.3 * (ci // 2))
-                        chair["z"] = table["z"]
-                        chair["rot"] = -side * math.pi / 2  # Face inward towards table
-                else:
-                    for ci, chair in enumerate(chairs):
-                        chair["x"] = -halfW + 0.5 + ci * 0.8
-                        chair["z"] = halfL - 0.5
-                        chair["rot"] = math.pi
-
-            wardrobe = find_first("wardrobe")
-            if wardrobe:
-                # Wardrobe flush against right wall, towards front
-                wd_depth = 0.85  # Account for protruding mirror panels
-                wardrobe["x"] = halfW - (wd_depth / 2.0) - WALL_GAP
-                wardrobe["z"] = halfL * 0.5  # Near front-right
-                wardrobe["rot"] = -math.pi / 2
-
-            # Living room decorative items: SPREAD to different corners/walls
-            sideTable = find_first("sideTable")
-            if sideTable and sofa:
-                # Side table at the OPPOSITE end from L-arm (left side of sofa)
-                sideTable["x"] = sofa["x"] - 1.5
-                sideTable["z"] = sofa["z"] - 0.2
-                sideTable["rot"] = 0
-                # Clamp to room
-                if sideTable["x"] < -halfW + 0.4:
-                    sideTable["x"] = -halfW + 0.4
-
-            floorLamps = find_all("floorLamp")
-            for fli, fl in enumerate(floorLamps):
-                if fli == 0:
-                    # Floor lamp in FRONT-LEFT corner (far from sofa cluster)
-                    fl["x"] = -halfW + 0.35
-                    fl["z"] = halfL - 0.35
-                    fl["rot"] = 0
-                else:
-                    # Second lamp in BACK-RIGHT corner
-                    fl["x"] = halfW - 0.35
-                    fl["z"] = -halfL + 0.35
-                    fl["rot"] = 0
-
-            plants = find_all("plant")
-            for pi, pl in enumerate(plants):
-                if pi == 0:
-                    # Front-right corner
-                    pl["x"] = halfW - 0.4
-                    pl["z"] = halfL - 0.4
-                    pl["rot"] = 0
-                else:
-                    # Back-left corner
-                    pl["x"] = -halfW + 0.4
-                    pl["z"] = -halfL + 0.4
-                    pl["rot"] = 0
-
-        # ========== UNIVERSAL: Bookshelf fallback ==========
-        for it in items_dict.values():
-            if it["type"] == "bookshelf":
-                bs_depth = 0.35
-                # Place bookshelf on LEFT wall, towards FRONT (away from sofa area)
-                it["x"] = -halfW + (bs_depth / 2.0) + WALL_GAP
-                it["z"] = halfL * 0.5  # Front half of left wall
-                it["rot"] = math.pi / 2
-
-        # ========== UNIVERSAL: Rug placement ==========
-        for it in items_dict.values():
-            if it["type"] == "rug":
-                # Place rug in the center/focal zone of the room
-                if is_bedroom:
-                    # In bedroom: rug in front of the bed (between bed and foot-of-bed)
-                    bed_item = find_first("bed")
-                    if bed_item:
-                        it["x"] = bed_item["x"]
-                        it["z"] = bed_item["z"] + 1.8  # In front of bed
-                    else:
-                        it["x"] = 0.0
-                        it["z"] = 0.0
-                else:
-                    # In living room: rug under the coffee table (center of seating area)
-                    sofa_item = find_first("sofa")
-                    table_item = find_first("table")
-                    if sofa_item and table_item:
-                        it["x"] = (sofa_item["x"] + table_item["x"]) / 2.0
-                        it["z"] = (sofa_item["z"] + table_item["z"]) / 2.0
-                    elif sofa_item:
-                        it["x"] = sofa_item["x"]
-                        it["z"] = sofa_item["z"] + 1.0
-                    else:
-                        it["x"] = 0.0
-                        it["z"] = 0.0
-                it["rot"] = 0
-                it["y"] = -0.01  # Slightly below floor level to avoid z-fighting
-
-        # ========== FINAL SAFETY CLAMP & COLLISION RESOLUTION ==========
-        DIMS = {
-            "bed":       (1.9, 2.1),
-            "sofa":      (2.2, 0.95),   # 3-seater sofa actual footprint
-            "table":     (1.2, 0.8),
-            "chair":     (0.55, 0.55),
-            "wardrobe":  (1.6, 0.7),    # Slightly oversized for safety
-            "tvUnit":    (1.8, 0.45),
-            "bookshelf": (1.2, 0.35),
-            "plant":     (0.5, 0.5),
-            "floorLamp": (0.4, 0.4),
-            "sideTable": (0.45, 0.45),
-            "rug":       (2.5, 1.5),    # Area rug sits on floor
-        }
-
-        # Priority: higher = anchored in place, lower = gets nudged
-        PRIORITY = {
-            "bed": 10, "sofa": 9, "tvUnit": 8, "wardrobe": 7,
-            "table": 6, "bookshelf": 5, "chair": 4,
-            "sideTable": 3, "floorLamp": 2, "plant": 1, "rug": 0,
-        }
-
-        def get_dims_rotated(item):
-            fw, fd = DIMS.get(item["type"], (0.5, 0.5))
-            if 0.3 * math.pi < abs(item["rot"]) % math.pi < 0.7 * math.pi:
-                fw, fd = fd, fw
-            return fw, fd
-
-        def items_collide(a, b, gap=0.25):
-            fwa, fda = get_dims_rotated(a)
-            fwb, fdb = get_dims_rotated(b)
-            dx = abs(a["x"] - b["x"])
-            dz = abs(a["z"] - b["z"])
-            return dx < (fwa + fwb) / 2.0 + gap and dz < (fda + fdb) / 2.0 + gap
-
-        def clamp_item(item):
-            fw, fd = get_dims_rotated(item)
-            hw, hd = fw / 2.0, fd / 2.0
-            # Extra per-type safety margin so 3D meshes don't clip through walls
-            item_type = item.get("type", "").lower() if isinstance(item, dict) else ""
-            extra = {"sofa": 0.25, "bed": 0.15, "wardrobe": 0.15, "tvunit": 0.12}.get(item_type, 0.08)
-            margin = WALL_GAP + extra
-            item["x"] = max(-halfW + hw + margin, min(halfW - hw - margin, item["x"]))
-            item["z"] = max(-halfL + hd + margin, min(halfL - hd - margin, item["z"]))
-
-        # Smart capacity filter: remove excess small items if room is crowded
-        total_footprint = sum(
-            DIMS.get(it["type"], (0.5, 0.5))[0] * DIMS.get(it["type"], (0.5, 0.5))[1]
-            for it in items_dict.values()
-        )
-        room_area = room_w * room_l
-        if total_footprint > room_area * 0.42:
-            # Remove lowest-priority items until under 40%
-            sorted_items = sorted(items_dict.items(), key=lambda kv: PRIORITY.get(kv[1]["type"], 0))
-            while total_footprint > room_area * 0.40 and sorted_items:
-                key, removed = sorted_items.pop(0)
-                if PRIORITY.get(removed["type"], 0) <= 3:  # Only remove small items
-                    fw_r, fd_r = DIMS.get(removed["type"], (0.5, 0.5))
-                    total_footprint -= fw_r * fd_r
-                    del items_dict[key]
-
-        # Sort items by priority (high priority stays, low priority moves)
-        priority_sorted = sorted(items_dict.values(), key=lambda it: PRIORITY.get(it["type"], 0), reverse=True)
-
-        GAP = 0.25  # 25cm clearance gap
-
-        # Iterative collision resolution (max 12 iterations)
-        for iteration in range(12):
-            any_collision = False
-            for i in range(len(priority_sorted)):
-                it1 = priority_sorted[i]
-                fw1, fd1 = get_dims_rotated(it1)
-
-                for j in range(i + 1, len(priority_sorted)):
-                    it2 = priority_sorted[j]
-                    fw2, fd2 = get_dims_rotated(it2)
-
-                    dx = abs(it1["x"] - it2["x"])
-                    dz = abs(it1["z"] - it2["z"])
-                    min_dist_x = (fw1 + fw2) / 2.0 + GAP
-                    min_dist_z = (fd1 + fd2) / 2.0 + GAP
-
-                    if dx < min_dist_x and dz < min_dist_z:
-                        any_collision = True
-                        pen_x = min_dist_x - dx
-                        pen_z = min_dist_z - dz
-
-                        # Always move the lower-priority item (it2, since sorted)
-                        if pen_x < pen_z:
-                            nudge = pen_x + 0.12
-                            if it2["x"] > it1["x"]: it2["x"] += nudge
-                            else: it2["x"] -= nudge
-                        else:
-                            nudge = pen_z + 0.12
-                            if it2["z"] > it1["z"]: it2["z"] += nudge
-                            else: it2["z"] -= nudge
-
-            # Clamp after each iteration
-            for it in items_dict.values():
-                clamp_item(it)
-
-            if not any_collision:
-                break  # No more collisions, we're done
-
-        return list(items_dict.values())
-
-    # ── Decode raw snapshots into HistoryStep objects ──
-    for snap_gen, snap_genome in _raw_snapshots:
-        snap_metrics, snap_decoded = compute_metrics(
-            snap_genome, items, room_w, room_l,
-            float(extracted.budgetINR), profile, clearance_m, furn_req_local,
-        )
-        snap_decoded = relational_furniture_snap(snap_decoded)
-
-        # Budget-aware cost scaling for history steps too
-        snap_raw_total = sum(float(CATALOG[sd["type"]].cost) for sd in snap_decoded)
-        snap_budget = float(extracted.budgetINR)
-        snap_cost_scale = (snap_budget / snap_raw_total) if snap_raw_total > snap_budget and snap_raw_total > 0 else 1.0
-
-        snap_items: List[HistoryStepItem] = []
-        snap_scaled_total = 0.0
-        for si, sd in enumerate(snap_decoded):
-            st = sd["type"]
-            snap_item_cost = float(CATALOG[st].cost) * snap_cost_scale
-            snap_item_cost = round(snap_item_cost / 500) * 500
-            snap_item_cost = max(snap_item_cost, 500)
-            snap_scaled_total += snap_item_cost
-            snap_items.append(HistoryStepItem(
-                id=f"{st}-{si}",
-                type=st,
-                x=float(sd["x"]),
-                z=float(sd["z"]),
-                y=0.0,
-                rotationY=float(sd["rot"]),
-                scale=float(sd["scale"]),
-                costINR=snap_item_cost,
-            ))
-        if snap_cost_scale < 1.0:
-            snap_metrics["totalCostINR"] = snap_scaled_total
-            snap_metrics["budgetCompliancePct"] = clamp((snap_budget / snap_scaled_total) * 100.0, 0.0, 100.0) if snap_scaled_total > 0 else 100.0
-        history_steps.append(HistoryStep(
-            generation=snap_gen,
-            items=snap_items,
-            metrics=HistoryStepMetrics(**snap_metrics),
-            totalCostINR=float(snap_metrics["totalCostINR"]),
-        ))
-
-    for idx, ind in enumerate(top_inds):
-        metrics, decoded = compute_metrics(ind, items, room_w, room_l, float(extracted.budgetINR), profile, clearance_m, furn_req_local)
-        decoded = relational_furniture_snap(decoded)
-
-        # ── Budget-aware cost scaling ──
-        # Sum base catalog costs for all items in this solution
-        raw_total = sum(float(CATALOG[d["type"]].cost) for d in decoded)
-        budget_val = float(extracted.budgetINR)
-        # Scale factor: if total exceeds budget, proportionally reduce each item's cost
-        # This simulates selecting budget-tier variants for each furniture piece
-        if raw_total > budget_val and raw_total > 0:
-            cost_scale = budget_val / raw_total
-        else:
-            cost_scale = 1.0
-
-        sol_items: List[FurnitureItem] = []
-        scaled_total = 0.0
-        for j, d in enumerate(decoded):
-            t = d["type"]
-            item_cost = float(CATALOG[t].cost) * cost_scale
-            # Round to nearest 500 for realistic pricing
-            item_cost = round(item_cost / 500) * 500
-            item_cost = max(item_cost, 500)  # minimum ₹500
-            scaled_total += item_cost
-            sol_items.append(
-                FurnitureItem(
-                    id=f"{t}-{j}",
-                    type=t,
-                    x=float(d["x"]),
-                    z=float(d["z"]),
-                    y=0.0,
-                    rotationY=float(d["rot"]),
-                    scale=float(d["scale"]),
-                    costINR=item_cost,
-                )
-            )
-
-        # Update metrics with the scaled costs
-        if cost_scale < 1.0:
-            budget_compliance = clamp((budget_val / scaled_total) * 100.0, 0.0, 100.0) if scaled_total > 0 else 100.0
-            metrics["totalCostINR"] = scaled_total
-            metrics["budgetCompliancePct"] = budget_compliance
-
-        solutions.append(
-            LayoutSolution(
-                id=str(uuid.uuid4()),
-                rank=1 if idx == 0 else (2 if idx == 1 else 3),
-                room={"lengthM": float(extracted.lengthM), "widthM": float(extracted.widthM), "type": extracted.roomType},
-                prompt=req.prompt,
-                selectedStyles=extracted.styles,
-                items=sol_items,
-                metrics=Metrics(**metrics),
-                explanation=build_explanation(metrics, profile),
-                removedItems=removed_items_info,
-            )
-        )
-
-    # Sort by computed fitness descending (safety)
-    solutions.sort(key=lambda s: s.metrics.fitness, reverse=True)
-    for i, s in enumerate(solutions):
-        s.rank = 1 if i == 0 else (2 if i == 1 else 3)  # type: ignore[misc]
-
-    return OptimizeResponse(
-        requestId=request_id,
-        generatedAtISO=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        evolution=evolution,
-        solutions=solutions,
-        history_steps=history_steps,
-    )
-
-app = FastAPI(title="LayoutMind X Soft Computing Engine", version="1.0.0")
-
+    extracted,requested=parse_prompt(req.prompt)
+    if req.roomType:extracted.roomType=req.roomType
+    if req.widthM is not None:extracted.widthM=req.widthM
+    if req.lengthM is not None:extracted.lengthM=req.lengthM
+    if req.budgetINR is not None:extracted.budgetINR=req.budgetINR
+    valid=['Cozy','Minimal','Modern','Luxury','Compact','Bohemian','Industrial','Coastal']
+    if req.explicitStyle in valid:
+        extracted.styles=[req.explicitStyle]+[style for style in extracted.styles if style!=req.explicitStyle][:4]
+    style=extracted.styles[0] if extracted.styles else 'Modern'
+    profile=fuzzy_profile(style_inputs(extracted.styles,extracted.styleSliders))
+    plants=req.addPlants and not re.search(r'(?:no|without|exclude)\s+(?:any\s+)?plants?\b',req.prompt.lower())
+    rugs=req.addRugs and not re.search(r'(?:no|without|exclude)\s+(?:any\s+)?rugs?\b',req.prompt.lower())
+    width,length,budget=float(extracted.widthM),float(extracted.lengthM),float(extracted.budgetINR)
+    candidates=[];history=[];evolution=[];scores=[]
+    for variant in range(4):
+        items,omitted,door=make_plan(width,length,extracted.roomType,style,requested,plants,rugs,variant)
+        metrics=metrics_for_plan(items,width,length,budget,profile)
+        converted=[]
+        for index,item in enumerate(items):
+            converted.append(FurnitureItem(id=f"{item['type']}-{index}",type=item['type'],x=item['x'],z=item['z'],y=item['y'],rotationY=item['rot'],scale=item['scale'],
+                widthM=item.get('widthM'),depthM=item.get('depthM'),groupId=item.get('groupId'),costINR=CATALOG_DATA[item['type']]['costINR']))
+        explanation=(f"{style} {extracted.roomType.lower()}: room-aware planning keeps wall fixtures backed by a wall, reserves an entrance and turns seating toward its table. "
+            "Kitchen appliances form a connected worktop run; upper cabinets have explicit mounting heights. " if extracted.roomType=='Kitchen' else
+            f"{style} {extracted.roomType.lower()}: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. ")
+        if extracted.roomType=='Kitchen':explanation+=f"Configuration: {kitchen_family(items)}. "
+        explanation+='Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.'
+        sol=LayoutSolution(id=str(uuid.uuid4()),rank=1,room={'type':extracted.roomType,'widthM':width,'lengthM':length,'doorWall':door,**({'layoutKind':kitchen_family(items)} if extracted.roomType=='Kitchen' else {})},prompt=req.prompt,selectedStyles=extracted.styles or ['Modern'],
+            items=converted,metrics=Metrics(**metrics),explanation=explanation,removedItems=[RemovedItemInfo(**item) for item in omitted])
+        candidates.append(sol);scores.append(metrics['fitness'])
+        history.append(HistoryStep(generation=variant+1,doorWall=door,items=[HistoryStepItem(**item.model_dump()) for item in converted],metrics=HistoryStepMetrics(**metrics),totalCostINR=metrics['totalCostINR']))
+        evolution.append(EvolutionPoint(generation=variant+1,bestFitness=max(scores),avgFitness=sum(scores)/len(scores)))
+    preferred_kitchen={'Luxury':'Island','Modern':'L-shaped','Minimal':'Single-wall','Compact':'Single-wall','Cozy':'L-shaped','Bohemian':'Island','Industrial':'Galley','Coastal':'L-shaped'}
+    # Prefer a style's practical configuration when it fits the budget. Keep
+    # the measured scores intact rather than inflating them for this ordering.
+    candidates.sort(key=lambda sol:(int(extracted.roomType=='Kitchen' and sol.room.get('layoutKind')==preferred_kitchen[style] and sol.metrics.budgetCompliancePct>=100),sol.metrics.fitness,len(sol.items)),reverse=True)
+    solutions=candidates[:3]
+    for index,solution in enumerate(solutions):solution.rank=index+1
+    # Keep each history study's door orientation with its items.
+    return OptimizeResponse(requestId=str(uuid.uuid4()),generatedAtISO=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),solutions=solutions,evolution=evolution,history_steps=history)
+
+app=FastAPI(title='LayoutMind Spatial Studio',version='2.0.0')
 from fastapi.middleware.cors import CORSMiddleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/health")
-def health():
-    return {"ok": True}
-
-@app.post("/optimize", response_model=OptimizeResponse)
-def optimize_endpoint(req: OptimizeRequest):
-    try:
-        return optimize(req)
-    except Exception as exc:  # pragma: no cover - safety net
-        # Log full traceback to server console for debugging
-        import traceback
-
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(exc))
-
+app.add_middleware(CORSMiddleware,allow_origins=['*'],allow_methods=['*'],allow_headers=['*'])
+@app.get('/health')
+def health():return {'ok':True}
+@app.post('/optimize',response_model=OptimizeResponse)
+def optimize_endpoint(req:OptimizeRequest):return optimize(req)

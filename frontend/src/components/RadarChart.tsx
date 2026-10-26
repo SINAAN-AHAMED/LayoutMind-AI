@@ -43,7 +43,7 @@ export function RadarChart({
   // Build polygon points for current metrics
   const points = AXES.map((axis, i) => {
     const rawVal = metrics ? metrics[axis.key] : undefined
-    const parsed = typeof rawVal === 'number' ? rawVal : parseFloat(rawVal as any)
+    const parsed = typeof rawVal === 'number' ? rawVal : Number(rawVal)
     const safeVal = isFinite(parsed) ? parsed : 0
     const clampedVal = Math.max(0, Math.min(safeVal, axis.max))
     const val = clampedVal / axis.max
@@ -57,7 +57,7 @@ export function RadarChart({
   if (prevMetrics) {
     const prevPoints = AXES.map((axis, i) => {
       const rawVal = prevMetrics ? prevMetrics[axis.key] : undefined
-      const parsed = typeof rawVal === 'number' ? rawVal : parseFloat(rawVal as any)
+      const parsed = typeof rawVal === 'number' ? rawVal : Number(rawVal)
       const safeVal = isFinite(parsed) ? parsed : 0
       const clampedVal = Math.max(0, Math.min(safeVal, axis.max))
       const val = clampedVal / axis.max
@@ -182,7 +182,7 @@ export function RadarChart({
       {/* Value labels on current data points */}
       {AXES.map((axis, i) => {
         const rawVal = metrics ? metrics[axis.key] : undefined
-        const parsed = typeof rawVal === 'number' ? rawVal : parseFloat(rawVal as any)
+        const parsed = typeof rawVal === 'number' ? rawVal : Number(rawVal)
         const safeVal = isFinite(parsed) ? parsed : 0
         const clampedVal = Math.max(0, Math.min(safeVal, axis.max))
         const val = Math.round(clampedVal)

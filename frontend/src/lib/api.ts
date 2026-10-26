@@ -1,23 +1,12 @@
 import { z } from 'zod'
 import type { OptimizationResult } from '../types/layout'
 
-const FurnitureItemSchema = z.object({
+export const FurnitureItemSchema = z.object({
   id: z.string(),
-  type: z.union([
-    z.literal('sofa'),
-    z.literal('bed'),
-    z.literal('table'),
-    z.literal('chair'),
-    z.literal('wardrobe'),
-    z.literal('tvUnit'),
-    z.literal('plant'),
-    z.literal('rug'),
-    z.literal('floorLamp'),
-    z.literal('sideTable'),
-    z.literal('bookshelf'),
-    z.literal('ottoman'),
-    z.literal('dresser'),
-  ]),
+  type: z.enum(['sofa','bed','table','chair','wardrobe','tvUnit','plant','rug','floorLamp','sideTable','bookshelf','ottoman','dresser','kitchenCounter','kitchenIsland','stove','refrigerator','sink','dishwasher','wallCabinet','rangeHood','tallCabinet','microwave','barStool','toilet','shower','bathtub','vanity','towelRack','diningTable','diningChair','sideboard','desk','officeChair','wallArt','wallSconce','wallShelf','kitchenVent','bathroomCabinet','petBed','petBowls','catTree','scratchingPost','petToyBasket']),
+  widthM:z.number().optional().nullable().transform(v=>v??undefined),
+  depthM:z.number().optional().nullable().transform(v=>v??undefined),
+  groupId:z.string().optional().nullable().transform(v=>v??undefined),
   x: z.number(),
   z: z.number(),
   y: z.number(),
@@ -37,14 +26,15 @@ const MetricsSchema = z.object({
   fitness: z.number(),
 })
 
-const HistoryStepSchema = z.object({
+export const HistoryStepSchema = z.object({
+  doorWall:z.enum(['front','back','left','right']).optional().nullable().transform(v=>v??undefined),
   generation: z.number(),
   items: z.array(FurnitureItemSchema),
   metrics: MetricsSchema,
   totalCostINR: z.number(),
 })
 
-const OptimizeResponseSchema = z.object({
+export const OptimizeResponseSchema = z.object({
   requestId: z.string(),
   generatedAtISO: z.string(),
   evolution: z.array(
@@ -61,7 +51,9 @@ const OptimizeResponseSchema = z.object({
       room: z.object({
         lengthM: z.number(),
         widthM: z.number(),
-        type: z.union([z.literal('Bedroom'), z.literal('Living Room')]),
+        type: z.enum(['Bedroom','Living Room','Kitchen','Bathroom','Dining Room','Home Office']),
+        doorWall:z.enum(['front','back','left','right']).optional(),
+        layoutKind:z.string().optional(),
       }),
       prompt: z.string(),
       selectedStyles: z.array(
@@ -86,14 +78,19 @@ export type OptimizeRequest = {
   explicitStyle?: string
   addPlants?: boolean
   addRugs?: boolean
+  roomType?: import('../types/layout').RoomType
+  lengthM?: number
+  widthM?: number
+  budgetINR?: number
 }
 
 export async function optimizeLayout(req: OptimizeRequest): Promise<OptimizationResult> {
   // In Electron the app loads from file:// — relative /api paths don't work.
   // Detect Electron by protocol and hit the Python engine directly on localhost:8000.
   const isElectron = typeof window !== 'undefined' && window.location.protocol === 'file:'
-  const baseUrl = import.meta.env.VITE_API_URL || (isElectron ? 'http://localhost:8000' : '/api')
+  const baseUrl = import.meta.env.VITE_API_URL || (isElectron ? 'http://127.0.0.1:8000' : '/api')
   const res = await fetch(`${baseUrl}/optimize`, {
+    signal:AbortSignal.timeout(120000),
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(req),
@@ -109,7 +106,7 @@ export async function optimizeLayout(req: OptimizeRequest): Promise<Optimization
 export async function checkHealth(signal?: AbortSignal): Promise<boolean> {
   try {
     const isElectron = typeof window !== 'undefined' && window.location.protocol === 'file:'
-    const baseUrl = import.meta.env.VITE_API_URL || (isElectron ? 'http://localhost:8000' : '/api')
+    const baseUrl = import.meta.env.VITE_API_URL || (isElectron ? 'http://127.0.0.1:8000' : '/api')
     const res = await fetch(`${baseUrl}/health`, { signal })
     return res.ok
   } catch {

@@ -1,4 +1,7 @@
-import { useMemo } from 'react'
+import { useStudioStore } from '../store/useStudioStore'
+import { furnitureCatalog } from './catalog'
+import { RoomSpecificFurniture } from './RoomSpecificFurniture'
+import { useMemo, useLayoutEffect, useRef } from 'react'
 import { RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
 import type { FurnitureItem } from '../types/layout'
@@ -22,8 +25,8 @@ export type DominantStyle = 'Cozy' | 'Minimal' | 'Modern' | 'Luxury' | 'Compact'
 const STYLE_PALETTES: Record<DominantStyle, { primary: string, secondary: string, metal: string, wood: string, accent: string }> = {
   Cozy:       { primary: '#b48356', secondary: '#f0e6d8', metal: '#6b5a46', wood: '#7a5230', accent: '#d4a574' },
   Minimal:    { primary: '#e8e8e8', secondary: '#f8f8f8', metal: '#1a1a1a', wood: '#d4ccbb', accent: '#c0c0c0' },
-  Modern:     { primary: '#2d333b', secondary: '#4a535e', metal: '#8fa0b5', wood: '#3c3a38', accent: '#38bdf8' },
-  Luxury:     { primary: '#1a2238', secondary: '#8a6a2f', metal: '#d4af37', wood: '#0d0d0d', accent: '#c9a227' },
+  Modern:     { primary: '#52675e', secondary: '#d4d8cb', metal: '#a5afa6', wood: '#806348', accent: '#b7a887' },
+  Luxury:     { primary: '#304d43', secondary: '#e2d5b8', metal: '#b99b62', wood: '#503c30', accent: '#bda16e' },
   Compact:    { primary: '#8b9b8b', secondary: '#c6d0c6', metal: '#7d8a7d', wood: '#9c8968', accent: '#a8b5a8' },
   Bohemian:   { primary: '#c17a4a', secondary: '#f0dfc0', metal: '#8b7355', wood: '#a0522d', accent: '#e0936a' },
   Industrial: { primary: '#4a4a4a', secondary: '#7a7a7a', metal: '#9a9a9a', wood: '#5c4a3a', accent: '#c75000' },
@@ -58,42 +61,28 @@ function SofaComposite({ styleKey }: { styleKey: DominantStyle }) {
   const Accent = <meshStandardMaterial color={p.secondary} roughness={0.75} />
   const Legs = <meshStandardMaterial color={isLuxury ? p.metal : p.wood} roughness={isLuxury ? 0.2 : 0.65} metalness={isLuxury ? 0.9 : 0.05} />
 
-  // L-Sectional for Luxury / Modern
-  if (isLuxury || isModern) {
-    return (
-      <group>
-        {/* Main seat body */}
-        <RoundedBox args={[2.2, 0.22, 0.95]} radius={0.05} smoothness={4} position={[0, 0.3, 0]} castShadow receiveShadow>{Fabric}</RoundedBox>
-        {/* Right arm extension seat */}
-        <RoundedBox args={[0.9, 0.22, 0.85]} radius={0.05} smoothness={4} position={[1.5, 0.3, -0.5]} castShadow receiveShadow>{Fabric}</RoundedBox>
-        {/* Seat cushions - main */}
-        <RoundedBox args={[0.92, 0.15, 0.88]} radius={0.05} smoothness={4} position={[-0.6, 0.45, 0]} castShadow receiveShadow>{isModern ? Accent : Fabric}</RoundedBox>
-        <RoundedBox args={[0.92, 0.15, 0.88]} radius={0.05} smoothness={4} position={[0.5, 0.45, 0]} castShadow receiveShadow>{Fabric}</RoundedBox>
-        {/* Seat cushion - L-arm */}
-        <RoundedBox args={[0.85, 0.15, 0.8]} radius={0.05} smoothness={4} position={[1.5, 0.45, -0.5]} castShadow receiveShadow>{Fabric}</RoundedBox>
-        {/* Main backrest */}
-        <RoundedBox args={[2.2, 0.55, 0.22]} radius={0.05} smoothness={4} position={[0, 0.67, -0.37]} castShadow receiveShadow>{Fabric}</RoundedBox>
-        {/* L-arm backrest */}
-        <RoundedBox args={[0.22, 0.55, 0.85]} radius={0.04} smoothness={4} position={[2.05, 0.67, -0.5]} castShadow receiveShadow>{Fabric}</RoundedBox>
-        {/* Low modern legs */}
-        {[-1.0, 1.0].map(x => [-0.38, 0.38].map(z => (
-          <mesh key={`${x}-${z}`} position={[x, 0.07, z]} castShadow>
-            <boxGeometry args={[0.06, 0.12, 0.06]} />
-            {Legs}
-          </mesh>
-        )))}
-        {/* Throw pillows */}
-        {isLuxury && <>
-          <RoundedBox args={[0.35, 0.3, 0.12]} radius={0.04} smoothness={3} position={[-1.5, 0.62, -0.2]} rotation={[0.1, 0.2, 0.05]} castShadow>
-            <meshStandardMaterial color={p.accent} roughness={0.7} />
-          </RoundedBox>
-          <RoundedBox args={[0.28, 0.28, 0.1]} radius={0.04} smoothness={3} position={[0.1, 0.62, -0.2]} rotation={[0.05, -0.3, 0.08]} castShadow>
-            <meshStandardMaterial color={p.secondary} roughness={0.7} />
-          </RoundedBox>
-        </>}
-      </group>
-    )
-  }
+  // A tailored salon sofa, structurally distinct from the modern sectional.
+  if(isLuxury)return <group name="salon-sofa">
+    <RoundedBox args={[2.2,.22,.92]} radius={.07} position={[0,.30,0]} castShadow>{Fabric}</RoundedBox>
+    <RoundedBox args={[2.05,.58,.19]} radius={.08} position={[0,.66,-.37]} castShadow>{Fabric}</RoundedBox>
+    {[-1,1].map(sign=><RoundedBox key={sign} args={[.23,.45,.92]} radius={.10} position={[sign*1.06,.49,0]} castShadow>{Fabric}</RoundedBox>)}
+    {[-.66,0,.66].map(x=><group key={x}><RoundedBox args={[.63,.16,.77]} radius={.055} position={[x,.47,.06]} castShadow>{Fabric}</RoundedBox>{[.60,.79].map(y=><mesh key={y} position={[x,y,-.265]}><sphereGeometry args={[.018,10,8]}/>{Legs}</mesh>)}</group>)}
+    <mesh position={[0,.18,0]} castShadow><boxGeometry args={[2.12,.045,.82]}/>{Legs}</mesh>
+    {[-.90,.90].flatMap(x=>[-.34,.34].map(z=><mesh key={`${x}:${z}`} position={[x,.09,z]} castShadow><cylinderGeometry args={[.018,.027,.18,12]}/>{Legs}</mesh>))}
+    {[-.82,.82].map(x=><RoundedBox key={x} args={[.29,.29,.12]} radius={.045} position={[x,.64,-.16]} rotation={[.12,0,x*.12]} castShadow>{Accent}</RoundedBox>)}
+  </group>
+
+  // A forward-facing chaise, built near catalog scale to retain normal seat height.
+  if(isModern)return <group name="modern-sectional">
+    <RoundedBox args={[1.56,.20,.85]} radius={.045} position={[-.36,.28,-.08]} castShadow receiveShadow>{Fabric}</RoundedBox>
+    <RoundedBox args={[.72,.20,1.16]} radius={.045} position={[.78,.28,.09]} castShadow receiveShadow>{Fabric}</RoundedBox>
+    {[-.74,0].map(x=><RoundedBox key={x} name="sofa-seat" args={[.70,.14,.72]} radius={.04} position={[x,.45,-.04]} castShadow>{Accent}</RoundedBox>)}
+    <RoundedBox name="sofa-chaise" args={[.65,.14,1.06]} radius={.04} position={[.77,.45,.10]} castShadow>{Fabric}</RoundedBox>
+    <RoundedBox name="sofa-back" args={[2.3,.45,.16]} radius={.045} position={[0,.665,-.43]} castShadow>{Fabric}</RoundedBox>
+    <RoundedBox args={[.10,.36,.85]} radius={.04} position={[-1.10,.50,-.08]} castShadow>{Fabric}</RoundedBox>
+    <RoundedBox args={[.10,.36,1.16]} radius={.04} position={[1.10,.50,.09]} castShadow>{Fabric}</RoundedBox>
+    {[-1,.32,1].flatMap(x=>[-.35,.39].map(z=><mesh key={`${x}:${z}`} position={[x,.09,z]} castShadow><cylinderGeometry args={[.024,.020,.18,12]}/>{Legs}</mesh>))}
+  </group>
 
   // Chesterfield for Cozy
   if (isCozy) {
@@ -265,7 +254,7 @@ function TvUnitComposite({ styleKey }: { styleKey: DominantStyle }) {
 
   const WoodBody = <meshStandardMaterial color={p.wood} roughness={0.6} metalness={0.05} />
   const Screen = <meshStandardMaterial color="#050505" roughness={0.05} metalness={0.9} />
-  const Glow = <meshStandardMaterial color="#0a0a0a" emissive="#1d4ed8" emissiveIntensity={0.3} />
+  const Glow = <meshStandardMaterial color="#1c2e29" emissive="#29463c" emissiveIntensity={0.12} roughness={.25} />
   const Metal = <meshStandardMaterial color={p.metal} roughness={isLuxury ? 0.2 : 0.4} metalness={0.8} />
 
   // Minimal: floating wall-mount shelf only — no console
@@ -1082,34 +1071,14 @@ function ChairComposite({ styleKey }: { styleKey: DominantStyle }) {
   const Fabric = <meshStandardMaterial color={p.primary} roughness={0.8} />
   const LegMat = <meshStandardMaterial color={p.metal} metalness={0.6} roughness={0.4} />
 
-  // Eames-style shell for Modern
-  if (isModern) {
-    return (
-      <group>
-        <RoundedBox args={[0.52, 0.08, 0.52]} radius={0.04} smoothness={4} position={[0, 0.45, 0]} castShadow receiveShadow>
-          <meshStandardMaterial color={p.secondary} roughness={0.4} />
-        </RoundedBox>
-        <RoundedBox args={[0.5, 0.44, 0.08]} radius={0.04} smoothness={4} position={[0, 0.7, -0.2]} castShadow receiveShadow>
-          <meshStandardMaterial color={p.secondary} roughness={0.4} />
-        </RoundedBox>
-        {[[-0.2, 0.2], [0.2, 0.2], [-0.2, -0.2], [0.2, -0.2]].map(([x, z], i) => (
-          <mesh key={i} position={[x, 0.22, z]} castShadow>
-            <cylinderGeometry args={[0.018, 0.014, 0.45, 8]} />
-            {LegMat}
-          </mesh>
-        ))}
-        {/* Eames cross brace under seat */}
-        <mesh position={[0, 0.12, 0]} castShadow>
-          <boxGeometry args={[0.42, 0.02, 0.02]} />
-          {LegMat}
-        </mesh>
-        <mesh position={[0, 0.12, 0]} rotation={[0, Math.PI/2, 0]} castShadow>
-          <boxGeometry args={[0.42, 0.02, 0.02]} />
-          {LegMat}
-        </mesh>
-      </group>
-    )
-  }
+  // Upholstered lounge seating, rather than a dining/task-chair silhouette.
+  if(isModern)return <group name="modern-lounge-chair">
+    <RoundedBox args={[.58,.18,.56]} radius={.055} position={[0,.30,0]} castShadow receiveShadow>{Fabric}</RoundedBox>
+    <RoundedBox name="accent-seat" args={[.45,.105,.46]} radius={.04} position={[0,.435,.035]} castShadow receiveShadow><meshStandardMaterial color={p.secondary} roughness={.85}/></RoundedBox>
+    <RoundedBox name="accent-back" args={[.53,.49,.12]} radius={.055} position={[0,.64,-.22]} rotation={[-.10,0,0]} castShadow>{Fabric}</RoundedBox>
+    {[-1,1].map(sign=><RoundedBox key={sign} args={[.095,.26,.55]} radius={.045} position={[sign*.265,.46,0]} castShadow>{Fabric}</RoundedBox>)}
+    {[-.22,.22].flatMap(x=>[-.21,.21].map(z=><mesh key={`${x}:${z}`} position={[x,.11,z]} castShadow><cylinderGeometry args={[.022,.017,.22,12]}/><meshStandardMaterial color={p.wood} roughness={.65}/></mesh>))}
+  </group>
 
   // Wingback for Luxury
   if (isLuxury) {
@@ -1756,7 +1725,7 @@ function RugComposite({ styleKey }: { styleKey: DominantStyle }) {
   return (
     <group>
       {/* Main rug base */}
-      <mesh position={[0, 0.005, 0]} receiveShadow>
+      <mesh name="rug-base" position={[0, 0.005, 0]} receiveShadow>
         <boxGeometry args={[2.5, 0.02, 1.5]} />
         <meshStandardMaterial color={rugColor} roughness={1.0} />
       </mesh>
@@ -1766,8 +1735,8 @@ function RugComposite({ styleKey }: { styleKey: DominantStyle }) {
         <meshStandardMaterial color={patternColor} roughness={1.0} transparent opacity={0.35} />
       </mesh>
       {/* Inner border rectangle */}
-      {[[-1.1, 0, 0, 2.3, 0.01, 0.06], [1.1, 0, 0, 2.3, 0.01, 0.06],
-        [0, 0, -0.67, 0.06, 0.01, 1.38], [0, 0, 0.67, 0.06, 0.01, 1.38]].map(([x, y, z, w, h, d], i) => (
+      {[[-1.1, 0, 0, .06, 0.004, 1.38], [1.1, 0, 0, .06, 0.004, 1.38],
+        [0, 0, -0.67, 2.3, 0.004, .06], [0, 0, 0.67, 2.3, 0.004, .06]].map(([x, y, z, w, h, d], i) => (
         <mesh key={i} position={[x as number, 0.018 + (y as number), z as number]} receiveShadow>
           <boxGeometry args={[w as number, h as number, d as number]} />
           <meshStandardMaterial color={patternColor} roughness={0.9} />
@@ -1795,6 +1764,7 @@ function RugComposite({ styleKey }: { styleKey: DominantStyle }) {
 const VALID_STYLES: DominantStyle[] = ['Cozy','Minimal','Modern','Luxury','Compact','Bohemian','Industrial','Coastal']
 
 export function FurnitureInstance({ item, styleSliders }: { item: FurnitureItem; styleSliders?: Record<string, number> }) {
+  const appearanceKey=useStudioStore(s=>`${s.cabinetColor}|${s.countertopColor}|${s.metalFinish}`)
   // If item has a _swapStyle override from the swap panel, use that instead of global style
   const swapStyle = item._swapStyle as DominantStyle | undefined
   const dominantStyle = useMemo(() => {
@@ -1817,17 +1787,33 @@ export function FurnitureInstance({ item, styleSliders }: { item: FurnitureItem;
       case 'rug':        return <RugComposite styleKey={dominantStyle} />
       case 'ottoman':    return <OttomanComposite styleKey={dominantStyle} />
       case 'dresser':    return <DresserComposite styleKey={dominantStyle} />
-      default:           return null
+      default:           return <RoomSpecificFurniture type={item.type} style={dominantStyle}/>
     }
   }
 
-  return (
-    <group
-      position={[item.x, item.y ?? 0, item.z]}
-      rotation={[0, item.rotationY, 0]}
-      scale={[item.scale, item.scale, item.scale]}
-    >
-      {renderGeometry()}
-    </group>
-  )
+  const geometryRef=useRef<THREE.Group>(null)
+  useLayoutEffect(()=>{
+    const group=geometryRef.current;if(!group)return
+    group.position.set(0,0,0);group.scale.set(1,1,1)
+    const parent=group.parent;group.removeFromParent();group.updateMatrixWorld(true)
+    const bounds=new THREE.Box3().setFromObject(group),size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3())
+    if(parent)parent.add(group)
+    const spec=furnitureCatalog[item.type].targetSizeM
+    const target={...spec,x:item.widthM??spec.x,z:item.depthM??spec.z}
+    if(size.x>0&&size.y>0&&size.z>0){
+      group.scale.set(target.x/size.x,Math.min(target.y/size.y,Math.max(target.x/size.x,target.z/size.z)),target.z/size.z)
+      group.position.set(-center.x*group.scale.x,-bounds.min.y*group.scale.y,-center.z*group.scale.z)
+    }
+    group.traverse(obj=>{if((obj as THREE.Mesh).isMesh){
+      const mesh=obj as THREE.Mesh
+      const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material]
+      materials.forEach(mat=>{if((mat as THREE.MeshStandardMaterial).isMeshStandardMaterial){
+        const material=mat as THREE.MeshStandardMaterial
+        if(!material.userData.originalColor)material.userData.originalColor=material.color.clone()
+        material.color.copy(material.userData.originalColor)
+        if(item.color)material.color.multiply(new THREE.Color(item.color))
+      }})
+    }})
+  },[item.type,dominantStyle,item.color,item.widthM,item.depthM,appearanceKey])
+  return <group position={[item.x,item.y??0,item.z]} rotation={[0,item.rotationY,0]} scale={item.scale}><group ref={geometryRef} key={`${dominantStyle}:${appearanceKey}`}>{renderGeometry()}</group></group>
 }

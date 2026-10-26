@@ -1,0 +1,38 @@
+[
+  {
+    "type": "sofa",
+    "modelUrl": "/models/sofa.glb",
+    "dimensions": {"width": 2.10, "height": 0.8, "depth": 0.95},
+    "styleTags": ["cozy", "modern", "luxury"]
+  },
+  {
+    "type": "bed",
+    "modelUrl": "/models/bed.glb",
+    "dimensions": {"width": 2.10, "height": 0.6, "depth": 1.60},
+    "styleTags": ["cozy", "minimal"]
+  },
+  {
+    "type": "table",
+    "modelUrl": "/models/table.glb",
+    "dimensions": {"width": 1.00, "height": 0.45, "depth": 1.00},
+    "styleTags": ["modern", "compact"]
+  },
+  {
+    "type": "chair",
+    "modelUrl": "/models/chair.glb",
+    "dimensions": {"width": 0.85, "height": 0.9, "depth": 0.85},
+    "styleTags": ["minimal", "luxury"]
+  },
+  {
+    "type": "wardrobe",
+    "modelUrl": "/models/wardrobe.glb",
+    "dimensions": {"width": 1.40, "height": 2.2, "depth": 0.60},
+    "styleTags": ["luxury", "modern"]
+  },
+  {
+    "type": "tvUnit",
+    "modelUrl": "/models/tvUnit.glb",
+    "dimensions": {"width": 1.60, "height": 0.5, "depth": 0.45},
+    "styleTags": ["modern", "minimal"]
+  }
+]

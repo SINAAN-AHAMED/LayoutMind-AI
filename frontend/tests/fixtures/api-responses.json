@@ -1,0 +1,5683 @@
+{
+  "Kitchen": {
+    "requestId": "9c49d777-f33a-4cd8-a86b-ddc31bae518a",
+    "generatedAtISO": "2026-10-24T15:21:35Z",
+    "evolution": [
+      {
+        "generation": 1,
+        "bestFitness": 0.8946639784946236,
+        "avgFitness": 0.8946639784946236
+      },
+      {
+        "generation": 2,
+        "bestFitness": 0.8946639784946236,
+        "avgFitness": 0.8570637177855949
+      },
+      {
+        "generation": 3,
+        "bestFitness": 0.8946639784946236,
+        "avgFitness": 0.8691538857731969
+      },
+      {
+        "generation": 4,
+        "bestFitness": 0.9320833333333333,
+        "avgFitness": 0.884886247663231
+      }
+    ],
+    "solutions": [
+      {
+        "id": "f8238e7d-ff30-45f5-813a-b22cc2367681",
+        "rank": 1,
+        "room": {
+          "type": "Kitchen",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "left",
+          "layoutKind": "Single-wall"
+        },
+        "prompt": "Luxury Kitchen 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 0.76,
+            "groupId": "kitchen-run",
+            "id": "refrigerator-0",
+            "type": "refrigerator",
+            "x": 1.5850000000000004,
+            "z": -2.0599999999999996,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "sink-1",
+            "type": "sink",
+            "x": 1.6350000000000002,
+            "z": -1.2119999999999997,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "widthM": 1.908,
+            "groupId": "kitchen-run",
+            "id": "kitchenCounter-2",
+            "type": "kitchenCounter",
+            "x": 1.635,
+            "z": 0.21000000000000038,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "widthM": 0.64,
+            "groupId": "kitchen-run",
+            "id": "stove-3",
+            "type": "stove",
+            "x": 1.6349999999999998,
+            "z": 1.5020000000000002,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 0.6,
+            "groupId": "kitchen-run",
+            "id": "dishwasher-4",
+            "type": "dishwasher",
+            "x": 1.6349999999999996,
+            "z": 2.14,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-5",
+            "type": "wallCabinet",
+            "x": 1.7850000000000001,
+            "z": -1.2119999999999997,
+            "y": 1.5,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.946,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-6",
+            "type": "wallCabinet",
+            "x": 1.785,
+            "z": -0.2709999999999996,
+            "y": 1.5,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.946,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-7",
+            "type": "wallCabinet",
+            "x": 1.7849999999999997,
+            "z": 0.6910000000000004,
+            "y": 1.5,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.65,
+            "groupId": "kitchen-run",
+            "id": "rangeHood-8",
+            "type": "rangeHood",
+            "x": 1.7299999999999998,
+            "z": 1.5020000000000002,
+            "y": 1.5,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 10000.0
+          },
+          {
+            "groupId": "kitchen-run",
+            "id": "microwave-9",
+            "type": "microwave",
+            "x": 1.675,
+            "z": 0.4600000000000004,
+            "y": 0.94,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "id": "plant-10",
+            "type": "plant",
+            "x": -1.6499999999999995,
+            "z": -2.2300000000000004,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "kitchenVent-11",
+            "type": "kitchenVent",
+            "x": -1.4499999999999995,
+            "z": -2.4150000000000005,
+            "y": 2.1,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 3500.0
+          },
+          {
+            "id": "wallShelf-12",
+            "type": "wallShelf",
+            "x": -0.6999999999999995,
+            "z": -2.325,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 6500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 187500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 77.33333333333333,
+          "spaceUtilizationPct": 16.778100000000002,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.9320833333333333
+        },
+        "explanation": "Luxury kitchen: room-aware planning keeps wall fixtures backed by a wall, reserves an entrance and turns seating toward its table. Kitchen appliances form a connected worktop run; upper cabinets have explicit mounting heights. Configuration: Single-wall. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "b7f75721-772d-4940-aa54-54583567d350",
+        "rank": 2,
+        "room": {
+          "type": "Kitchen",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "front",
+          "layoutKind": "Island"
+        },
+        "prompt": "Luxury Kitchen 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 0.76,
+            "groupId": "kitchen-run",
+            "id": "refrigerator-0",
+            "type": "refrigerator",
+            "x": -1.56,
+            "z": -2.085,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "sink-1",
+            "type": "sink",
+            "x": -0.712,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "widthM": 0.908,
+            "groupId": "kitchen-run",
+            "id": "kitchenCounter-2",
+            "type": "kitchenCounter",
+            "x": 0.21000000000000013,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "widthM": 0.64,
+            "groupId": "kitchen-run",
+            "id": "stove-3",
+            "type": "stove",
+            "x": 1.0020000000000002,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 0.6,
+            "groupId": "kitchen-run",
+            "id": "dishwasher-4",
+            "type": "dishwasher",
+            "x": 1.6400000000000003,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-5",
+            "type": "wallCabinet",
+            "x": -0.712,
+            "z": -2.285,
+            "y": 1.5,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.908,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-6",
+            "type": "wallCabinet",
+            "x": 0.21000000000000013,
+            "z": -2.285,
+            "y": 1.5,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.65,
+            "groupId": "kitchen-run",
+            "id": "rangeHood-7",
+            "type": "rangeHood",
+            "x": 1.0020000000000002,
+            "z": -2.23,
+            "y": 1.5,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 10000.0
+          },
+          {
+            "groupId": "kitchen-run",
+            "id": "microwave-8",
+            "type": "microwave",
+            "x": 0.39400000000000013,
+            "z": -2.175,
+            "y": 0.94,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "island",
+            "id": "kitchenIsland-9",
+            "type": "kitchenIsland",
+            "x": 0.0,
+            "z": 0.16,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 42000.0
+          },
+          {
+            "groupId": "island",
+            "id": "barStool-10",
+            "type": "barStool",
+            "x": -0.5,
+            "z": 1.04,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "groupId": "island",
+            "id": "barStool-11",
+            "type": "barStool",
+            "x": 0.5,
+            "z": 1.04,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "id": "plant-12",
+            "type": "plant",
+            "x": -1.73,
+            "z": 2.15,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "kitchenVent-13",
+            "type": "kitchenVent",
+            "x": -1.915,
+            "z": 1.95,
+            "y": 2.1,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 3500.0
+          },
+          {
+            "id": "wallShelf-14",
+            "type": "wallShelf",
+            "x": -1.825,
+            "z": 1.2,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 6500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 232500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 62.365591397849464,
+          "spaceUtilizationPct": 23.568100000000005,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.8946639784946236
+        },
+        "explanation": "Luxury kitchen: room-aware planning keeps wall fixtures backed by a wall, reserves an entrance and turns seating toward its table. Kitchen appliances form a connected worktop run; upper cabinets have explicit mounting heights. Configuration: Island. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "638cc766-9763-4c98-a5e5-801ab01cc9d0",
+        "rank": 3,
+        "room": {
+          "type": "Kitchen",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "back",
+          "layoutKind": "Galley"
+        },
+        "prompt": "Luxury Kitchen 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 0.76,
+            "groupId": "kitchen-run",
+            "id": "refrigerator-0",
+            "type": "refrigerator",
+            "x": 1.5599999999999998,
+            "z": 2.085,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "sink-1",
+            "type": "sink",
+            "x": 0.7119999999999997,
+            "z": 2.135,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "widthM": 0.908,
+            "groupId": "kitchen-run",
+            "id": "kitchenCounter-2",
+            "type": "kitchenCounter",
+            "x": -0.21000000000000038,
+            "z": 2.135,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "widthM": 0.64,
+            "groupId": "kitchen-run",
+            "id": "stove-3",
+            "type": "stove",
+            "x": -1.0020000000000004,
+            "z": 2.135,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 0.6,
+            "groupId": "kitchen-run",
+            "id": "dishwasher-4",
+            "type": "dishwasher",
+            "x": -1.6400000000000006,
+            "z": 2.135,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-5",
+            "type": "wallCabinet",
+            "x": 0.7119999999999996,
+            "z": 2.285,
+            "y": 1.5,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.908,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-6",
+            "type": "wallCabinet",
+            "x": -0.2100000000000004,
+            "z": 2.285,
+            "y": 1.5,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.65,
+            "groupId": "kitchen-run",
+            "id": "rangeHood-7",
+            "type": "rangeHood",
+            "x": -1.0020000000000004,
+            "z": 2.23,
+            "y": 1.5,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 10000.0
+          },
+          {
+            "groupId": "kitchen-run",
+            "id": "microwave-8",
+            "type": "microwave",
+            "x": -0.3940000000000004,
+            "z": 2.175,
+            "y": 0.94,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 1.2,
+            "groupId": "kitchen-galley",
+            "id": "kitchenCounter-9",
+            "type": "kitchenCounter",
+            "x": -1.3549999999999998,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "widthM": 1.2,
+            "groupId": "kitchen-galley",
+            "id": "kitchenCounter-10",
+            "type": "kitchenCounter",
+            "x": 1.3550000000000002,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "id": "plant-11",
+            "type": "plant",
+            "x": 1.7300000000000002,
+            "z": -1.5749999999999995,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "kitchenVent-12",
+            "type": "kitchenVent",
+            "x": 1.9150000000000003,
+            "z": -1.9499999999999997,
+            "y": 2.1,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 3500.0
+          },
+          {
+            "id": "wallShelf-13",
+            "type": "wallShelf",
+            "x": 1.8250000000000002,
+            "z": -1.1999999999999997,
+            "y": 1.35,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 6500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 234500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 61.833688699360344,
+          "spaceUtilizationPct": 21.2581,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.8933342217484008
+        },
+        "explanation": "Luxury kitchen: room-aware planning keeps wall fixtures backed by a wall, reserves an entrance and turns seating toward its table. Kitchen appliances form a connected worktop run; upper cabinets have explicit mounting heights. Configuration: Galley. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      }
+    ],
+    "history_steps": [
+      {
+        "doorWall": "front",
+        "generation": 1,
+        "items": [
+          {
+            "widthM": 0.76,
+            "groupId": "kitchen-run",
+            "id": "refrigerator-0",
+            "type": "refrigerator",
+            "x": -1.56,
+            "z": -2.085,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "sink-1",
+            "type": "sink",
+            "x": -0.712,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "widthM": 0.908,
+            "groupId": "kitchen-run",
+            "id": "kitchenCounter-2",
+            "type": "kitchenCounter",
+            "x": 0.21000000000000013,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "widthM": 0.64,
+            "groupId": "kitchen-run",
+            "id": "stove-3",
+            "type": "stove",
+            "x": 1.0020000000000002,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 0.6,
+            "groupId": "kitchen-run",
+            "id": "dishwasher-4",
+            "type": "dishwasher",
+            "x": 1.6400000000000003,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-5",
+            "type": "wallCabinet",
+            "x": -0.712,
+            "z": -2.285,
+            "y": 1.5,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.908,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-6",
+            "type": "wallCabinet",
+            "x": 0.21000000000000013,
+            "z": -2.285,
+            "y": 1.5,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.65,
+            "groupId": "kitchen-run",
+            "id": "rangeHood-7",
+            "type": "rangeHood",
+            "x": 1.0020000000000002,
+            "z": -2.23,
+            "y": 1.5,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 10000.0
+          },
+          {
+            "groupId": "kitchen-run",
+            "id": "microwave-8",
+            "type": "microwave",
+            "x": 0.39400000000000013,
+            "z": -2.175,
+            "y": 0.94,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "island",
+            "id": "kitchenIsland-9",
+            "type": "kitchenIsland",
+            "x": 0.0,
+            "z": 0.16,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 42000.0
+          },
+          {
+            "groupId": "island",
+            "id": "barStool-10",
+            "type": "barStool",
+            "x": -0.5,
+            "z": 1.04,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "groupId": "island",
+            "id": "barStool-11",
+            "type": "barStool",
+            "x": 0.5,
+            "z": 1.04,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "id": "plant-12",
+            "type": "plant",
+            "x": -1.73,
+            "z": 2.15,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "kitchenVent-13",
+            "type": "kitchenVent",
+            "x": -1.915,
+            "z": 1.95,
+            "y": 2.1,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 3500.0
+          },
+          {
+            "id": "wallShelf-14",
+            "type": "wallShelf",
+            "x": -1.825,
+            "z": 1.2,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 6500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 232500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 62.365591397849464,
+          "spaceUtilizationPct": 23.568100000000005,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.8946639784946236
+        },
+        "totalCostINR": 232500.0
+      },
+      {
+        "doorWall": "right",
+        "generation": 2,
+        "items": [
+          {
+            "widthM": 0.76,
+            "groupId": "kitchen-run",
+            "id": "refrigerator-0",
+            "type": "refrigerator",
+            "x": -1.5850000000000002,
+            "z": 2.06,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "sink-1",
+            "type": "sink",
+            "x": -1.635,
+            "z": 1.212,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "widthM": 1.908,
+            "groupId": "kitchen-run",
+            "id": "kitchenCounter-2",
+            "type": "kitchenCounter",
+            "x": -1.635,
+            "z": -0.2100000000000002,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "widthM": 0.64,
+            "groupId": "kitchen-run",
+            "id": "stove-3",
+            "type": "stove",
+            "x": -1.635,
+            "z": -1.502,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 0.6,
+            "groupId": "kitchen-run",
+            "id": "dishwasher-4",
+            "type": "dishwasher",
+            "x": -1.6349999999999998,
+            "z": -2.1399999999999997,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-5",
+            "type": "wallCabinet",
+            "x": -1.785,
+            "z": 1.212,
+            "y": 1.5,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.946,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-6",
+            "type": "wallCabinet",
+            "x": -1.785,
+            "z": 0.2709999999999998,
+            "y": 1.5,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.946,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-7",
+            "type": "wallCabinet",
+            "x": -1.785,
+            "z": -0.6910000000000002,
+            "y": 1.5,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.65,
+            "groupId": "kitchen-run",
+            "id": "rangeHood-8",
+            "type": "rangeHood",
+            "x": -1.73,
+            "z": -1.502,
+            "y": 1.5,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 10000.0
+          },
+          {
+            "groupId": "kitchen-run",
+            "id": "microwave-9",
+            "type": "microwave",
+            "x": -1.675,
+            "z": -0.4600000000000002,
+            "y": 0.94,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 1.2,
+            "groupId": "kitchen-return",
+            "id": "kitchenCounter-10",
+            "type": "kitchenCounter",
+            "x": -0.6969999999999998,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "id": "plant-11",
+            "type": "plant",
+            "x": 1.6499999999999997,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "kitchenVent-12",
+            "type": "kitchenVent",
+            "x": 1.4499999999999997,
+            "z": 2.415,
+            "y": 2.1,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 3500.0
+          },
+          {
+            "id": "wallShelf-13",
+            "type": "wallShelf",
+            "x": 0.6999999999999998,
+            "z": 2.325,
+            "y": 1.35,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 6500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 215500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 67.28538283062645,
+          "spaceUtilizationPct": 20.6181,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 83.33333333333333,
+          "comfortIndexPct": 76.25,
+          "fitness": 0.8194634570765661
+        },
+        "totalCostINR": 215500.0
+      },
+      {
+        "doorWall": "back",
+        "generation": 3,
+        "items": [
+          {
+            "widthM": 0.76,
+            "groupId": "kitchen-run",
+            "id": "refrigerator-0",
+            "type": "refrigerator",
+            "x": 1.5599999999999998,
+            "z": 2.085,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "sink-1",
+            "type": "sink",
+            "x": 0.7119999999999997,
+            "z": 2.135,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "widthM": 0.908,
+            "groupId": "kitchen-run",
+            "id": "kitchenCounter-2",
+            "type": "kitchenCounter",
+            "x": -0.21000000000000038,
+            "z": 2.135,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "widthM": 0.64,
+            "groupId": "kitchen-run",
+            "id": "stove-3",
+            "type": "stove",
+            "x": -1.0020000000000004,
+            "z": 2.135,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 0.6,
+            "groupId": "kitchen-run",
+            "id": "dishwasher-4",
+            "type": "dishwasher",
+            "x": -1.6400000000000006,
+            "z": 2.135,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-5",
+            "type": "wallCabinet",
+            "x": 0.7119999999999996,
+            "z": 2.285,
+            "y": 1.5,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.908,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-6",
+            "type": "wallCabinet",
+            "x": -0.2100000000000004,
+            "z": 2.285,
+            "y": 1.5,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.65,
+            "groupId": "kitchen-run",
+            "id": "rangeHood-7",
+            "type": "rangeHood",
+            "x": -1.0020000000000004,
+            "z": 2.23,
+            "y": 1.5,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 10000.0
+          },
+          {
+            "groupId": "kitchen-run",
+            "id": "microwave-8",
+            "type": "microwave",
+            "x": -0.3940000000000004,
+            "z": 2.175,
+            "y": 0.94,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 1.2,
+            "groupId": "kitchen-galley",
+            "id": "kitchenCounter-9",
+            "type": "kitchenCounter",
+            "x": -1.3549999999999998,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "widthM": 1.2,
+            "groupId": "kitchen-galley",
+            "id": "kitchenCounter-10",
+            "type": "kitchenCounter",
+            "x": 1.3550000000000002,
+            "z": -2.135,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "id": "plant-11",
+            "type": "plant",
+            "x": 1.7300000000000002,
+            "z": -1.5749999999999995,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "kitchenVent-12",
+            "type": "kitchenVent",
+            "x": 1.9150000000000003,
+            "z": -1.9499999999999997,
+            "y": 2.1,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 3500.0
+          },
+          {
+            "id": "wallShelf-13",
+            "type": "wallShelf",
+            "x": 1.8250000000000002,
+            "z": -1.1999999999999997,
+            "y": 1.35,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 6500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 234500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 61.833688699360344,
+          "spaceUtilizationPct": 21.2581,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.8933342217484008
+        },
+        "totalCostINR": 234500.0
+      },
+      {
+        "doorWall": "left",
+        "generation": 4,
+        "items": [
+          {
+            "widthM": 0.76,
+            "groupId": "kitchen-run",
+            "id": "refrigerator-0",
+            "type": "refrigerator",
+            "x": 1.5850000000000004,
+            "z": -2.0599999999999996,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "sink-1",
+            "type": "sink",
+            "x": 1.6350000000000002,
+            "z": -1.2119999999999997,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "widthM": 1.908,
+            "groupId": "kitchen-run",
+            "id": "kitchenCounter-2",
+            "type": "kitchenCounter",
+            "x": 1.635,
+            "z": 0.21000000000000038,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "widthM": 0.64,
+            "groupId": "kitchen-run",
+            "id": "stove-3",
+            "type": "stove",
+            "x": 1.6349999999999998,
+            "z": 1.5020000000000002,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 0.6,
+            "groupId": "kitchen-run",
+            "id": "dishwasher-4",
+            "type": "dishwasher",
+            "x": 1.6349999999999996,
+            "z": 2.14,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 0.9,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-5",
+            "type": "wallCabinet",
+            "x": 1.7850000000000001,
+            "z": -1.2119999999999997,
+            "y": 1.5,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.946,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-6",
+            "type": "wallCabinet",
+            "x": 1.785,
+            "z": -0.2709999999999996,
+            "y": 1.5,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.946,
+            "groupId": "kitchen-run",
+            "id": "wallCabinet-7",
+            "type": "wallCabinet",
+            "x": 1.7849999999999997,
+            "z": 0.6910000000000004,
+            "y": 1.5,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "widthM": 0.65,
+            "groupId": "kitchen-run",
+            "id": "rangeHood-8",
+            "type": "rangeHood",
+            "x": 1.7299999999999998,
+            "z": 1.5020000000000002,
+            "y": 1.5,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 10000.0
+          },
+          {
+            "groupId": "kitchen-run",
+            "id": "microwave-9",
+            "type": "microwave",
+            "x": 1.675,
+            "z": 0.4600000000000004,
+            "y": 0.94,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "id": "plant-10",
+            "type": "plant",
+            "x": -1.6499999999999995,
+            "z": -2.2300000000000004,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "kitchenVent-11",
+            "type": "kitchenVent",
+            "x": -1.4499999999999995,
+            "z": -2.4150000000000005,
+            "y": 2.1,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 3500.0
+          },
+          {
+            "id": "wallShelf-12",
+            "type": "wallShelf",
+            "x": -0.6999999999999995,
+            "z": -2.325,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 6500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 187500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 77.33333333333333,
+          "spaceUtilizationPct": 16.778100000000002,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.9320833333333333
+        },
+        "totalCostINR": 187500.0
+      }
+    ]
+  },
+  "Bathroom": {
+    "requestId": "a4783499-50ff-43e7-9d66-0ef77cc255b2",
+    "generatedAtISO": "2026-10-24T15:21:35Z",
+    "evolution": [
+      {
+        "generation": 1,
+        "bestFitness": 0.81375,
+        "avgFitness": 0.81375
+      },
+      {
+        "generation": 2,
+        "bestFitness": 0.81375,
+        "avgFitness": 0.81375
+      },
+      {
+        "generation": 3,
+        "bestFitness": 0.81375,
+        "avgFitness": 0.8137500000000001
+      },
+      {
+        "generation": 4,
+        "bestFitness": 0.81375,
+        "avgFitness": 0.81375
+      }
+    ],
+    "solutions": [
+      {
+        "id": "ce4b6550-e0cb-44cc-97ca-6ef032d86bd0",
+        "rank": 1,
+        "room": {
+          "type": "Bathroom",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "front"
+        },
+        "prompt": "Luxury Bathroom 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "id": "shower-0",
+            "type": "shower",
+            "x": -1.465,
+            "z": -1.9649999999999999,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 30000.0
+          },
+          {
+            "id": "toilet-1",
+            "type": "toilet",
+            "x": -0.6599999999999999,
+            "z": -2.095,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "widthM": 1.0,
+            "id": "vanity-2",
+            "type": "vanity",
+            "x": -1.685,
+            "z": 1.9300000000000002,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 26000.0
+          },
+          {
+            "id": "bathtub-3",
+            "type": "bathtub",
+            "x": 1.5450000000000002,
+            "z": 1.585,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 38000.0
+          },
+          {
+            "id": "towelRack-4",
+            "type": "towelRack",
+            "x": -1.895,
+            "z": 1.1099999999999999,
+            "y": 0.8,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "plant-5",
+            "type": "plant",
+            "x": -1.73,
+            "z": -1.225,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "bathroomCabinet-6",
+            "type": "bathroomCabinet",
+            "x": 1.845,
+            "z": 0.4,
+            "y": 1.2,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 12500.0
+          },
+          {
+            "id": "wallSconce-7",
+            "type": "wallSconce",
+            "x": -1.865,
+            "z": 0.0,
+            "y": 1.65,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 135000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 16.996499999999997,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 66.66666666666667,
+          "comfortIndexPct": 63.75,
+          "fitness": 0.81375
+        },
+        "explanation": "Luxury bathroom: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "b82b4f9a-e862-4c07-b6df-eb5bc1cfa3e3",
+        "rank": 2,
+        "room": {
+          "type": "Bathroom",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "right"
+        },
+        "prompt": "Luxury Bathroom 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "id": "shower-0",
+            "type": "shower",
+            "x": -1.465,
+            "z": 1.965,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 30000.0
+          },
+          {
+            "id": "toilet-1",
+            "type": "toilet",
+            "x": -1.595,
+            "z": 1.16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "widthM": 1.0,
+            "id": "vanity-2",
+            "type": "vanity",
+            "x": 1.4299999999999997,
+            "z": 2.185,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 26000.0
+          },
+          {
+            "id": "bathtub-3",
+            "type": "bathtub",
+            "x": 1.0850000000000002,
+            "z": -2.045,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 38000.0
+          },
+          {
+            "id": "towelRack-4",
+            "type": "towelRack",
+            "x": 0.6099999999999998,
+            "z": 2.395,
+            "y": 0.8,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "plant-5",
+            "type": "plant",
+            "x": -0.6850000000000002,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "bathroomCabinet-6",
+            "type": "bathroomCabinet",
+            "x": 0.4000000000000002,
+            "z": -2.345,
+            "y": 1.2,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 12500.0
+          },
+          {
+            "id": "wallSconce-7",
+            "type": "wallSconce",
+            "x": -1.4481448399917452e-16,
+            "z": 2.365,
+            "y": 1.65,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 135000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 16.996499999999997,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 66.66666666666667,
+          "comfortIndexPct": 63.75,
+          "fitness": 0.81375
+        },
+        "explanation": "Luxury bathroom: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "9c7ed587-f246-45f5-91dd-813c1e03f1fa",
+        "rank": 3,
+        "room": {
+          "type": "Bathroom",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "back"
+        },
+        "prompt": "Luxury Bathroom 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "id": "shower-0",
+            "type": "shower",
+            "x": 1.4649999999999999,
+            "z": 1.965,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 30000.0
+          },
+          {
+            "id": "toilet-1",
+            "type": "toilet",
+            "x": 0.6599999999999997,
+            "z": 2.095,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "widthM": 1.0,
+            "id": "vanity-2",
+            "type": "vanity",
+            "x": 1.6850000000000003,
+            "z": -1.93,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 26000.0
+          },
+          {
+            "id": "bathtub-3",
+            "type": "bathtub",
+            "x": -1.545,
+            "z": -1.5850000000000002,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 38000.0
+          },
+          {
+            "id": "towelRack-4",
+            "type": "towelRack",
+            "x": 1.8950000000000002,
+            "z": -1.1099999999999997,
+            "y": 0.8,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "plant-5",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 1.2250000000000003,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "bathroomCabinet-6",
+            "type": "bathroomCabinet",
+            "x": -1.845,
+            "z": -0.40000000000000024,
+            "y": 1.2,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 12500.0
+          },
+          {
+            "id": "wallSconce-7",
+            "type": "wallSconce",
+            "x": 1.865,
+            "z": 2.2839662804098137e-16,
+            "y": 1.65,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 135000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 16.996499999999997,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 66.66666666666667,
+          "comfortIndexPct": 63.75,
+          "fitness": 0.81375
+        },
+        "explanation": "Luxury bathroom: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      }
+    ],
+    "history_steps": [
+      {
+        "doorWall": "front",
+        "generation": 1,
+        "items": [
+          {
+            "id": "shower-0",
+            "type": "shower",
+            "x": -1.465,
+            "z": -1.9649999999999999,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 30000.0
+          },
+          {
+            "id": "toilet-1",
+            "type": "toilet",
+            "x": -0.6599999999999999,
+            "z": -2.095,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "widthM": 1.0,
+            "id": "vanity-2",
+            "type": "vanity",
+            "x": -1.685,
+            "z": 1.9300000000000002,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 26000.0
+          },
+          {
+            "id": "bathtub-3",
+            "type": "bathtub",
+            "x": 1.5450000000000002,
+            "z": 1.585,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 38000.0
+          },
+          {
+            "id": "towelRack-4",
+            "type": "towelRack",
+            "x": -1.895,
+            "z": 1.1099999999999999,
+            "y": 0.8,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "plant-5",
+            "type": "plant",
+            "x": -1.73,
+            "z": -1.225,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "bathroomCabinet-6",
+            "type": "bathroomCabinet",
+            "x": 1.845,
+            "z": 0.4,
+            "y": 1.2,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 12500.0
+          },
+          {
+            "id": "wallSconce-7",
+            "type": "wallSconce",
+            "x": -1.865,
+            "z": 0.0,
+            "y": 1.65,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 135000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 16.996499999999997,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 66.66666666666667,
+          "comfortIndexPct": 63.75,
+          "fitness": 0.81375
+        },
+        "totalCostINR": 135000.0
+      },
+      {
+        "doorWall": "right",
+        "generation": 2,
+        "items": [
+          {
+            "id": "shower-0",
+            "type": "shower",
+            "x": -1.465,
+            "z": 1.965,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 30000.0
+          },
+          {
+            "id": "toilet-1",
+            "type": "toilet",
+            "x": -1.595,
+            "z": 1.16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "widthM": 1.0,
+            "id": "vanity-2",
+            "type": "vanity",
+            "x": 1.4299999999999997,
+            "z": 2.185,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 26000.0
+          },
+          {
+            "id": "bathtub-3",
+            "type": "bathtub",
+            "x": 1.0850000000000002,
+            "z": -2.045,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 38000.0
+          },
+          {
+            "id": "towelRack-4",
+            "type": "towelRack",
+            "x": 0.6099999999999998,
+            "z": 2.395,
+            "y": 0.8,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "plant-5",
+            "type": "plant",
+            "x": -0.6850000000000002,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "bathroomCabinet-6",
+            "type": "bathroomCabinet",
+            "x": 0.4000000000000002,
+            "z": -2.345,
+            "y": 1.2,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 12500.0
+          },
+          {
+            "id": "wallSconce-7",
+            "type": "wallSconce",
+            "x": -1.4481448399917452e-16,
+            "z": 2.365,
+            "y": 1.65,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 135000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 16.996499999999997,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 66.66666666666667,
+          "comfortIndexPct": 63.75,
+          "fitness": 0.81375
+        },
+        "totalCostINR": 135000.0
+      },
+      {
+        "doorWall": "back",
+        "generation": 3,
+        "items": [
+          {
+            "id": "shower-0",
+            "type": "shower",
+            "x": 1.4649999999999999,
+            "z": 1.965,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 30000.0
+          },
+          {
+            "id": "toilet-1",
+            "type": "toilet",
+            "x": 0.6599999999999997,
+            "z": 2.095,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "widthM": 1.0,
+            "id": "vanity-2",
+            "type": "vanity",
+            "x": 1.6850000000000003,
+            "z": -1.93,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 26000.0
+          },
+          {
+            "id": "bathtub-3",
+            "type": "bathtub",
+            "x": -1.545,
+            "z": -1.5850000000000002,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 38000.0
+          },
+          {
+            "id": "towelRack-4",
+            "type": "towelRack",
+            "x": 1.8950000000000002,
+            "z": -1.1099999999999997,
+            "y": 0.8,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "plant-5",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 1.2250000000000003,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "bathroomCabinet-6",
+            "type": "bathroomCabinet",
+            "x": -1.845,
+            "z": -0.40000000000000024,
+            "y": 1.2,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 12500.0
+          },
+          {
+            "id": "wallSconce-7",
+            "type": "wallSconce",
+            "x": 1.865,
+            "z": 2.2839662804098137e-16,
+            "y": 1.65,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 135000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 16.996499999999997,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 66.66666666666667,
+          "comfortIndexPct": 63.75,
+          "fitness": 0.81375
+        },
+        "totalCostINR": 135000.0
+      },
+      {
+        "doorWall": "left",
+        "generation": 4,
+        "items": [
+          {
+            "id": "shower-0",
+            "type": "shower",
+            "x": 1.4650000000000003,
+            "z": -1.9649999999999999,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 30000.0
+          },
+          {
+            "id": "toilet-1",
+            "type": "toilet",
+            "x": 1.5950000000000002,
+            "z": -1.1599999999999997,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "widthM": 1.0,
+            "id": "vanity-2",
+            "type": "vanity",
+            "x": -1.4299999999999995,
+            "z": -2.1850000000000005,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 26000.0
+          },
+          {
+            "id": "bathtub-3",
+            "type": "bathtub",
+            "x": -1.0850000000000004,
+            "z": 2.045,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 38000.0
+          },
+          {
+            "id": "towelRack-4",
+            "type": "towelRack",
+            "x": -0.6099999999999994,
+            "z": -2.395,
+            "y": 0.8,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "plant-5",
+            "type": "plant",
+            "x": 0.6850000000000005,
+            "z": -2.23,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "bathroomCabinet-6",
+            "type": "bathroomCabinet",
+            "x": -0.40000000000000047,
+            "z": 2.345,
+            "y": 1.2,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 12500.0
+          },
+          {
+            "id": "wallSconce-7",
+            "type": "wallSconce",
+            "x": 4.3444345199752354e-16,
+            "z": -2.365,
+            "y": 1.65,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 135000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 16.996499999999997,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 66.66666666666667,
+          "comfortIndexPct": 63.75,
+          "fitness": 0.81375
+        },
+        "totalCostINR": 135000.0
+      }
+    ]
+  },
+  "Dining Room": {
+    "requestId": "8bf2e2e8-f5ce-4e4d-a4d7-d922ed6364db",
+    "generatedAtISO": "2026-10-24T15:21:35Z",
+    "evolution": [
+      {
+        "generation": 1,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      },
+      {
+        "generation": 2,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      },
+      {
+        "generation": 3,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      },
+      {
+        "generation": 4,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      }
+    ],
+    "solutions": [
+      {
+        "id": "fe279058-99c4-4212-ba9e-d9cf0f86fb75",
+        "rank": 1,
+        "room": {
+          "type": "Dining Room",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "front"
+        },
+        "prompt": "Luxury Dining Room 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.8,
+            "depthM": 0.95,
+            "groupId": "dining-set",
+            "id": "diningTable-0",
+            "type": "diningTable",
+            "x": 0.0,
+            "z": -0.08,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-1",
+            "type": "diningChair",
+            "x": -0.45,
+            "z": -0.9199999999999999,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-2",
+            "type": "diningChair",
+            "x": -0.45,
+            "z": 0.76,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-3",
+            "type": "diningChair",
+            "x": 0.45,
+            "z": -0.9199999999999999,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-4",
+            "type": "diningChair",
+            "x": 0.45,
+            "z": 0.76,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-5",
+            "type": "diningChair",
+            "x": -1.2650000000000001,
+            "z": -0.08,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-6",
+            "type": "diningChair",
+            "x": 1.2650000000000001,
+            "z": -0.08,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "id": "sideboard-7",
+            "type": "sideboard",
+            "x": 0.0,
+            "z": -2.23,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.7,
+            "depthM": 2.3,
+            "id": "rug-8",
+            "type": "rug",
+            "x": 0.0,
+            "z": -0.08,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-9",
+            "type": "plant",
+            "x": -1.73,
+            "z": -2.12,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-10",
+            "type": "wallArt",
+            "x": 0.0,
+            "z": -2.4275,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-11",
+            "type": "wallSconce",
+            "x": -1.865,
+            "z": -0.7,
+            "y": 1.65,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 128500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 22.0005,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "explanation": "Luxury dining room: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "106daf3b-e4e6-492a-9a5a-ace5c4e5a113",
+        "rank": 2,
+        "room": {
+          "type": "Dining Room",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "right"
+        },
+        "prompt": "Luxury Dining Room 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.8,
+            "depthM": 0.95,
+            "groupId": "dining-set",
+            "id": "diningTable-0",
+            "type": "diningTable",
+            "x": -0.08,
+            "z": -4.898587196589413e-18,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-1",
+            "type": "diningChair",
+            "x": -0.9199999999999999,
+            "z": 0.44999999999999996,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-2",
+            "type": "diningChair",
+            "x": 0.76,
+            "z": 0.45000000000000007,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-3",
+            "type": "diningChair",
+            "x": -0.9199999999999999,
+            "z": -0.45000000000000007,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-4",
+            "type": "diningChair",
+            "x": 0.76,
+            "z": -0.44999999999999996,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-5",
+            "type": "diningChair",
+            "x": -0.08000000000000008,
+            "z": 1.2650000000000001,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-6",
+            "type": "diningChair",
+            "x": -0.07999999999999992,
+            "z": -1.2650000000000001,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "id": "sideboard-7",
+            "type": "sideboard",
+            "x": -1.73,
+            "z": -1.0593194812624605e-16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.7,
+            "depthM": 2.3,
+            "id": "rug-8",
+            "type": "rug",
+            "x": -0.08,
+            "z": -4.898587196589413e-18,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-9",
+            "type": "plant",
+            "x": -1.6200000000000003,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-10",
+            "type": "wallArt",
+            "x": -1.9275,
+            "z": -1.1802533526782616e-16,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-11",
+            "type": "wallSconce",
+            "x": -0.7000000000000001,
+            "z": 2.365,
+            "y": 1.65,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 128500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 22.0005,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "explanation": "Luxury dining room: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "38bff657-27b0-42ed-bab0-433dc2609aa8",
+        "rank": 3,
+        "room": {
+          "type": "Dining Room",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "back"
+        },
+        "prompt": "Luxury Dining Room 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.8,
+            "depthM": 0.95,
+            "groupId": "dining-set",
+            "id": "diningTable-0",
+            "type": "diningTable",
+            "x": -9.797174393178826e-18,
+            "z": 0.08,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-1",
+            "type": "diningChair",
+            "x": 0.4499999999999999,
+            "z": 0.9199999999999999,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-2",
+            "type": "diningChair",
+            "x": 0.4500000000000001,
+            "z": -0.76,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-3",
+            "type": "diningChair",
+            "x": -0.4500000000000001,
+            "z": 0.9199999999999999,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-4",
+            "type": "diningChair",
+            "x": -0.4499999999999999,
+            "z": -0.76,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-5",
+            "type": "diningChair",
+            "x": 1.2650000000000001,
+            "z": 0.08000000000000015,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-6",
+            "type": "diningChair",
+            "x": -1.2650000000000001,
+            "z": 0.07999999999999985,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "id": "sideboard-7",
+            "type": "sideboard",
+            "x": -2.730962362098598e-16,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.7,
+            "depthM": 2.3,
+            "id": "rug-8",
+            "type": "rug",
+            "x": -9.797174393178826e-18,
+            "z": 0.08,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-9",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 2.12,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-10",
+            "type": "wallArt",
+            "x": -2.9728301049302004e-16,
+            "z": 2.4275,
+            "y": 1.35,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-11",
+            "type": "wallSconce",
+            "x": 1.865,
+            "z": 0.7000000000000002,
+            "y": 1.65,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 128500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 22.0005,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "explanation": "Luxury dining room: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      }
+    ],
+    "history_steps": [
+      {
+        "doorWall": "front",
+        "generation": 1,
+        "items": [
+          {
+            "widthM": 1.8,
+            "depthM": 0.95,
+            "groupId": "dining-set",
+            "id": "diningTable-0",
+            "type": "diningTable",
+            "x": 0.0,
+            "z": -0.08,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-1",
+            "type": "diningChair",
+            "x": -0.45,
+            "z": -0.9199999999999999,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-2",
+            "type": "diningChair",
+            "x": -0.45,
+            "z": 0.76,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-3",
+            "type": "diningChair",
+            "x": 0.45,
+            "z": -0.9199999999999999,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-4",
+            "type": "diningChair",
+            "x": 0.45,
+            "z": 0.76,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-5",
+            "type": "diningChair",
+            "x": -1.2650000000000001,
+            "z": -0.08,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-6",
+            "type": "diningChair",
+            "x": 1.2650000000000001,
+            "z": -0.08,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "id": "sideboard-7",
+            "type": "sideboard",
+            "x": 0.0,
+            "z": -2.23,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.7,
+            "depthM": 2.3,
+            "id": "rug-8",
+            "type": "rug",
+            "x": 0.0,
+            "z": -0.08,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-9",
+            "type": "plant",
+            "x": -1.73,
+            "z": -2.12,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-10",
+            "type": "wallArt",
+            "x": 0.0,
+            "z": -2.4275,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-11",
+            "type": "wallSconce",
+            "x": -1.865,
+            "z": -0.7,
+            "y": 1.65,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 128500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 22.0005,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 128500.0
+      },
+      {
+        "doorWall": "right",
+        "generation": 2,
+        "items": [
+          {
+            "widthM": 1.8,
+            "depthM": 0.95,
+            "groupId": "dining-set",
+            "id": "diningTable-0",
+            "type": "diningTable",
+            "x": -0.08,
+            "z": -4.898587196589413e-18,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-1",
+            "type": "diningChair",
+            "x": -0.9199999999999999,
+            "z": 0.44999999999999996,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-2",
+            "type": "diningChair",
+            "x": 0.76,
+            "z": 0.45000000000000007,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-3",
+            "type": "diningChair",
+            "x": -0.9199999999999999,
+            "z": -0.45000000000000007,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-4",
+            "type": "diningChair",
+            "x": 0.76,
+            "z": -0.44999999999999996,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-5",
+            "type": "diningChair",
+            "x": -0.08000000000000008,
+            "z": 1.2650000000000001,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-6",
+            "type": "diningChair",
+            "x": -0.07999999999999992,
+            "z": -1.2650000000000001,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "id": "sideboard-7",
+            "type": "sideboard",
+            "x": -1.73,
+            "z": -1.0593194812624605e-16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.7,
+            "depthM": 2.3,
+            "id": "rug-8",
+            "type": "rug",
+            "x": -0.08,
+            "z": -4.898587196589413e-18,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-9",
+            "type": "plant",
+            "x": -1.6200000000000003,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-10",
+            "type": "wallArt",
+            "x": -1.9275,
+            "z": -1.1802533526782616e-16,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-11",
+            "type": "wallSconce",
+            "x": -0.7000000000000001,
+            "z": 2.365,
+            "y": 1.65,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 128500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 22.0005,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 128500.0
+      },
+      {
+        "doorWall": "back",
+        "generation": 3,
+        "items": [
+          {
+            "widthM": 1.8,
+            "depthM": 0.95,
+            "groupId": "dining-set",
+            "id": "diningTable-0",
+            "type": "diningTable",
+            "x": -9.797174393178826e-18,
+            "z": 0.08,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-1",
+            "type": "diningChair",
+            "x": 0.4499999999999999,
+            "z": 0.9199999999999999,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-2",
+            "type": "diningChair",
+            "x": 0.4500000000000001,
+            "z": -0.76,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-3",
+            "type": "diningChair",
+            "x": -0.4500000000000001,
+            "z": 0.9199999999999999,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-4",
+            "type": "diningChair",
+            "x": -0.4499999999999999,
+            "z": -0.76,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-5",
+            "type": "diningChair",
+            "x": 1.2650000000000001,
+            "z": 0.08000000000000015,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-6",
+            "type": "diningChair",
+            "x": -1.2650000000000001,
+            "z": 0.07999999999999985,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "id": "sideboard-7",
+            "type": "sideboard",
+            "x": -2.730962362098598e-16,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.7,
+            "depthM": 2.3,
+            "id": "rug-8",
+            "type": "rug",
+            "x": -9.797174393178826e-18,
+            "z": 0.08,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-9",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 2.12,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-10",
+            "type": "wallArt",
+            "x": -2.9728301049302004e-16,
+            "z": 2.4275,
+            "y": 1.35,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-11",
+            "type": "wallSconce",
+            "x": 1.865,
+            "z": 0.7000000000000002,
+            "y": 1.65,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 128500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 22.0005,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 128500.0
+      },
+      {
+        "doorWall": "left",
+        "generation": 4,
+        "items": [
+          {
+            "widthM": 1.8,
+            "depthM": 0.95,
+            "groupId": "dining-set",
+            "id": "diningTable-0",
+            "type": "diningTable",
+            "x": 0.08,
+            "z": 1.4695761589768237e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 28000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-1",
+            "type": "diningChair",
+            "x": 0.92,
+            "z": -0.44999999999999984,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-2",
+            "type": "diningChair",
+            "x": -0.7599999999999999,
+            "z": -0.4500000000000002,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-3",
+            "type": "diningChair",
+            "x": 0.9199999999999998,
+            "z": 0.4500000000000002,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-4",
+            "type": "diningChair",
+            "x": -0.7600000000000001,
+            "z": 0.44999999999999984,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-5",
+            "type": "diningChair",
+            "x": 0.08000000000000024,
+            "z": -1.2650000000000001,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "groupId": "dining-set",
+            "id": "diningChair-6",
+            "type": "diningChair",
+            "x": 0.07999999999999977,
+            "z": 1.2650000000000001,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 9000.0
+          },
+          {
+            "id": "sideboard-7",
+            "type": "sideboard",
+            "x": 1.73,
+            "z": 3.1779584437873813e-16,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.7,
+            "depthM": 2.3,
+            "id": "rug-8",
+            "type": "rug",
+            "x": 0.08,
+            "z": 1.4695761589768237e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-9",
+            "type": "plant",
+            "x": 1.6200000000000006,
+            "z": -2.2299999999999995,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-10",
+            "type": "wallArt",
+            "x": 1.9275,
+            "z": 3.5407600580347845e-16,
+            "y": 1.35,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-11",
+            "type": "wallSconce",
+            "x": 0.7000000000000004,
+            "z": -2.365,
+            "y": 1.65,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 128500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 22.0005,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 128500.0
+      }
+    ]
+  },
+  "Living Room": {
+    "requestId": "6cdeee56-b184-4f1f-ace7-fbf5320944c8",
+    "generatedAtISO": "2026-10-24T16:05:25Z",
+    "evolution": [
+      {
+        "generation": 1,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      },
+      {
+        "generation": 2,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      },
+      {
+        "generation": 3,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      },
+      {
+        "generation": 4,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      }
+    ],
+    "solutions": [
+      {
+        "id": "c09780c1-0c8c-493f-9d07-17e1809f4355",
+        "rank": 1,
+        "room": {
+          "type": "Living Room",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "front"
+        },
+        "prompt": "Luxury Living Room 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.8,
+            "groupId": "lounge-set",
+            "id": "tvUnit-0",
+            "type": "tvUnit",
+            "x": 0.0,
+            "z": -2.205,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 2.3,
+            "depthM": 1.0,
+            "groupId": "lounge-set",
+            "id": "sofa-1",
+            "type": "sofa",
+            "x": 0.0,
+            "z": 0.895,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 48000.0
+          },
+          {
+            "widthM": 1.2,
+            "depthM": 0.8,
+            "groupId": "lounge-set",
+            "id": "table-2",
+            "type": "table",
+            "x": 0.0,
+            "z": -0.385,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-3",
+            "type": "chair",
+            "x": -1.5999999999999999,
+            "z": -0.265,
+            "y": 0.0,
+            "rotationY": 1.6456561745056635,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-4",
+            "type": "chair",
+            "x": 1.5999999999999999,
+            "z": -0.265,
+            "y": 0.0,
+            "rotationY": 4.637529132673922,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "sideTable-5",
+            "type": "sideTable",
+            "x": 1.5099999999999998,
+            "z": 0.795,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "floorLamp-6",
+            "type": "floorLamp",
+            "x": -1.5099999999999998,
+            "z": 0.9450000000000001,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "widthM": 2.9499999999999997,
+            "depthM": 2.05,
+            "groupId": "lounge-set",
+            "id": "rug-7",
+            "type": "rug",
+            "x": 0.0,
+            "z": -0.03500000000000003,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-8",
+            "type": "plant",
+            "x": -1.73,
+            "z": -1.695,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-9",
+            "type": "wallArt",
+            "x": 1.3399999999999999,
+            "z": -2.4275,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 5500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 140000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 27.9125,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "explanation": "Luxury living room: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "939eacef-4e90-4f62-a2bc-7ad8ef0265a5",
+        "rank": 2,
+        "room": {
+          "type": "Living Room",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "right"
+        },
+        "prompt": "Luxury Living Room 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.8,
+            "groupId": "lounge-set",
+            "id": "tvUnit-0",
+            "type": "tvUnit",
+            "x": -1.705,
+            "z": -1.0440113962731187e-16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 2.3,
+            "depthM": 1.0,
+            "groupId": "lounge-set",
+            "id": "sofa-1",
+            "type": "sofa",
+            "x": 0.8599999999999999,
+            "z": 5.265981236333618e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 48000.0
+          },
+          {
+            "widthM": 1.2,
+            "depthM": 0.8,
+            "groupId": "lounge-set",
+            "id": "table-2",
+            "type": "table",
+            "x": -0.42000000000000015,
+            "z": -2.5717582782094425e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-3",
+            "type": "chair",
+            "x": -0.30000000000000027,
+            "z": 1.5999999999999999,
+            "y": 0.0,
+            "rotationY": 3.21645250130056,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-4",
+            "type": "chair",
+            "x": -0.30000000000000004,
+            "z": -1.5999999999999999,
+            "y": 0.0,
+            "rotationY": 6.208325459468819,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "sideTable-5",
+            "type": "sideTable",
+            "x": 0.76,
+            "z": -1.5099999999999998,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "floorLamp-6",
+            "type": "floorLamp",
+            "x": 0.9099999999999998,
+            "z": 1.5099999999999998,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "widthM": 2.9499999999999997,
+            "depthM": 2.05,
+            "groupId": "lounge-set",
+            "id": "rug-7",
+            "type": "rug",
+            "x": -0.07000000000000017,
+            "z": -4.286263797015747e-18,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-8",
+            "type": "plant",
+            "x": -1.6600000000000001,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-9",
+            "type": "wallArt",
+            "x": -1.9275,
+            "z": -1.32,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 5500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 140000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 27.9125,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "explanation": "Luxury living room: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "284c2db2-0834-4c3c-8704-9ec5758545b3",
+        "rank": 3,
+        "room": {
+          "type": "Living Room",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "back"
+        },
+        "prompt": "Luxury Living Room 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.8,
+            "groupId": "lounge-set",
+            "id": "tvUnit-0",
+            "type": "tvUnit",
+            "x": -2.700346192119914e-16,
+            "z": 2.205,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 2.3,
+            "depthM": 1.0,
+            "groupId": "lounge-set",
+            "id": "sofa-1",
+            "type": "sofa",
+            "x": 1.0960588852368812e-16,
+            "z": -0.895,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 48000.0
+          },
+          {
+            "widthM": 1.2,
+            "depthM": 0.8,
+            "groupId": "lounge-set",
+            "id": "table-2",
+            "type": "table",
+            "x": -4.71489017671731e-17,
+            "z": 0.385,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-3",
+            "type": "chair",
+            "x": 1.5999999999999999,
+            "z": 0.26500000000000024,
+            "y": 0.0,
+            "rotationY": 4.787248828095457,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-4",
+            "type": "chair",
+            "x": -1.5999999999999999,
+            "z": 0.2649999999999998,
+            "y": 0.0,
+            "rotationY": 1.4959364790841292,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "sideTable-5",
+            "type": "sideTable",
+            "x": -1.5099999999999998,
+            "z": -0.7950000000000003,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "floorLamp-6",
+            "type": "floorLamp",
+            "x": 1.51,
+            "z": -0.9449999999999998,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "widthM": 2.9499999999999997,
+            "depthM": 2.05,
+            "groupId": "lounge-set",
+            "id": "rug-7",
+            "type": "rug",
+            "x": -4.28626379701574e-18,
+            "z": 0.03500000000000003,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-8",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 1.6950000000000003,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-9",
+            "type": "wallArt",
+            "x": -1.34,
+            "z": 2.4275,
+            "y": 1.35,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 5500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 140000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 27.9125,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "explanation": "Luxury living room: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      }
+    ],
+    "history_steps": [
+      {
+        "doorWall": "front",
+        "generation": 1,
+        "items": [
+          {
+            "widthM": 1.8,
+            "groupId": "lounge-set",
+            "id": "tvUnit-0",
+            "type": "tvUnit",
+            "x": 0.0,
+            "z": -2.205,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 2.3,
+            "depthM": 1.0,
+            "groupId": "lounge-set",
+            "id": "sofa-1",
+            "type": "sofa",
+            "x": 0.0,
+            "z": 0.895,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 48000.0
+          },
+          {
+            "widthM": 1.2,
+            "depthM": 0.8,
+            "groupId": "lounge-set",
+            "id": "table-2",
+            "type": "table",
+            "x": 0.0,
+            "z": -0.385,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-3",
+            "type": "chair",
+            "x": -1.5999999999999999,
+            "z": -0.265,
+            "y": 0.0,
+            "rotationY": 1.6456561745056635,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-4",
+            "type": "chair",
+            "x": 1.5999999999999999,
+            "z": -0.265,
+            "y": 0.0,
+            "rotationY": 4.637529132673922,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "sideTable-5",
+            "type": "sideTable",
+            "x": 1.5099999999999998,
+            "z": 0.795,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "floorLamp-6",
+            "type": "floorLamp",
+            "x": -1.5099999999999998,
+            "z": 0.9450000000000001,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "widthM": 2.9499999999999997,
+            "depthM": 2.05,
+            "groupId": "lounge-set",
+            "id": "rug-7",
+            "type": "rug",
+            "x": 0.0,
+            "z": -0.03500000000000003,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-8",
+            "type": "plant",
+            "x": -1.73,
+            "z": -1.695,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-9",
+            "type": "wallArt",
+            "x": 1.3399999999999999,
+            "z": -2.4275,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 5500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 140000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 27.9125,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 140000.0
+      },
+      {
+        "doorWall": "right",
+        "generation": 2,
+        "items": [
+          {
+            "widthM": 1.8,
+            "groupId": "lounge-set",
+            "id": "tvUnit-0",
+            "type": "tvUnit",
+            "x": -1.705,
+            "z": -1.0440113962731187e-16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 2.3,
+            "depthM": 1.0,
+            "groupId": "lounge-set",
+            "id": "sofa-1",
+            "type": "sofa",
+            "x": 0.8599999999999999,
+            "z": 5.265981236333618e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 48000.0
+          },
+          {
+            "widthM": 1.2,
+            "depthM": 0.8,
+            "groupId": "lounge-set",
+            "id": "table-2",
+            "type": "table",
+            "x": -0.42000000000000015,
+            "z": -2.5717582782094425e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-3",
+            "type": "chair",
+            "x": -0.30000000000000027,
+            "z": 1.5999999999999999,
+            "y": 0.0,
+            "rotationY": 3.21645250130056,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-4",
+            "type": "chair",
+            "x": -0.30000000000000004,
+            "z": -1.5999999999999999,
+            "y": 0.0,
+            "rotationY": 6.208325459468819,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "sideTable-5",
+            "type": "sideTable",
+            "x": 0.76,
+            "z": -1.5099999999999998,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "floorLamp-6",
+            "type": "floorLamp",
+            "x": 0.9099999999999998,
+            "z": 1.5099999999999998,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "widthM": 2.9499999999999997,
+            "depthM": 2.05,
+            "groupId": "lounge-set",
+            "id": "rug-7",
+            "type": "rug",
+            "x": -0.07000000000000017,
+            "z": -4.286263797015747e-18,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-8",
+            "type": "plant",
+            "x": -1.6600000000000001,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-9",
+            "type": "wallArt",
+            "x": -1.9275,
+            "z": -1.32,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 5500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 140000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 27.9125,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 140000.0
+      },
+      {
+        "doorWall": "back",
+        "generation": 3,
+        "items": [
+          {
+            "widthM": 1.8,
+            "groupId": "lounge-set",
+            "id": "tvUnit-0",
+            "type": "tvUnit",
+            "x": -2.700346192119914e-16,
+            "z": 2.205,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 2.3,
+            "depthM": 1.0,
+            "groupId": "lounge-set",
+            "id": "sofa-1",
+            "type": "sofa",
+            "x": 1.0960588852368812e-16,
+            "z": -0.895,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 48000.0
+          },
+          {
+            "widthM": 1.2,
+            "depthM": 0.8,
+            "groupId": "lounge-set",
+            "id": "table-2",
+            "type": "table",
+            "x": -4.71489017671731e-17,
+            "z": 0.385,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-3",
+            "type": "chair",
+            "x": 1.5999999999999999,
+            "z": 0.26500000000000024,
+            "y": 0.0,
+            "rotationY": 4.787248828095457,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-4",
+            "type": "chair",
+            "x": -1.5999999999999999,
+            "z": 0.2649999999999998,
+            "y": 0.0,
+            "rotationY": 1.4959364790841292,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "sideTable-5",
+            "type": "sideTable",
+            "x": -1.5099999999999998,
+            "z": -0.7950000000000003,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "floorLamp-6",
+            "type": "floorLamp",
+            "x": 1.51,
+            "z": -0.9449999999999998,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "widthM": 2.9499999999999997,
+            "depthM": 2.05,
+            "groupId": "lounge-set",
+            "id": "rug-7",
+            "type": "rug",
+            "x": -4.28626379701574e-18,
+            "z": 0.03500000000000003,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-8",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 1.6950000000000003,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-9",
+            "type": "wallArt",
+            "x": -1.34,
+            "z": 2.4275,
+            "y": 1.35,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 5500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 140000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 27.9125,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 140000.0
+      },
+      {
+        "doorWall": "left",
+        "generation": 4,
+        "items": [
+          {
+            "widthM": 1.8,
+            "groupId": "lounge-set",
+            "id": "tvUnit-0",
+            "type": "tvUnit",
+            "x": 1.705,
+            "z": 3.1320341888193557e-16,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 22000.0
+          },
+          {
+            "widthM": 2.3,
+            "depthM": 1.0,
+            "groupId": "lounge-set",
+            "id": "sofa-1",
+            "type": "sofa",
+            "x": -0.8599999999999999,
+            "z": -1.5797943709000853e-16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 48000.0
+          },
+          {
+            "widthM": 1.2,
+            "depthM": 0.8,
+            "groupId": "lounge-set",
+            "id": "table-2",
+            "type": "table",
+            "x": 0.42000000000000015,
+            "z": 7.715274834628328e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 18000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-3",
+            "type": "chair",
+            "x": 0.30000000000000043,
+            "z": -1.5999999999999999,
+            "y": 0.0,
+            "rotationY": 0.07485984771076737,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "chair-4",
+            "type": "chair",
+            "x": 0.2999999999999999,
+            "z": 1.5999999999999999,
+            "y": 0.0,
+            "rotationY": 3.0667328058790257,
+            "scale": 1.0,
+            "costINR": 12000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "sideTable-5",
+            "type": "sideTable",
+            "x": -0.7600000000000001,
+            "z": 1.5099999999999996,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "groupId": "lounge-set",
+            "id": "floorLamp-6",
+            "type": "floorLamp",
+            "x": -0.9099999999999997,
+            "z": -1.51,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 6000.0
+          },
+          {
+            "widthM": 2.9499999999999997,
+            "depthM": 2.05,
+            "groupId": "lounge-set",
+            "id": "rug-7",
+            "type": "rug",
+            "x": 0.07000000000000017,
+            "z": 1.285879139104724e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-8",
+            "type": "plant",
+            "x": 1.6600000000000004,
+            "z": -2.2299999999999995,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-9",
+            "type": "wallArt",
+            "x": 1.9274999999999998,
+            "z": 1.3200000000000003,
+            "y": 1.35,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 5500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 140000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 27.9125,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 140000.0
+      }
+    ]
+  },
+  "Bedroom": {
+    "requestId": "92f529ba-01cf-41a7-978d-f5d57108dc5e",
+    "generatedAtISO": "2026-10-24T15:21:35Z",
+    "evolution": [
+      {
+        "generation": 1,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      },
+      {
+        "generation": 2,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      },
+      {
+        "generation": 3,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      },
+      {
+        "generation": 4,
+        "bestFitness": 0.98875,
+        "avgFitness": 0.98875
+      }
+    ],
+    "solutions": [
+      {
+        "id": "54a9db2a-3f3f-4c10-9bdf-c2348e36aaa5",
+        "rank": 1,
+        "room": {
+          "type": "Bedroom",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "front"
+        },
+        "prompt": "Luxury Bedroom 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.9,
+            "depthM": 2.1,
+            "id": "bed-0",
+            "type": "bed",
+            "x": 0.0,
+            "z": -1.405,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 52000.0
+          },
+          {
+            "id": "sideTable-1",
+            "type": "sideTable",
+            "x": -1.28,
+            "z": -2.205,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "sideTable-2",
+            "type": "sideTable",
+            "x": 1.28,
+            "z": -2.205,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "wardrobe-3",
+            "type": "wardrobe",
+            "x": -1.605,
+            "z": 1.5,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "id": "dresser-4",
+            "type": "dresser",
+            "x": 1.705,
+            "z": 0.0,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.5,
+            "id": "rug-5",
+            "type": "rug",
+            "x": 0.0,
+            "z": 0.5,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-6",
+            "type": "plant",
+            "x": -1.73,
+            "z": -1.705,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-7",
+            "type": "wallArt",
+            "x": -1.3800000000000001,
+            "z": -2.4275,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "floorLamp-8",
+            "type": "floorLamp",
+            "x": -1.705,
+            "z": 0.42999999999999994,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 6000.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 143000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 33.0625,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "explanation": "Luxury bedroom: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "f201ecb9-3750-49b0-87b8-423d3da25975",
+        "rank": 2,
+        "room": {
+          "type": "Bedroom",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "right"
+        },
+        "prompt": "Luxury Bedroom 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.9,
+            "depthM": 2.1,
+            "id": "bed-0",
+            "type": "bed",
+            "x": -0.905,
+            "z": -5.5415267661417733e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 52000.0
+          },
+          {
+            "id": "sideTable-1",
+            "type": "sideTable",
+            "x": -1.705,
+            "z": 1.28,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "sideTable-2",
+            "type": "sideTable",
+            "x": -1.705,
+            "z": -1.28,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "wardrobe-3",
+            "type": "wardrobe",
+            "x": 0.9999999999999999,
+            "z": 2.105,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "id": "dresser-4",
+            "type": "dresser",
+            "x": 1.350173096059957e-16,
+            "z": -2.205,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.5,
+            "id": "rug-5",
+            "type": "rug",
+            "x": 0.5,
+            "z": 3.061616997868383e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-6",
+            "type": "plant",
+            "x": -1.6500000000000001,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-7",
+            "type": "wallArt",
+            "x": -1.9275,
+            "z": 1.3999999999999997,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "floorLamp-8",
+            "type": "floorLamp",
+            "x": -0.0700000000000002,
+            "z": 2.205,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 6000.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 143000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 33.0625,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "explanation": "Luxury bedroom: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "628571e4-e522-446f-9ca4-e2af026c6df7",
+        "rank": 3,
+        "room": {
+          "type": "Bedroom",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "back"
+        },
+        "prompt": "Luxury Bedroom 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.9,
+            "depthM": 2.1,
+            "id": "bed-0",
+            "type": "bed",
+            "x": -1.7206287528020313e-16,
+            "z": 1.405,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 52000.0
+          },
+          {
+            "id": "sideTable-1",
+            "type": "sideTable",
+            "x": 1.2799999999999998,
+            "z": 2.205,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "sideTable-2",
+            "type": "sideTable",
+            "x": -1.2800000000000002,
+            "z": 2.205,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "wardrobe-3",
+            "type": "wardrobe",
+            "x": 1.6050000000000002,
+            "z": -1.4999999999999998,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "id": "dresser-4",
+            "type": "dresser",
+            "x": -1.705,
+            "z": -2.0880227925462374e-16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.5,
+            "id": "rug-5",
+            "type": "rug",
+            "x": 6.123233995736766e-17,
+            "z": -0.5,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-6",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 1.7050000000000003,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-7",
+            "type": "wallArt",
+            "x": 1.38,
+            "z": 2.4275,
+            "y": 1.35,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "floorLamp-8",
+            "type": "floorLamp",
+            "x": 1.705,
+            "z": -0.4299999999999997,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 6000.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 143000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 33.0625,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "explanation": "Luxury bedroom: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      }
+    ],
+    "history_steps": [
+      {
+        "doorWall": "front",
+        "generation": 1,
+        "items": [
+          {
+            "widthM": 1.9,
+            "depthM": 2.1,
+            "id": "bed-0",
+            "type": "bed",
+            "x": 0.0,
+            "z": -1.405,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 52000.0
+          },
+          {
+            "id": "sideTable-1",
+            "type": "sideTable",
+            "x": -1.28,
+            "z": -2.205,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "sideTable-2",
+            "type": "sideTable",
+            "x": 1.28,
+            "z": -2.205,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "wardrobe-3",
+            "type": "wardrobe",
+            "x": -1.605,
+            "z": 1.5,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "id": "dresser-4",
+            "type": "dresser",
+            "x": 1.705,
+            "z": 0.0,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.5,
+            "id": "rug-5",
+            "type": "rug",
+            "x": 0.0,
+            "z": 0.5,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-6",
+            "type": "plant",
+            "x": -1.73,
+            "z": -1.705,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-7",
+            "type": "wallArt",
+            "x": -1.3800000000000001,
+            "z": -2.4275,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "floorLamp-8",
+            "type": "floorLamp",
+            "x": -1.705,
+            "z": 0.42999999999999994,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 6000.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 143000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 33.0625,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 143000.0
+      },
+      {
+        "doorWall": "right",
+        "generation": 2,
+        "items": [
+          {
+            "widthM": 1.9,
+            "depthM": 2.1,
+            "id": "bed-0",
+            "type": "bed",
+            "x": -0.905,
+            "z": -5.5415267661417733e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 52000.0
+          },
+          {
+            "id": "sideTable-1",
+            "type": "sideTable",
+            "x": -1.705,
+            "z": 1.28,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "sideTable-2",
+            "type": "sideTable",
+            "x": -1.705,
+            "z": -1.28,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "wardrobe-3",
+            "type": "wardrobe",
+            "x": 0.9999999999999999,
+            "z": 2.105,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "id": "dresser-4",
+            "type": "dresser",
+            "x": 1.350173096059957e-16,
+            "z": -2.205,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.5,
+            "id": "rug-5",
+            "type": "rug",
+            "x": 0.5,
+            "z": 3.061616997868383e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-6",
+            "type": "plant",
+            "x": -1.6500000000000001,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-7",
+            "type": "wallArt",
+            "x": -1.9275,
+            "z": 1.3999999999999997,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "floorLamp-8",
+            "type": "floorLamp",
+            "x": -0.0700000000000002,
+            "z": 2.205,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 6000.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 143000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 33.0625,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 143000.0
+      },
+      {
+        "doorWall": "back",
+        "generation": 3,
+        "items": [
+          {
+            "widthM": 1.9,
+            "depthM": 2.1,
+            "id": "bed-0",
+            "type": "bed",
+            "x": -1.7206287528020313e-16,
+            "z": 1.405,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 52000.0
+          },
+          {
+            "id": "sideTable-1",
+            "type": "sideTable",
+            "x": 1.2799999999999998,
+            "z": 2.205,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "sideTable-2",
+            "type": "sideTable",
+            "x": -1.2800000000000002,
+            "z": 2.205,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "wardrobe-3",
+            "type": "wardrobe",
+            "x": 1.6050000000000002,
+            "z": -1.4999999999999998,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "id": "dresser-4",
+            "type": "dresser",
+            "x": -1.705,
+            "z": -2.0880227925462374e-16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.5,
+            "id": "rug-5",
+            "type": "rug",
+            "x": 6.123233995736766e-17,
+            "z": -0.5,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-6",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 1.7050000000000003,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-7",
+            "type": "wallArt",
+            "x": 1.38,
+            "z": 2.4275,
+            "y": 1.35,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "floorLamp-8",
+            "type": "floorLamp",
+            "x": 1.705,
+            "z": -0.4299999999999997,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 6000.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 143000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 33.0625,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 143000.0
+      },
+      {
+        "doorWall": "left",
+        "generation": 4,
+        "items": [
+          {
+            "widthM": 1.9,
+            "depthM": 2.1,
+            "id": "bed-0",
+            "type": "bed",
+            "x": 0.905,
+            "z": 1.662458029842532e-16,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 52000.0
+          },
+          {
+            "id": "sideTable-1",
+            "type": "sideTable",
+            "x": 1.7050000000000003,
+            "z": -1.2799999999999998,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "sideTable-2",
+            "type": "sideTable",
+            "x": 1.7049999999999998,
+            "z": 1.2800000000000002,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4000.0
+          },
+          {
+            "id": "wardrobe-3",
+            "type": "wardrobe",
+            "x": -0.9999999999999997,
+            "z": -2.105,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 35000.0
+          },
+          {
+            "id": "dresser-4",
+            "type": "dresser",
+            "x": -4.050519288179871e-16,
+            "z": 2.205,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 24000.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.5,
+            "id": "rug-5",
+            "type": "rug",
+            "x": -0.5,
+            "z": -9.184850993605148e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "plant-6",
+            "type": "plant",
+            "x": 1.6500000000000004,
+            "z": -2.2299999999999995,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "id": "wallArt-7",
+            "type": "wallArt",
+            "x": 1.9275000000000002,
+            "z": -1.3999999999999995,
+            "y": 1.35,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "floorLamp-8",
+            "type": "floorLamp",
+            "x": 0.07000000000000046,
+            "z": -2.205,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 6000.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 143000.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 33.0625,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 100.0,
+          "comfortIndexPct": 88.75,
+          "fitness": 0.98875
+        },
+        "totalCostINR": 143000.0
+      }
+    ]
+  },
+  "Home Office": {
+    "requestId": "58a6436f-68c6-43fd-ab3c-283b9c114874",
+    "generatedAtISO": "2026-10-24T15:21:35Z",
+    "evolution": [
+      {
+        "generation": 1,
+        "bestFitness": 0.46375,
+        "avgFitness": 0.46375
+      },
+      {
+        "generation": 2,
+        "bestFitness": 0.46375,
+        "avgFitness": 0.46375
+      },
+      {
+        "generation": 3,
+        "bestFitness": 0.46375,
+        "avgFitness": 0.46374999999999994
+      },
+      {
+        "generation": 4,
+        "bestFitness": 0.46375,
+        "avgFitness": 0.46375
+      }
+    ],
+    "solutions": [
+      {
+        "id": "df02bac5-5e3d-4863-925d-feb6feb40f3a",
+        "rank": 1,
+        "room": {
+          "type": "Home Office",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "front"
+        },
+        "prompt": "Luxury Home Office 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.3,
+            "id": "desk-0",
+            "type": "desk",
+            "x": 0.0,
+            "z": -2.13,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 19000.0
+          },
+          {
+            "groupId": "desk-set",
+            "id": "officeChair-1",
+            "type": "officeChair",
+            "x": 0.0,
+            "z": -1.2399999999999998,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 16000.0
+          },
+          {
+            "id": "bookshelf-2",
+            "type": "bookshelf",
+            "x": -1.755,
+            "z": 1.89,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "id": "plant-3",
+            "type": "plant",
+            "x": -1.73,
+            "z": -2.15,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.4,
+            "id": "rug-4",
+            "type": "rug",
+            "x": 0.0,
+            "z": 0.3,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "wallArt-5",
+            "type": "wallArt",
+            "x": 0.0,
+            "z": -2.4275,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-6",
+            "type": "wallSconce",
+            "x": -1.865,
+            "z": -0.7,
+            "y": 1.65,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 72500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 9.485500000000002,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 0.0,
+          "comfortIndexPct": 13.749999999999998,
+          "fitness": 0.46375
+        },
+        "explanation": "Luxury home office: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "084dd9d3-8489-4b0b-a226-ce0318ca1b0c",
+        "rank": 2,
+        "room": {
+          "type": "Home Office",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "right"
+        },
+        "prompt": "Luxury Home Office 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.3,
+            "id": "desk-0",
+            "type": "desk",
+            "x": -1.63,
+            "z": -9.980871413050927e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 19000.0
+          },
+          {
+            "groupId": "desk-set",
+            "id": "officeChair-1",
+            "type": "officeChair",
+            "x": -0.7399999999999999,
+            "z": -4.531193156845206e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 16000.0
+          },
+          {
+            "id": "bookshelf-2",
+            "type": "bookshelf",
+            "x": 1.3899999999999997,
+            "z": 2.255,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "id": "plant-3",
+            "type": "plant",
+            "x": -1.6500000000000001,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.4,
+            "id": "rug-4",
+            "type": "rug",
+            "x": 0.3,
+            "z": 1.8369701987210297e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "wallArt-5",
+            "type": "wallArt",
+            "x": -1.9275,
+            "z": -1.1802533526782616e-16,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-6",
+            "type": "wallSconce",
+            "x": -0.7000000000000001,
+            "z": 2.365,
+            "y": 1.65,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 72500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 9.485500000000002,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 0.0,
+          "comfortIndexPct": 13.749999999999998,
+          "fitness": 0.46375
+        },
+        "explanation": "Luxury home office: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      },
+      {
+        "id": "ca663c81-8c9e-438c-afc5-246dec007896",
+        "rank": 3,
+        "room": {
+          "type": "Home Office",
+          "widthM": 4.0,
+          "lengthM": 5.0,
+          "doorWall": "back"
+        },
+        "prompt": "Luxury Home Office 4x5 with plants",
+        "selectedStyles": [
+          "Luxury"
+        ],
+        "items": [
+          {
+            "widthM": 1.3,
+            "id": "desk-0",
+            "type": "desk",
+            "x": -2.608497682183862e-16,
+            "z": 2.13,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 19000.0
+          },
+          {
+            "groupId": "desk-set",
+            "id": "officeChair-1",
+            "type": "officeChair",
+            "x": -1.5185620309427176e-16,
+            "z": 1.2399999999999998,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 16000.0
+          },
+          {
+            "id": "bookshelf-2",
+            "type": "bookshelf",
+            "x": 1.7550000000000001,
+            "z": -1.8899999999999997,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "id": "plant-3",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 2.15,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.4,
+            "id": "rug-4",
+            "type": "rug",
+            "x": 3.6739403974420595e-17,
+            "z": -0.3,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "wallArt-5",
+            "type": "wallArt",
+            "x": -2.9728301049302004e-16,
+            "z": 2.4275,
+            "y": 1.35,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-6",
+            "type": "wallSconce",
+            "x": 1.865,
+            "z": 0.7000000000000002,
+            "y": 1.65,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 72500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 9.485500000000002,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 0.0,
+          "comfortIndexPct": 13.749999999999998,
+          "fitness": 0.46375
+        },
+        "explanation": "Luxury home office: room-aware planning keeps fixtures at walls, preserves a central entrance and maintains furniture relationships. Costs are catalog estimates. Approach scores are planning aids, not a building-code assessment.",
+        "removedItems": []
+      }
+    ],
+    "history_steps": [
+      {
+        "doorWall": "front",
+        "generation": 1,
+        "items": [
+          {
+            "widthM": 1.3,
+            "id": "desk-0",
+            "type": "desk",
+            "x": 0.0,
+            "z": -2.13,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 19000.0
+          },
+          {
+            "groupId": "desk-set",
+            "id": "officeChair-1",
+            "type": "officeChair",
+            "x": 0.0,
+            "z": -1.2399999999999998,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 16000.0
+          },
+          {
+            "id": "bookshelf-2",
+            "type": "bookshelf",
+            "x": -1.755,
+            "z": 1.89,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "id": "plant-3",
+            "type": "plant",
+            "x": -1.73,
+            "z": -2.15,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.4,
+            "id": "rug-4",
+            "type": "rug",
+            "x": 0.0,
+            "z": 0.3,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "wallArt-5",
+            "type": "wallArt",
+            "x": 0.0,
+            "z": -2.4275,
+            "y": 1.35,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-6",
+            "type": "wallSconce",
+            "x": -1.865,
+            "z": -0.7,
+            "y": 1.65,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 72500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 9.485500000000002,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 0.0,
+          "comfortIndexPct": 13.749999999999998,
+          "fitness": 0.46375
+        },
+        "totalCostINR": 72500.0
+      },
+      {
+        "doorWall": "right",
+        "generation": 2,
+        "items": [
+          {
+            "widthM": 1.3,
+            "id": "desk-0",
+            "type": "desk",
+            "x": -1.63,
+            "z": -9.980871413050927e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 19000.0
+          },
+          {
+            "groupId": "desk-set",
+            "id": "officeChair-1",
+            "type": "officeChair",
+            "x": -0.7399999999999999,
+            "z": -4.531193156845206e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 16000.0
+          },
+          {
+            "id": "bookshelf-2",
+            "type": "bookshelf",
+            "x": 1.3899999999999997,
+            "z": 2.255,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "id": "plant-3",
+            "type": "plant",
+            "x": -1.6500000000000001,
+            "z": 2.23,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.4,
+            "id": "rug-4",
+            "type": "rug",
+            "x": 0.3,
+            "z": 1.8369701987210297e-17,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "wallArt-5",
+            "type": "wallArt",
+            "x": -1.9275,
+            "z": -1.1802533526782616e-16,
+            "y": 1.35,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-6",
+            "type": "wallSconce",
+            "x": -0.7000000000000001,
+            "z": 2.365,
+            "y": 1.65,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 72500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 9.485500000000002,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 0.0,
+          "comfortIndexPct": 13.749999999999998,
+          "fitness": 0.46375
+        },
+        "totalCostINR": 72500.0
+      },
+      {
+        "doorWall": "back",
+        "generation": 3,
+        "items": [
+          {
+            "widthM": 1.3,
+            "id": "desk-0",
+            "type": "desk",
+            "x": -2.608497682183862e-16,
+            "z": 2.13,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 19000.0
+          },
+          {
+            "groupId": "desk-set",
+            "id": "officeChair-1",
+            "type": "officeChair",
+            "x": -1.5185620309427176e-16,
+            "z": 1.2399999999999998,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 16000.0
+          },
+          {
+            "id": "bookshelf-2",
+            "type": "bookshelf",
+            "x": 1.7550000000000001,
+            "z": -1.8899999999999997,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "id": "plant-3",
+            "type": "plant",
+            "x": 1.7299999999999998,
+            "z": 2.15,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.4,
+            "id": "rug-4",
+            "type": "rug",
+            "x": 3.6739403974420595e-17,
+            "z": -0.3,
+            "y": 0.0,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "wallArt-5",
+            "type": "wallArt",
+            "x": -2.9728301049302004e-16,
+            "z": 2.4275,
+            "y": 1.35,
+            "rotationY": 3.141592653589793,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-6",
+            "type": "wallSconce",
+            "x": 1.865,
+            "z": 0.7000000000000002,
+            "y": 1.65,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 72500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 9.485500000000002,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 0.0,
+          "comfortIndexPct": 13.749999999999998,
+          "fitness": 0.46375
+        },
+        "totalCostINR": 72500.0
+      },
+      {
+        "doorWall": "left",
+        "generation": 4,
+        "items": [
+          {
+            "widthM": 1.3,
+            "id": "desk-0",
+            "type": "desk",
+            "x": 1.63,
+            "z": 2.994261423915278e-16,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 19000.0
+          },
+          {
+            "groupId": "desk-set",
+            "id": "officeChair-1",
+            "type": "officeChair",
+            "x": 0.7399999999999999,
+            "z": 1.3593579470535618e-16,
+            "y": 0.0,
+            "rotationY": 1.5707963267948966,
+            "scale": 1.0,
+            "costINR": 16000.0
+          },
+          {
+            "id": "bookshelf-2",
+            "type": "bookshelf",
+            "x": -1.3899999999999995,
+            "z": -2.2550000000000003,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 15000.0
+          },
+          {
+            "id": "plant-3",
+            "type": "plant",
+            "x": 1.6500000000000004,
+            "z": -2.2299999999999995,
+            "y": 0.0,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          },
+          {
+            "widthM": 2.5,
+            "depthM": 1.4,
+            "id": "rug-4",
+            "type": "rug",
+            "x": -0.3,
+            "z": -5.510910596163089e-17,
+            "y": 0.0,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 8000.0
+          },
+          {
+            "id": "wallArt-5",
+            "type": "wallArt",
+            "x": 1.9275,
+            "z": 3.5407600580347845e-16,
+            "y": 1.35,
+            "rotationY": 4.71238898038469,
+            "scale": 1.0,
+            "costINR": 5500.0
+          },
+          {
+            "id": "wallSconce-6",
+            "type": "wallSconce",
+            "x": 0.7000000000000004,
+            "z": -2.365,
+            "y": 1.65,
+            "rotationY": 0.0,
+            "scale": 1.0,
+            "costINR": 4500.0
+          }
+        ],
+        "metrics": {
+          "totalCostINR": 72500.0,
+          "budgetINR": 145000.0,
+          "budgetCompliancePct": 100.0,
+          "spaceUtilizationPct": 9.485500000000002,
+          "styleAlignmentPct": 100.0,
+          "clearanceScorePct": 0.0,
+          "comfortIndexPct": 13.749999999999998,
+          "fitness": 0.46375
+        },
+        "totalCostINR": 72500.0
+      }
+    ]
+  }
+}

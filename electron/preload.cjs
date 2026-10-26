@@ -5,7 +5,7 @@
  * Kept minimal — exposes only safe, non-privileged APIs to the React app.
  */
 
-import { contextBridge, ipcRenderer } from 'electron'
+const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
   // Expose app version to the React UI (e.g., for an About page)
