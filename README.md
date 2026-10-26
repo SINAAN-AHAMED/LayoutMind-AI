@@ -10,7 +10,7 @@ An interactive room planner that turns room dimensions, design preferences, and 
 
 Local-first · No API key required · macOS & Windows
 
-[Quick start](#-quick-start) · [Features](#-features) · [Gallery](#gallery) · [Development](#development) · [User guide](docs/USER_GUIDE.md) · [Publish to GitHub](PUBLISHING.md)
+[Quick start](#-quick-start) · [Features](#-features) · [Gallery](#gallery) · [Development](#development) · [User guide](docs/USER_GUIDE.md) 
 
 </div>
 
