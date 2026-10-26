@@ -25,10 +25,10 @@ export function GenerationSidebar() {
 
   if (steps.length === 0) return null
 
-  const currentGen = currentStep?.generation ?? 0
+  const currentGen = currentStep?.generation ?? steps[maxIndex]?.generation ?? 0
   const finalGen = steps[maxIndex]?.generation ?? 0
 
-  // Cost delta vs final generation
+  // Cost delta vs final study
   const finalCost = steps[maxIndex]?.totalCostINR ?? 0
   const currentCost = currentStep?.totalCostINR ?? 0
   const costDiff = currentCost - finalCost
@@ -44,10 +44,13 @@ export function GenerationSidebar() {
         transition={{ delay: 1.8, duration: 0.6 }}
         onClick={toggleSidebar}
         className="gen-sidebar-toggle"
-        title="Generation History"
+        title="Planning studies"
+        aria-label="Open planning studies"
+        aria-expanded={sidebarOpen}
+        aria-controls="gen-history-sidebar"
         id="gen-history-toggle"
       >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.7}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <span className="text-[9px] font-bold tracking-widest uppercase">GEN</span>
@@ -61,7 +64,7 @@ export function GenerationSidebar() {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 320, opacity: 0 }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-            className="gen-sidebar"
+            className="gen-sidebar" data-lenis-prevent
             id="gen-history-sidebar"
           >
             {/* Header */}
@@ -69,11 +72,12 @@ export function GenerationSidebar() {
               <div className="flex items-center gap-2.5">
                 <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 <h3 className="text-[10px] font-bold tracking-[0.25em] uppercase text-white/60">
-                  Evolution Timeline
+                  Planning studies
                 </h3>
               </div>
               <button
                 onClick={toggleSidebar}
+                aria-label="Close planning studies"
                 className="w-6 h-6 rounded-md bg-white/5 flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/10 transition-all"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -86,18 +90,20 @@ export function GenerationSidebar() {
             <div className="mb-4">
               <div className="flex items-baseline gap-2 mb-1">
                 <span className="text-3xl font-light tracking-tight text-white tabular-nums">
-                  Gen {currentGen}
+                  {activeIndex < 0 ? 'Final layout' : `Study ${currentGen}`} 
                 </span>
                 <span className="text-xs text-white/30">/ {finalGen}</span>
               </div>
               <div className="text-[10px] text-white/40 font-medium">
-                {steps.length} snapshots captured · every 5th generation
+                {steps.length} room arrangements evaluated
               </div>
             </div>
 
+            <button onClick={() => setActiveSnapshot(-1)} className="w-full p-2 mb-4 rounded border border-white/20 text-xs text-white" aria-pressed={activeIndex < 0}>Return to final layout</button>
             {/* Timeline slider */}
             <div className="gen-slider-container mb-6">
               <input
+                aria-label="Planning study"
                 type="range"
                 min={0}
                 max={maxIndex}
@@ -107,8 +113,8 @@ export function GenerationSidebar() {
                 id="gen-timeline-slider"
               />
               <div className="flex justify-between mt-1.5">
-                <span className="text-[9px] text-white/30 font-medium">Gen 0</span>
-                <span className="text-[9px] text-white/30 font-medium">Gen {finalGen}</span>
+                <span className="text-[9px] text-white/30 font-medium">Study 1</span>
+                <span className="text-[9px] text-white/30 font-medium">Study {finalGen}</span>
               </div>
               {/* Tick marks */}
               <div className="flex justify-between px-[2px] mt-1">
@@ -121,7 +127,7 @@ export function GenerationSidebar() {
                         ? 'bg-primary scale-150 shadow-[0_0_6px_rgba(56,189,248,0.5)]'
                         : 'bg-white/15 hover:bg-white/30'
                     }`}
-                    title={`Gen ${step.generation}`}
+                    title={`Study ${step.generation}`}
                   />
                 ))}
               </div>
@@ -173,11 +179,11 @@ export function GenerationSidebar() {
                     <div className="flex items-center gap-3 mt-2 justify-center">
                       <div className="flex items-center gap-1.5">
                         <div className="w-2.5 h-[2px] bg-[#38BDF8] rounded-full" />
-                        <span className="text-[8px] text-white/40 font-medium">Gen {currentGen}</span>
+                        <span className="text-[8px] text-white/40 font-medium">Study {currentGen}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <div className="w-2.5 h-[2px] bg-[#F59E0B] rounded-full opacity-60" style={{ borderStyle: 'dashed' }} />
-                        <span className="text-[8px] text-white/40 font-medium">Gen {previousStep.generation}</span>
+                        <span className="text-[8px] text-white/40 font-medium">Study {previousStep.generation}</span>
                       </div>
                     </div>
                   )}
@@ -209,7 +215,7 @@ export function GenerationSidebar() {
                     </div>
                   )}
                   {costDiff === 0 && (
-                    <div className="text-[11px] text-white/30 font-medium">Viewing final generation</div>
+                    <div className="text-[11px] text-white/30 font-medium">Same estimated cost as final study</div>
                   )}
                 </div>
               </div>

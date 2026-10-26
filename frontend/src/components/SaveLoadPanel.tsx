@@ -1,3 +1,5 @@
+import {useDialogDismiss} from '../lib/useDialogDismiss'
+import { saveableResult } from '../lib/editorOps'
 import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStudioStore } from '../store/useStudioStore'
@@ -5,6 +7,7 @@ import { getSavedLayouts, saveLayout, deleteLayout, renameLayout, type SavedLayo
 import { formatINR } from '../lib/inr'
 
 export function SaveLoadPanel({ onClose }: { onClose: () => void }) {
+  useDialogDismiss(onClose)
   const result = useStudioStore((s) => s.lastResult)
   const setResult = useStudioStore((s) => s.setResult)
 
@@ -14,7 +17,7 @@ export function SaveLoadPanel({ onClose }: { onClose: () => void }) {
   const [editName, setEditName] = React.useState('')
   const [showSaveSuccess, setShowSaveSuccess] = React.useState(false)
   const [confirmDeleteId, setConfirmDeleteId] = React.useState<string | null>(null)
-  const timeoutIdRef = React.useRef<any>(null)
+  const timeoutIdRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
   React.useEffect(() => {
     setLayouts(getSavedLayouts())
@@ -27,7 +30,7 @@ export function SaveLoadPanel({ onClose }: { onClose: () => void }) {
 
   const handleSave = () => {
     if (!result || !saveName.trim()) return
-    saveLayout(saveName.trim(), result)
+    try{saveLayout(saveName.trim(),saveableResult()!)}catch(error){alert(error instanceof Error?error.message:'Unable to save');return}
     setLayouts(getSavedLayouts())
     setSaveName('')
     setShowSaveSuccess(true)
@@ -43,19 +46,18 @@ export function SaveLoadPanel({ onClose }: { onClose: () => void }) {
   }
 
   const handleLoad = (layout: SavedLayout) => {
-    setResult(layout.result)
-    onClose()
+    try{setResult(layout.result);onClose()}catch(error){alert(error instanceof Error?error.message:'Unable to load this layout')}
   }
 
   const handleDelete = (id: string) => {
-    deleteLayout(id)
+    try{deleteLayout(id)}catch(error){alert(error instanceof Error?error.message:'Unable to delete');return}
     setLayouts(getSavedLayouts())
     setConfirmDeleteId(null)
   }
 
   const handleRename = (id: string) => {
     if (editName.trim()) {
-      renameLayout(id, editName.trim())
+      try{renameLayout(id, editName.trim())}catch(error){alert(error instanceof Error?error.message:'Unable to rename');return}
       setLayouts(getSavedLayouts())
     }
     setEditingId(null)
@@ -85,7 +87,7 @@ export function SaveLoadPanel({ onClose }: { onClose: () => void }) {
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 30 }}
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        onClick={(e) => e.stopPropagation()}
+        role="dialog" aria-modal="true" aria-label="Saved layouts" onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-lg mx-4 max-h-[80vh] overflow-hidden rounded-2xl"
         style={{
           background: 'rgba(10, 10, 18, 0.92)',
@@ -193,7 +195,7 @@ export function SaveLoadPanel({ onClose }: { onClose: () => void }) {
                         autoFocus
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') handleRename(layout.id); if (e.key === 'Escape') setEditingId(null) }}
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleRename(layout.id); if (e.key === 'Escape') { e.preventDefault(); setEditingId(null) } }}
                         onBlur={() => handleRename(layout.id)}
                         onClick={(e) => e.stopPropagation()}
                         className="px-2 py-0.5 bg-white/[0.06] border border-primary/30 rounded text-sm text-white focus:outline-none w-full"

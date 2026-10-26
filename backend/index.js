@@ -18,14 +18,21 @@ const StyleChipSchema = z.union([
 ])
 
 const OptimizeBodySchema = z.object({
-  prompt: z.string().min(4).max(600)
+  prompt: z.string().min(4).max(600),
+  explicitStyle: z.union([StyleChipSchema, z.literal('')]).optional(),
+  addPlants: z.boolean().optional(),
+  addRugs: z.boolean().optional(),
+  roomType: z.enum(['Bedroom', 'Living Room', 'Kitchen', 'Bathroom', 'Dining Room', 'Home Office']).optional(),
+  lengthM: z.number().min(2).max(15).optional(),
+  widthM: z.number().min(2).max(15).optional(),
+  budgetINR: z.number().min(20000).max(1000000).optional(),
 })
 
 const app = express()
 app.use(cors({ origin: true }))
 app.use(express.json({ limit: '1mb' }))
 
-app.get('/api/health', (_req, res) => res.json({ ok: true }))
+app.get('/api/health', async (_req,res)=>{try{const r=await axios.get(`${PY_BASE}/health`,{timeout:3000});res.json(r.data)}catch{res.status(503).json({ok:false})}})
 
 app.post('/api/optimize', async (req, res) => {
   const parsed = OptimizeBodySchema.safeParse(req.body)

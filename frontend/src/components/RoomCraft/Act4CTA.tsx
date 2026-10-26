@@ -29,7 +29,7 @@ export function Act4CTA() {
       )
 
       // Floating orbs
-      gsap.utils.toArray('.cta-orb').forEach((orb: any, i: number) => {
+      gsap.utils.toArray<HTMLElement>('.cta-orb').forEach((orb, i: number) => {
         gsap.to(orb, {
           y: -20 + i * 5,
           x: 10 - i * 8,

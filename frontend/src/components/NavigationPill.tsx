@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
 
 const GITHUB_URL = 'https://github.com/SINAAN-AHAMED'
-const isElectron = typeof window !== 'undefined' && (window as any).electronAPI?.isElectron
+const isElectron = typeof window !== 'undefined' && window.electronAPI?.isElectron
 // In Electron the TitleBar is 36px fixed at top:0, so nav sits below it
 const NAV_TOP = isElectron ? 36 : 0
 
@@ -37,7 +37,7 @@ export function NavigationPill() {
       {/* Logo */}
       <Link to="/" style={{ textDecoration: 'none' }}>
         <span style={{
-          fontFamily: "'Playfair Display', serif",
+          fontFamily: "'Playfair Display Variable', serif",
           fontSize: '22px',
           fontWeight: 300,
           color: '#1A1A1A',
@@ -56,7 +56,7 @@ export function NavigationPill() {
               key={link.path}
               to={link.path}
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: "'DM Sans Variable', sans-serif",
                 fontSize: '10px',
                 fontWeight: 600,
                 textTransform: 'uppercase',
@@ -107,7 +107,7 @@ export function NavigationPill() {
         <Link
           to="/studio"
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'DM Sans Variable', sans-serif",
             fontSize: '10px',
             fontWeight: 600,
             textTransform: 'uppercase',

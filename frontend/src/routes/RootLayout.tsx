@@ -1,15 +1,9 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { NavigationPill } from '../components/NavigationPill'
 
 export function RootLayout() {
   const location = useLocation()
-  const isWorkspace = location.pathname === '/workspace'
-  const isStudio = location.pathname === '/studio'
-
-  // Show nav on landing page only.
-  // /studio has its own embedded header, /workspace is full-screen 3D.
-  const showNav = !isWorkspace && !isStudio
+  useEffect(()=>{window.scrollTo({top:0,left:0,behavior:'instant'})},[location.pathname])
 
   // Always force light mode — Elyse design is light-only
   useEffect(() => {
@@ -21,7 +15,7 @@ export function RootLayout() {
   return (
     <div style={{ minHeight: '100%', background: '#FAF8F5' }}>
       {/* Clean NavigationPill — no wrapper header, nav manages its own fixed positioning */}
-      {showNav && <NavigationPill />}
+
       <Outlet />
     </div>
   )

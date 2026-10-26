@@ -1,3 +1,5 @@
+import {useDialogDismiss} from '../lib/useDialogDismiss'
+import type { LayoutSolution } from '../types/layout'
 import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { FurnitureItem } from '../types/layout'
@@ -177,15 +179,16 @@ function generateSuggestions(
 
 // ─── Component ────────────────────────────────────────────────────────────────
 interface Props {
-  solution: any
+  solution: LayoutSolution
   onClose: () => void
-  onAddItem?: (type: string, costINR: number) => void
+  onAddItem?: (type: string, costINR: number) => boolean
 }
 
 export function DesignSuggestionsPanel({ solution, onClose, onAddItem }: Props) {
+  useDialogDismiss(onClose)
   const [added, setAdded] = React.useState<Set<string>>(new Set())
   const [animating, setAnimating] = React.useState<string | null>(null)
-  const timerRef = React.useRef<any>(null)
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
   React.useEffect(() => {
     return () => {
@@ -197,12 +200,13 @@ export function DesignSuggestionsPanel({ solution, onClose, onAddItem }: Props) 
 
   const suggestions = React.useMemo(() => {
     if (!solution) return []
-    return generateSuggestions(
+    const suggestions = generateSuggestions(
       solution.items ?? [],
       solution.room?.widthM ?? 7,
       solution.room?.lengthM ?? 6,
       solution.selectedStyles ?? [],
     )
+    return ['Kitchen','Bathroom'].includes(solution.room.type) ? suggestions.filter(s => s.furnitureType === 'plant') : suggestions
   }, [solution])
 
   const handleAdd = (s: Suggestion) => {
@@ -214,9 +218,8 @@ export function DesignSuggestionsPanel({ solution, onClose, onAddItem }: Props) 
 
     setAnimating(s.id)
     timerRef.current = setTimeout(() => {
-      setAdded((prev) => new Set([...prev, s.id]))
+      if (onAddItem?.(s.furnitureType, s.estimatedCostINR)) setAdded((prev) => new Set([...prev, s.id]))
       setAnimating(null)
-      onAddItem?.(s.furnitureType, s.estimatedCostINR)
       timerRef.current = null
     }, 600)
   }
@@ -238,7 +241,7 @@ export function DesignSuggestionsPanel({ solution, onClose, onAddItem }: Props) 
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 30 }}
         transition={{ type: 'spring', damping: 26, stiffness: 300 }}
-        onClick={(e) => e.stopPropagation()}
+        role="dialog" aria-modal="true" aria-label="Design suggestions" onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-lg mx-4 max-h-[85vh] flex flex-col rounded-2xl overflow-hidden"
         style={{
           background: 'rgba(8,8,16,0.96)',

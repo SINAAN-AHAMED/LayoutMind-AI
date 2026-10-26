@@ -1,3 +1,4 @@
+import {useDialogDismiss} from '../lib/useDialogDismiss'
 import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
@@ -26,6 +27,7 @@ const BUDGET_ALT: Record<string,{label:string;savings:number}> = {
 type CostItem = { name:string; type:string; cost:number; pct:number }
 
 export function CostBreakdown({ items, metrics, onClose }: { items:FurnitureItem[]; metrics:Metrics; onClose:()=>void }) {
+  useDialogDismiss(onClose)
   const [showBudget, setShowBudget] = React.useState(false)
 
   const costByType = React.useMemo(() => {
@@ -50,7 +52,7 @@ export function CostBreakdown({ items, metrics, onClose }: { items:FurnitureItem
   return (
     <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="fixed inset-0 z-50 flex items-center justify-center" onClick={onClose}>
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      <motion.div initial={{scale:0.9,opacity:0,y:30}} animate={{scale:1,opacity:1,y:0}} exit={{scale:0.9,opacity:0,y:30}} transition={{type:'spring',damping:25,stiffness:300}} onClick={e=>e.stopPropagation()} className="relative w-full max-w-2xl mx-4 max-h-[85vh] overflow-y-auto rounded-2xl" style={{background:'rgba(10,10,18,0.92)',backdropFilter:'blur(40px)',border:'1px solid rgba(255,255,255,0.08)',boxShadow:'0 24px 80px rgba(0,0,0,0.6)'}} id="cost-breakdown-panel">
+      <motion.div initial={{scale:0.9,opacity:0,y:30}} animate={{scale:1,opacity:1,y:0}} exit={{scale:0.9,opacity:0,y:30}} transition={{type:'spring',damping:25,stiffness:300}} onClick={e=>e.stopPropagation()} className="relative w-full max-w-2xl mx-4 max-h-[85vh] overflow-y-auto rounded-2xl" style={{background:'rgba(10,10,18,0.92)',backdropFilter:'blur(40px)',border:'1px solid rgba(255,255,255,0.08)',boxShadow:'0 24px 80px rgba(0,0,0,0.6)'}} role="dialog" aria-modal="true" aria-label="Cost breakdown" id="cost-breakdown-panel" data-lenis-prevent>
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-white/[0.06] sticky top-0 z-10" style={{background:'rgba(10,10,18,0.95)'}}>
           <div className="flex items-center gap-3">
@@ -78,7 +80,7 @@ export function CostBreakdown({ items, metrics, onClose }: { items:FurnitureItem
               </div>
             </div>
             <button onClick={()=>setShowBudget(!showBudget)} className={`px-3 py-2 rounded-xl text-[11px] font-semibold transition-all ${showBudget?'bg-emerald-500/15 border border-emerald-500/25 text-emerald-400':'bg-white/[0.04] border border-white/[0.08] text-white/50 hover:text-white/70'}`}>
-              {showBudget ? '✓ Budget Mode' : '💡 Budget Alt.'}
+              {showBudget ? 'Budget ideas shown' : 'Budget ideas'}
             </button>
           </div>
           <AnimatePresence>
@@ -86,10 +88,11 @@ export function CostBreakdown({ items, metrics, onClose }: { items:FurnitureItem
               <motion.div initial={{height:0,opacity:0}} animate={{height:'auto',opacity:1}} exit={{height:0,opacity:0}} className="overflow-hidden">
                 <div className="mt-4 p-3 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/10">
                   <div className="flex justify-between items-center mb-1">
-                    <span className="text-[10px] text-emerald-400/60 font-semibold uppercase tracking-wider">Budget Alternative</span>
+                    <span className="text-[10px] text-emerald-400/60 font-semibold uppercase tracking-wider">Illustrative alternative</span>
                     <span className="text-sm font-medium text-emerald-400">{formatINR(budgetTotal)}</span>
                   </div>
-                  <div className="text-xs text-emerald-400/80 font-medium">Save {formatINR(savings)} ({((savings/metrics.totalCostINR)*100).toFixed(0)}% less)</div>
+                  <div className="text-xs text-emerald-400/80 font-medium">Possible saving {formatINR(savings)} ({((savings/Math.max(1,metrics.totalCostINR))*100).toFixed(0)}% less)</div>
+                  <p className="text-[10px] text-white/50 mt-2">Illustrative estimates only. These ideas do not change the layout or its saved costs.</p>
                 </div>
               </motion.div>
             )}
@@ -142,7 +145,7 @@ export function CostBreakdown({ items, metrics, onClose }: { items:FurnitureItem
                         <span className="text-[9px] text-white/25 tabular-nums">{item.pct.toFixed(0)}%</span>
                       </div>
                     </div>
-                    <a href={SHOP_LINKS[item.type]??'#'} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} className="flex-shrink-0 w-6 h-6 rounded bg-white/[0.04] flex items-center justify-center text-white/20 hover:text-[#FF9900] hover:bg-[#FF9900]/10 transition-all opacity-0 group-hover:opacity-100" title="Shop on Amazon">
+                    <a href={SHOP_LINKS[item.type]??`https://www.amazon.in/s?k=${encodeURIComponent(item.name)}`} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} className="flex-shrink-0 w-6 h-6 rounded bg-white/[0.04] flex items-center justify-center text-white/20 hover:text-[#FF9900] hover:bg-[#FF9900]/10 transition-all opacity-0 group-hover:opacity-100" title="Shop on Amazon">
                       <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12l-4-4v3H7V8l-4 4 4 4v-3h10v3l4-4z" /></svg>
                     </a>
                   </div>

@@ -1,325 +1,43 @@
-import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
-export function RoomCraftPage() {
-  const nav = useNavigate()
-  const [scrolled, setScrolled] = useState(false)
-  const heroImgRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // Parallax on hero image
-  useEffect(() => {
-    const onScroll = () => {
-      if (heroImgRef.current) {
-        heroImgRef.current.style.transform = `translateY(${window.scrollY * 0.12}px)`
-      }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  return (
-    <div className="bg-background text-on-surface font-body antialiased flex flex-col min-h-screen" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-
-      {/* ── NAVIGATION ── */}
-      <header
-        id="main-nav"
-        className="fixed top-0 w-full z-50 flex justify-between items-center px-20 py-6 transition-all duration-300"
-        style={{
-          background: scrolled ? 'rgba(250,248,245,0.92)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: `1px solid ${scrolled ? '#C9A96E40' : 'transparent'}`,
-        }}
-      >
-        <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '22px', fontWeight: 300, color: '#1A1A1A', letterSpacing: '-0.02em' }}>
-          LayoutMind
-        </div>
-        <nav className="hidden md:flex items-center" style={{ gap: '48px' }}>
-          {['Studio', 'Philosophy', 'Portfolio'].map(link => (
-            <button
-              key={link}
-              onClick={() => link === 'Studio' ? nav('/studio') : undefined}
-              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.25em', color: '#6B6560', background: 'none', border: 'none', cursor: 'pointer', transition: 'color 0.3s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#2D3B2D')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#6B6560')}
-            >
-              {link}
-            </button>
-          ))}
-        </nav>
-        <button
-          onClick={() => nav('/studio')}
-          style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600,
-            textTransform: 'uppercase', letterSpacing: '0.25em',
-            padding: '12px 24px', background: 'transparent',
-            border: '1px solid #2D3B2D', color: '#1A1A1A',
-            cursor: 'pointer', transition: 'all 0.3s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#2D3B2D'; e.currentTarget.style.color = '#FAF8F5' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#1A1A1A' }}
-        >
-          Begin Design
-        </button>
-      </header>
-
-      <main style={{ flex: 1, paddingTop: '0' }}>
-
-        {/* ── HERO SECTION ── */}
-        <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'row', position: 'relative' }}>
-          {/* Left column */}
-          <div style={{ width: '60%', paddingLeft: '80px', paddingRight: '64px', paddingTop: '148px', paddingBottom: '96px', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 10 }}>
-
-            {/* Label */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-              <span style={{ width: '32px', height: '1px', background: '#C9A96E', display: 'block' }} />
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3em', color: '#6B6560' }}>
-                AI · SPATIAL INTELLIGENCE
-              </span>
-            </div>
-
-            {/* Giant headline */}
-            <h1 style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: 'clamp(72px, 8.5vw, 110px)',
-              fontWeight: 300,
-              color: '#1A1A1A',
-              lineHeight: 0.9,
-              letterSpacing: '-0.02em',
-              marginBottom: '48px',
-            }}>
-              Design<br />
-              Without<br />
-              Limits.
-            </h1>
-
-            {/* Gold divider */}
-            <div style={{ height: '1px', width: '100%', background: 'rgba(201,169,110,0.5)', marginBottom: '48px' }} />
-
-            {/* Subtext */}
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '15px', color: '#6B6560', maxWidth: '400px', lineHeight: 1.7, marginBottom: '48px' }}>
-              Generative AI meets neuro-fuzzy logic — designing interior spaces that honor your vision.
-            </p>
-
-            {/* CTAs */}
-            <div style={{ display: 'flex', gap: '24px', marginBottom: '64px', flexWrap: 'wrap' }}>
-              <button
-                onClick={() => nav('/studio')}
-                style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: 600,
-                  textTransform: 'uppercase', letterSpacing: '0.2em',
-                  padding: '16px 32px', background: '#2D3B2D', color: '#FAF8F5',
-                  border: 'none', cursor: 'pointer', transition: 'all 0.3s',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#1a2a1a')}
-                onMouseLeave={e => (e.currentTarget.style.background = '#2D3B2D')}
-              >
-                Generate a Space →
-              </button>
-              <button
-                onClick={() => { document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }) }}
-                style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: 600,
-                  textTransform: 'uppercase', letterSpacing: '0.2em',
-                  padding: '16px 32px', background: 'transparent',
-                  border: '1px solid #2D3B2D', color: '#1A1A1A',
-                  cursor: 'pointer', transition: 'all 0.3s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#2D3B2D'; e.currentTarget.style.color = '#FAF8F5' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#1A1A1A' }}
-              >
-                See How It Works
-              </button>
-            </div>
-
-            {/* Footer label */}
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.25em', color: '#C9A96E' }}>
-              Powered by Genetic Algorithms &amp; NLP
-            </span>
-          </div>
-
-          {/* Right image panel */}
-          <div style={{ width: '40%', position: 'relative', overflow: 'hidden', borderLeft: '1px solid #E8E2DA', background: '#F2EDE8' }}>
-            <div
-              ref={heroImgRef}
-              style={{
-                position: 'absolute',
-                inset: '-10%',
-                backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCTP_EHC5Lhimf37Za7nvNVKLOnlDXYovH-bxbtg29QxSTwjmLYuhIcINsu4aEjzk11Uh5vr7WvS55sUMr1duB_5T-iSaBOx7VWC3udhdxS0gDBB5RkRtVxmp8y_dkuBDWz0z7W6ImjIn4EYEMgoZdW8Vo_-XHNkV8LxM4RtEKbVwr803fKL-FGIsGN4zqcnfImjxZbv_8fJIcWc6BoyR2m1S_RyFqLq0FWqDqzNK2Xm6R6bEe6zbeDn-e9XzYWwErWVRcrwX7u2e0')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                transition: 'transform 0.1s linear',
-              }}
-            />
-            {/* Efficiency badge */}
-            <div style={{ position: 'absolute', top: '48px', left: '48px', background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(8px)', border: '1px solid #E8E2DA', padding: '12px 20px' }}>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#1A1A1A', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C9A96E', display: 'block' }} />
-                76.4% Space Efficiency
-              </span>
-            </div>
-            {/* Room label */}
-            <div style={{ position: 'absolute', bottom: '48px', left: '48px', background: 'white', border: '1px solid #E8E2DA', padding: '10px 20px' }}>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: '#1A1A1A' }}>
-                Living Room · Modern · Luxury
-              </span>
-            </div>
-          </div>
-        </section>
-
-        {/* ── STATS SECTION ── */}
-        <section style={{ background: '#F2EDE8', padding: '96px 0', borderTop: '1px solid #C9A96E' }}>
-          <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 80px' }}>
-            <div style={{ marginBottom: '64px' }}>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.25em', color: '#C9A96E' }}>
-                BY THE NUMBERS
-              </span>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
-              {[
-                { value: '40+', label: 'Genetic Algorithm Generations' },
-                { value: '8', label: 'Interior Style Systems Available' },
-                { value: '∞', label: 'Unique Spatial Layouts Generated' },
-              ].map((stat, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: 'flex', flexDirection: 'column',
-                    padding: i === 0 ? '0 48px 0 0' : i === 2 ? '0 0 0 48px' : '0 48px',
-                    borderLeft: i > 0 ? '1px solid rgba(201,169,110,0.4)' : 'none',
-                  }}
-                >
-                  <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(64px, 6vw, 96px)', color: '#1A1A1A', lineHeight: 1, marginBottom: '16px', fontWeight: 300 }}>
-                    {stat.value}
-                  </span>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '15px', color: '#6B6560', lineHeight: 1.6 }}>
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── HOW IT WORKS SECTION ── */}
-        <section id="how-it-works" style={{ background: '#FAF8F5', padding: '128px 0', borderBottom: '1px solid rgba(201,169,110,0.4)' }}>
-          <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 80px' }}>
-
-            {/* Header row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '96px', gap: '48px', flexWrap: 'wrap' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-                  <span style={{ width: '32px', height: '1px', background: '#C9A96E', display: 'block' }} />
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.25em', color: '#6B6560' }}>
-                    THE PROCESS
-                  </span>
-                </div>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(40px, 4.5vw, 64px)', fontWeight: 400, color: '#1A1A1A', lineHeight: 1.1, letterSpacing: '-0.02em', maxWidth: '600px' }}>
-                  From Words to<br />Architectural Reality
-                </h2>
-              </div>
-              <div style={{ maxWidth: '400px', paddingTop: '16px' }}>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '15px', color: '#6B6560', lineHeight: 1.7 }}>
-                  Our proprietary engine translates your natural language descriptions into mathematically rigorous spatial layouts, balancing aesthetic intent with structural constraints.
-                </p>
-              </div>
-            </div>
-
-            {/* Steps grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '64px' }}>
-              {[
-                {
-                  num: '01', title: 'Describe Your Vision',
-                  desc: 'Input your aesthetic preferences, functional requirements, and spatial dimensions using natural language or structured parameters.',
-                },
-                {
-                  num: '02', title: 'AI Analysis',
-                  desc: 'The engine generates hundreds of layout permutations, optimizing for light flow, spatial efficiency, and adherence to your style parameters.',
-                },
-                {
-                  num: '03', title: '3D Visualization',
-                  desc: 'Review photorealistic renders of the top configurations, complete with material suggestions and structural blueprints ready for implementation.',
-                },
-              ].map((step, i) => (
-                <div key={i} style={{ position: 'relative' }}
-                  onMouseEnter={e => { const line = e.currentTarget.querySelector('.step-line') as HTMLElement; if (line) line.style.background = '#C9A96E' }}
-                  onMouseLeave={e => { const line = e.currentTarget.querySelector('.step-line') as HTMLElement; if (line) line.style.background = '#E8E2DA' }}
-                >
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '120px', color: '#C9A96E', opacity: 0.12, fontWeight: 300, lineHeight: 1, position: 'absolute', top: '-40px', left: '-24px', pointerEvents: 'none', userSelect: 'none' }}>
-                    {step.num}
-                  </div>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '32px', fontWeight: 400, color: '#1A1A1A', marginBottom: '24px', position: 'relative', zIndex: 1 }}>
-                    {step.title}
-                  </h3>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '15px', color: '#6B6560', lineHeight: 1.7, position: 'relative', zIndex: 1 }}>
-                    {step.desc}
-                  </p>
-                  <div className="step-line" style={{ marginTop: '32px', height: '1px', background: '#E8E2DA', transition: 'background 0.5s' }} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── CTA SECTION ── */}
-        <section style={{ background: '#FAF8F5', padding: '120px 80px', textAlign: 'center' }}>
-          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '32px' }}>
-              <span style={{ width: '32px', height: '1px', background: '#C9A96E', display: 'block' }} />
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.25em', color: '#6B6560' }}>
-                BEGIN
-              </span>
-              <span style={{ width: '32px', height: '1px', background: '#C9A96E', display: 'block' }} />
-            </div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(40px, 4.5vw, 64px)', fontWeight: 400, color: '#1A1A1A', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '32px' }}>
-              Your Space Awaits
-            </h2>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '15px', color: '#6B6560', lineHeight: 1.7, marginBottom: '48px' }}>
-              Describe your ideal interior and let our AI engine design a layout tailored to your vision, budget, and aesthetic.
-            </p>
-            <button
-              onClick={() => nav('/studio')}
-              style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: 600,
-                textTransform: 'uppercase', letterSpacing: '0.2em',
-                padding: '18px 48px', background: '#2D3B2D', color: '#FAF8F5',
-                border: 'none', cursor: 'pointer', transition: 'all 0.3s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#1a2a1a')}
-              onMouseLeave={e => (e.currentTarget.style.background = '#2D3B2D')}
-            >
-              Generate a Space →
-            </button>
-          </div>
-        </section>
-      </main>
-
-      {/* ── FOOTER ── */}
-      <footer style={{ background: '#1A1A1A', color: '#F2EDE8', padding: '80px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '40px' }}>
-        <div>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', fontWeight: 300, color: '#F2EDE8', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-            LayoutMind
-          </h2>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', color: 'rgba(242,237,232,0.55)' }}>
-            © 2026 LayoutMind. A Generative AI Interior Studio.
-          </p>
-        </div>
-        <nav style={{ display: 'flex', gap: '40px' }}>
-          {['Privacy', 'Terms', 'Contact'].map(link => (
-            <a key={link} href="#"
-              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.25em', color: 'rgba(242,237,232,0.55)', textDecoration: 'none', transition: 'color 0.3s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#C9A96E')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(242,237,232,0.55)')}
-            >{link}</a>
-          ))}
-        </nav>
-      </footer>
+import {APP_BUILD} from '../lib/buildInfo'
+import {useEffect,useState} from 'react'
+import {Link} from 'react-router-dom'
+import {ArrowUpRight,ArrowDown,MoveUpRight} from 'lucide-react'
+const asset=(name:string)=>`${import.meta.env?.BASE_URL??'/'}images/${name}${name==='architectural-blueprint.svg'?`?v=${APP_BUILD}`:''}`
+const steps=[['01','Make room for an idea.','Choose your room, set its dimensions, and tell us how you want it to feel.'],['02','Find your arrangement.','Explore room-aware layouts, compare alternatives, and choose a direction.'],['03','Make every detail yours.','Move furniture, change finishes, and add the little things that make a place feel like home.']]
+export function RoomCraftPage(){
+ const [scrolled,setScrolled]=useState(false)
+ useEffect(()=>{const scroll=()=>setScrolled(window.scrollY>24);scroll();window.addEventListener('scroll',scroll,{passive:true});return()=>window.removeEventListener('scroll',scroll)},[])
+ const jump=(id:string)=>document.getElementById(id)?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})
+ return <div className="lm-home" style={{'--desktop-top':typeof window!=='undefined'&&window.electronAPI?.isElectron?'36px':'0px'} as React.CSSProperties}>
+  <a className="home-skip" href="#home-main">Skip to content</a>
+  <header className={`home-nav${scrolled?' home-nav-scrolled':''}`}>
+   <Link to="/" className="home-wordmark" aria-label="LayoutMind home">LayoutMind<span>SPATIAL STUDIO</span></Link>
+   <nav aria-label="Main navigation"><button onClick={()=>jump('room-portfolio')}>The possibilities</button><button onClick={()=>jump('how-it-works')}>The process</button></nav>
+   <Link className="home-nav-cta" to="/studio">Enter the studio <ArrowUpRight size={15}/></Link>
+  </header>
+  <main id="home-main">
+   <section className="home-hero" aria-labelledby="home-heading">
+    <div className="home-intro"><p className="home-eyebrow"><i/> A LITTLE VISION. A PLACE OF YOUR OWN.</p>
+     <h1 id="home-heading">Considered spaces.<br/><em>Entirely yours.</em></h1>
+     <p className="home-lead">A room begins with a feeling. Turn yours into a thoughtful layout, then shape every colour, corner, and detail.</p>
+     <div className="home-hero-actions"><Link to="/studio" className="home-button">Create your space <ArrowUpRight size={18}/></Link><button onClick={()=>jump('how-it-works')} className="home-text-button">Discover the process <ArrowDown size={14}/></button></div>
+     <div className="home-footnote"><span>ROOM-AWARE PLANNING</span><span>YOUR DIMENSIONS. YOUR DETAILS.</span></div>
     </div>
-  )
+    <figure className="home-hero-figure"><img src={asset('step1.jpg')} alt="Warm living room with a grey sofa, oak table, sculptural lighting and garden views" fetchPriority="high"/><div className="home-image-shade"/>
+     <span className="home-image-index">01 / THE ART OF LIVING</span><figcaption><span>A softer kind of everyday.</span><small>WARM MATERIALS · ROOM TO BREATHE</small></figcaption><div className="home-figure-mark" aria-hidden="true">LM<span>STUDIO NOTES — 01</span></div>
+    </figure>
+    <div className="home-hero-note"><span className="home-note-no">01—06</span><p>From a quiet bedroom to a kitchen full of life.<br/>Every room has its own rhythm.</p><button onClick={()=>jump('room-portfolio')} aria-label="Explore room possibilities"><ArrowDown size={19}/></button></div>
+   </section>
+   <section id="room-portfolio" className="home-possibilities" aria-labelledby="possibilities-heading">
+    <div className="home-section-heading"><div><p className="home-eyebrow">A PLACE FOR EVERY PART OF LIFE</p><h2 id="possibilities-heading">Different rooms.<br/><em>The same sense of home.</em></h2></div><p>Six room types. Eight styles. A palette of possibilities, with the freedom to make it personal.</p></div>
+    <div className="home-room-grid">
+     <Link to="/studio" className="home-room-feature"><img src={asset('living.jpg')} loading="lazy" alt="An open living and dining space with natural materials"/><span className="home-room-caption"><span><small>01 / GATHER</small><strong>Space to come together.</strong></span><ArrowUpRight size={24}/></span></Link>
+     <div className="home-room-side"><div className="home-plan-card"><img src={asset('architectural-blueprint.svg')} alt="A coherent one-bedroom apartment floor plan" loading="lazy"/><span>GOOD DESIGN STARTS WITH A GOOD PLAN.</span></div><div className="home-room-links">{['Living Room','Bedroom','Kitchen','Bathroom','Dining Room','Home Office'].map((name,i)=><Link to="/studio" key={name}><small>0{i+1}</small><span>{name}</span><MoveUpRight size={14}/></Link>)}</div></div>
+    </div>
+   </section>
+   <section id="how-it-works" className="home-process" aria-labelledby="process-heading"><div className="home-section-heading"><div><p className="home-eyebrow">FROM AN IDEA TO YOUR EVERYDAY</p><h2 id="process-heading">A little guidance.<br/><em>A lot of freedom.</em></h2></div><Link to="/studio" className="home-text-button">Begin with your room <ArrowUpRight size={17}/></Link></div><div className="home-steps">{steps.map(([number,title,description])=><article key={number}><span>{number}</span><h3>{title}</h3><p>{description}</p></article>)}</div></section>
+   <section className="home-closing"><p className="home-eyebrow">YOUR NEXT CHAPTER, BY DESIGN</p><h2>There’s room for<br/><em>your imagination.</em></h2><Link to="/studio" className="home-button home-button-light">Let’s make it yours <ArrowUpRight size={18}/></Link><span className="home-closing-line" aria-hidden="true"/></section>
+  </main>
+  <footer className="home-footer"><Link to="/" className="home-wordmark">LayoutMind<span>SPATIAL STUDIO</span></Link><p>Thoughtful spaces. Personal possibilities.</p><span>© {new Date().getFullYear()} LayoutMind</span></footer>
+ </div>
 }

@@ -1,3 +1,4 @@
+import { seededRandom } from '../lib/seededRandom'
 import { useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
@@ -66,7 +67,7 @@ function CursorOrbitalField({
 
       const x = Math.cos(theta) * r
       const y = Math.sin(theta) * r
-      const z = (Math.random() - 0.5) * 2 * depthFactor
+      const z = (seededRandom(i*31+1) - 0.5) * 2 * depthFactor
 
       const angle = Math.atan2(y, x)
 
@@ -82,7 +83,7 @@ function CursorOrbitalField({
       }
 
       // Size variance
-      const sizeVar = 1 + (Math.random() - 0.5) * particleVariance * 0.6
+      const sizeVar = 1 + (seededRandom(i*31+2) - 0.5) * particleVariance * 0.6
 
       temp.push({
         initialPos: new THREE.Vector3(x, y, z),
@@ -91,7 +92,7 @@ function CursorOrbitalField({
         velocity: new THREE.Vector3(0, 0, 0),
         rotation: new THREE.Euler(0, 0, angle),
         color: c,
-        phase: Math.random() * Math.PI * 2,
+        phase: seededRandom(i*31+3) * Math.PI * 2,
         r,
         sizeVar,
       })

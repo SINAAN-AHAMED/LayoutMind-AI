@@ -1,3 +1,4 @@
+import { seededRandom } from '../../lib/seededRandom'
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
@@ -80,7 +81,7 @@ export function Act1Hero() {
   }, [])
 
   const headline = 'LayoutMind'
-  const subtitle = 'Architectural Harmony via Neuro-Fuzzy Logic & Genetic Algorithms'
+  const subtitle = 'Architectural Harmony via Neuro-Fuzzy Logic & Spatial Constraints'
 
   return (
     <section ref={sectionRef} className="relative h-[200vh] overflow-hidden" style={{ background: '#03030A' }}>
@@ -106,13 +107,13 @@ export function Act1Hero() {
           {Array.from({ length: 40 }).map((_, i) => (
             <div key={i} className="absolute rounded-full"
               style={{
-                width: Math.random() * 2 + 1 + 'px',
-                height: Math.random() * 2 + 1 + 'px',
-                left: Math.random() * 100 + '%',
-                top: Math.random() * 100 + '%',
+                width: seededRandom(i*31+1) * 2 + 1 + 'px',
+                height: seededRandom(i*31+2) * 2 + 1 + 'px',
+                left: seededRandom(i*31+3) * 100 + '%',
+                top: seededRandom(i*31+4) * 100 + '%',
                 background: i % 2 === 0 ? '#7C3AED' : '#06B6D4',
-                opacity: Math.random() * 0.6 + 0.2,
-                animation: `float-y ${3 + Math.random() * 4}s ease-in-out ${Math.random() * 2}s infinite`,
+                opacity: seededRandom(i*31+5) * 0.6 + 0.2,
+                animation: `float-y ${3 + seededRandom(i*31+6) * 4}s ease-in-out ${seededRandom(i*31+7) * 2}s infinite`,
               }}
             />
           ))}

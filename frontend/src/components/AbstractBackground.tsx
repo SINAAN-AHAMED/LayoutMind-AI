@@ -1,14 +1,16 @@
 import { useEffect, useRef } from 'react'
 
-// Pure CSS/Canvas 2D animated background — avoids nested R3F Canvas conflicts
-export function AbstractBackground({ variant = 'default' }: { variant?: 'default' | 'luxury' | 'cozy' }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
   const COLORS = {
     default: { a: '#3b82f6', b: '#8b5cf6', c: '#06b6d4' },
     luxury:  { a: '#10b981', b: '#d4af37', c: '#c026d3' },
     cozy:    { a: '#f59e0b', b: '#ef4444', c: '#f97316' },
   }
+
+// Pure CSS/Canvas 2D animated background — avoids nested R3F Canvas conflicts
+export function AbstractBackground({ variant = 'default' }: { variant?: 'default' | 'luxury' | 'cozy' }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+
 
   useEffect(() => {
     const canvas = canvasRef.current

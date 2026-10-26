@@ -2,7 +2,7 @@
   "name": "layoutmind-desktop",
   "version": "1.0.0",
   "author": "AHMED SINAAN",
-  "description": "LayoutMind AI Interior Layout Studio — Desktop Edition",
+  "description": "LayoutMind AI Interior Layout Studio \u2014 Desktop Edition",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -12,7 +12,7 @@
   "build": {
     "appId": "com.ahmedsinaan.layoutmind",
     "productName": "LayoutMind",
-    "copyright": "Copyright © 2026 AHMED SINAAN. All Rights Reserved.",
+    "copyright": "Copyright \u00a9 2026 AHMED SINAAN. All Rights Reserved.",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -20,7 +20,7 @@
     "forceCodeSigning": false,
     "files": [
       "main.js",
-      "preload.js",
+      "preload.cjs",
       "splash.html",
       "fonts/**/*"
     ],
@@ -28,31 +28,42 @@
       {
         "from": "../frontend/dist",
         "to": "frontend/dist",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       },
       {
         "from": "../backend",
         "to": "backend",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       },
       {
         "from": "../softcomputing-service",
         "to": "softcomputing-service",
-        "filter": ["**/*", "!__pycache__/**", "!*.pyc"]
+        "filter": [
+          "**/*",
+          "!__pycache__/**",
+          "!*.pyc"
+        ]
       }
     ],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
-      "icon": "build/icon.ico",
       "requestedExecutionLevel": "asInvoker",
       "signAndEditExecutable": false
     },
@@ -62,8 +73,6 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "LayoutMind",
-      "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico",
       "deleteAppDataOnUninstall": false
     }
   },
@@ -73,5 +82,6 @@
   },
   "dependencies": {
     "tree-kill": "^1.2.2"
-  }
+  },
+  "type": "module"
 }

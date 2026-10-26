@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# This release intentionally includes the production app for the Python launcher.
+!dist/
+!dist/**

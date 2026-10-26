@@ -45,7 +45,7 @@ export function TitleBar() {
         // Elyse ivory — matches app background perfectly, no dark flash
         background: '#FAF8F5',
         borderBottom: '1px solid #E8E2DA',
-        WebkitAppRegion: 'drag' as any,
+        WebkitAppRegion: 'drag',
         userSelect: 'none',
         flexShrink: 0,
       } as React.CSSProperties}
@@ -58,7 +58,7 @@ export function TitleBar() {
           <circle cx="12" cy="12" r="2.5" fill="#2D3B2D" />
         </svg>
         <span style={{
-          fontFamily: "'Playfair Display', serif",
+          fontFamily: "'Playfair Display Variable', serif",
           fontSize: '12px',
           fontWeight: 400,
           color: '#1A1A1A',
@@ -67,7 +67,7 @@ export function TitleBar() {
           LayoutMind
         </span>
         <span style={{
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: "'DM Sans Variable', sans-serif",
           fontSize: '9px',
           fontWeight: 600,
           textTransform: 'uppercase',
@@ -80,7 +80,7 @@ export function TitleBar() {
 
       {/* Center: subtle title */}
       <div style={{
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'DM Sans Variable', sans-serif",
         fontSize: '9px',
         fontWeight: 600,
         textTransform: 'uppercase',
@@ -92,7 +92,7 @@ export function TitleBar() {
 
       {/* Right: Window controls — must NOT be draggable */}
       <div
-        style={{ display: 'flex', alignItems: 'stretch', height: '36px', WebkitAppRegion: 'no-drag' as any } as React.CSSProperties}
+        style={{ display: 'flex', alignItems: 'stretch', height: '36px', WebkitAppRegion: 'no-drag' } as React.CSSProperties}
       >
         {/* Minimize */}
         <button
